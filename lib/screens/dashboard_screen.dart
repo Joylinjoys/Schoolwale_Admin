@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'Result.dart';
+import 'Resultfirst.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -44,7 +45,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const ResultPage ()),
+                        MaterialPageRoute(builder: (context) => const Resultfirst ()),
                       );
                     },
                     child: Icon(Icons.bar_chart),
