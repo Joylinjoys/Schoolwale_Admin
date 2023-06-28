@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'Result.dart';
+
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
 
@@ -14,26 +16,39 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Row(
-
         children: [
-          //Let's start by adding the Navigation Rail
+
           NavigationRail(
               extended: isExpanded,
               backgroundColor: Colors.deepPurple.shade400,
-              unselectedIconTheme:
-                  IconThemeData(color: Colors.white, opacity: 1),
+              unselectedIconTheme: IconThemeData(color: Colors.white, opacity: 1),
               unselectedLabelTextStyle: TextStyle(
                 color: Colors.white,
               ),
-              selectedIconTheme:
-                  IconThemeData(color: Colors.deepPurple.shade900),
+              selectedIconTheme: IconThemeData(color: Colors.deepPurple.shade900),
               destinations: [
                 NavigationRailDestination(
-                  icon: Icon(Icons.dashboard),
+                  icon: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const DashboardScreen()),
+                      );
+                    },
+                    child: Icon(Icons.dashboard),
+                  ),
                   label: Text("Dashboard"),
                 ),
                 NavigationRailDestination(
-                  icon: Icon(Icons.bar_chart),
+                  icon: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const ResultPage ()),
+                      );
+                    },
+                    child: Icon(Icons.bar_chart),
+                  ),
                   label: Text("Results"),
                 ),
                 NavigationRailDestination(
@@ -73,7 +88,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Expanded(
             child: Padding(
               padding: EdgeInsets.all(60.0),
-              child: SingleChildScrollView(
+              // child: SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,7 +149,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     height: 20.0,
                                   ),
                                   Text(
-                                    "967 Student in college",
+                                    "967 Students",
                                     style: TextStyle(
                                       fontSize: 36,
                                       fontWeight: FontWeight.bold,
@@ -262,7 +277,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     height: 20.0,
                                   ),
                                   Text(
-                                    "Total teachers are 56",
+                                    " 56 teachers",
                                     style: TextStyle(
                                       fontSize: 36,
                                       color: Colors.green,
@@ -285,7 +300,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
               ),
             ),
-          ),
+
         ],
       ),
       //let's add the floating action button
