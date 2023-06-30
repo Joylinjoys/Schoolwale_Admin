@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:web_dashboard_app_tut/screens/teachers.dart';
 
 import 'Result.dart';
+import 'studentList.dart';
 import 'Resultfirst.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -70,7 +71,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 ),
 
                 NavigationRailDestination(
-                  icon: Icon(Icons.people_outline),
+                  icon: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const Student_main ()),
+                      );
+                    },
+                    child: Icon(Icons.people_outline),
+                  ),
+                 
                   label: Text("Students"),
                 ),
                 NavigationRailDestination(
