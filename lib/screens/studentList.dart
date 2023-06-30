@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class Student_main extends StatefulWidget {
-  const Student_main({super.key});
+final String regno,name,clss,section;
+  const Student_main({super.key, required this.regno, required this.name, required this.clss, required this.section});
 
   @override
   State<Student_main> createState() => _Student_mainState();
@@ -19,7 +20,7 @@ class _Student_mainState extends State<Student_main> {
     '3 rd',
     '4 th',
   ];
- 
+
   //selectedIndex=1;
   @override
   Widget build(BuildContext context) {
@@ -122,34 +123,35 @@ class _Student_mainState extends State<Student_main> {
                   ),
                 ],
               ),
-              
-              DataTable(
-            columns: [
-              DataColumn(label: Text('Register No')),
-              DataColumn(label: Text('Name')),
-              DataColumn(label: Text('Class')),
-              DataColumn(label: Text('Section')),
-              DataColumn(label: Text('Profile')),
-              DataColumn(label: Text('Virtual ID')),
-               DataColumn(label: Text('Delete')),
-            
-             
-            ],
-            rows: [
-              // DataRow(cells: [
-              //   DataCell(Text('John Doe')),
-              //   DataCell(Text('25')),
-              // ]),
-              // DataRow(cells: [
-              //   DataCell(Text('Jane Doe')),
-              //   DataCell(Text('20')),
-              // ]),
-              // DataRow(cells: [
-              //   DataCell(Text('Peter Smith')),
-              //   DataCell(Text('30')),
-              // ]),
-            ],
-          ),
+              Column(
+                children: [
+                  DataTable(
+                    columns: [
+                      DataColumn(label: Text('Register No')),
+                      DataColumn(label: Text('Name')),
+                      DataColumn(label: Text('Class')),
+                      DataColumn(label: Text('Section')),
+                      DataColumn(label: Text('Profile')),
+                      DataColumn(label: Text('Virtual ID')),
+                      DataColumn(label: Text('Delete')),
+                    ],
+                    rows: [
+                      // DataRow(cells: [
+                      //   DataCell(Text('John Doe')),
+                      //   DataCell(Text('25')),
+                      // ]),
+                      // DataRow(cells: [
+                      //   DataCell(Text('Jane Doe')),
+                      //   DataCell(Text('20')),
+                      // ]),
+                      // DataRow(cells: [
+                      //   DataCell(Text('Peter Smith')),
+                      //   DataCell(Text('30')),
+                      // ]),
+                    ],
+                  ),
+                ],
+              ),
             ],
           ),
         ),
