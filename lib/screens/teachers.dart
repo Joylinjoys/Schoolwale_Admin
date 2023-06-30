@@ -26,6 +26,12 @@ class TeacherPage extends StatelessWidget {
         'qualification': 'B.Sc., M.Ed.',
         'phone no': 'N/A',
       },
+      {
+        'name': 'Rick Johnson',
+        'subject': 'Science',
+        'qualification': 'B.Sc., M.Ed.',
+        'phone no': 'N/A',
+      },
     ];
 
     return Scaffold(
