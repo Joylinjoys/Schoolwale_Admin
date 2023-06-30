@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 
 class Student_main extends StatefulWidget {
-final String regno,name,clss,section;
-  const Student_main({super.key, required this.regno, required this.name, required this.clss, required this.section});
+  const Student_main({super.key});
 
   @override
   State<Student_main> createState() => _Student_mainState();
@@ -24,6 +23,32 @@ class _Student_mainState extends State<Student_main> {
   //selectedIndex=1;
   @override
   Widget build(BuildContext context) {
+    List<Map<String, String>> students = [
+      {
+        'regno': '101',
+        'name': 'Vijesh',
+        'class': '1',
+        'section': 'C',
+      },
+      {
+        'regno': '202',
+        'name': 'Kavitha',
+        'class': '2',
+        'section': 'B',
+      },
+      {
+        'regno': '301',
+        'name': 'Winston',
+        'class': '5',
+        'section': 'A',
+      },
+      {
+        'regno': '302',
+        'name': 'Hilal',
+        'class': '1',
+        'section': 'B',
+      },
+    ];
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -33,8 +58,7 @@ class _Student_mainState extends State<Student_main> {
         ),
         backgroundColor: Colors.deepPurple.shade400,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
+      body: Padding(
           padding: const EdgeInsets.all(40.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,39 +147,157 @@ class _Student_mainState extends State<Student_main> {
                   ),
                 ],
               ),
-              Column(
-                children: [
-                  DataTable(
-                    columns: [
-                      DataColumn(label: Text('Register No')),
-                      DataColumn(label: Text('Name')),
-                      DataColumn(label: Text('Class')),
-                      DataColumn(label: Text('Section')),
-                      DataColumn(label: Text('Profile')),
-                      DataColumn(label: Text('Virtual ID')),
-                      DataColumn(label: Text('Delete')),
-                    ],
-                    rows: [
-                      // DataRow(cells: [
-                      //   DataCell(Text('John Doe')),
-                      //   DataCell(Text('25')),
-                      // ]),
-                      // DataRow(cells: [
-                      //   DataCell(Text('Jane Doe')),
-                      //   DataCell(Text('20')),
-                      // ]),
-                      // DataRow(cells: [
-                      //   DataCell(Text('Peter Smith')),
-                      //   DataCell(Text('30')),
-                      // ]),
-                    ],
-                  ),
+              SingleChildScrollView(
+                
+                child: 
+              DataTable(
+                columnSpacing: 20.0,
+                columns: [
+                  DataColumn(
+                      label: Text(
+                    'Register No',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )),
+                  DataColumn(
+                      label: Text(
+                    'Name',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )),
+                  DataColumn(
+                      label: Text(
+                    'Class',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )),
+                  DataColumn(
+                      label: Text(
+                    'Section',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )),
+                  DataColumn(
+                      label: Text(
+                    'Profile',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )),
+                  DataColumn(
+                      label: Text(
+                    'Virtual ID',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )),
+                  DataColumn(
+                      label: Text(
+                    'Delete',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  )),
                 ],
+                rows: students.map((student) {
+                  return DataRow(
+                    cells: [
+                      DataCell(
+                        Flexible(
+                          child: Text(student['regno'] ?? ''),
+                        ),
+                      ),
+                      DataCell(
+                        Flexible(
+                          child: Text(student['name'] ?? ''),
+                        ),
+                      ),
+                      DataCell(
+                        Flexible(
+                          child: Text(student['class'] ?? ''),
+                        ),
+                      ),
+                      DataCell(
+                        Flexible(
+                          child: Text(student['section'] ?? ''),
+                        ),
+                      ),
+                      DataCell(Flexible(
+                        child: ElevatedButton(
+                          child: Text('view profile'),
+                          onPressed: () {},
+                        ),
+                      )),
+                      DataCell(Flexible(
+                        child: ElevatedButton(
+                          child: Text('view virtual ID'),
+                          onPressed: () {},
+                        ),
+                      )),
+                      DataCell(Flexible(
+                        child: ElevatedButton(
+                          child: Text('delete'),
+                          onPressed: () {showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text('Confirmation'),
+                                      content: Text('Are you sure you want to delete?'),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            // Perform delete operation
+                                            // You can add your logic here to delete the teacher record
+                                            Navigator.of(context).pop(); // Close the dialog
+                                          },
+                                          child: Text('Yes'),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop(); // Close the dialog
+                                          },
+                                          child: Text('No'),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                           },
+                        ),
+                      ))
+                     
+                    ],
+                  );
+                }).toList(),
+              ),),
+               SizedBox(height: 16),
+            Center(
+              child: ElevatedButton(
+                onPressed: () {
+                  // Navigator.push(
+                  //   context,
+                  //   MaterialPageRoute(builder: (context) => const AddTeacherPage()),
+                  // );
+                },
+                child: Text('ADD'),
               ),
+            ),
             ],
           ),
         ),
-      ),
+      
+      
     );
   }
 }
