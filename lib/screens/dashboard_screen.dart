@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:web_dashboard_app_tut/screens/teachers.dart';
 
 import 'Result.dart';
 import 'Resultfirst.dart';
@@ -16,6 +17,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       body: Row(
         children: [
 
@@ -40,6 +42,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   label: Text("Dashboard"),
                 ),
+
                 NavigationRailDestination(
                   icon: GestureDetector(
                     onTap: () {
@@ -52,10 +55,20 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   label: Text("Results"),
                 ),
+
                 NavigationRailDestination(
-                  icon: Icon(Icons.person),
+                  icon: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const  TeacherPage ()),
+                      );
+                    },
+                    child: Icon(Icons.person),
+                  ),
                   label: Text("Teachers"),
                 ),
+
                 NavigationRailDestination(
                   icon: Icon(Icons.people_outline),
                   label: Text("Students"),
