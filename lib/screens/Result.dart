@@ -26,7 +26,7 @@ class ResultPage extends StatelessWidget {
             children: [
               Center(
                 child: Text(
-                  'Enter Student Marks',
+                  'Enter the Examination Details',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
               ),
@@ -102,7 +102,7 @@ class ResultPage extends StatelessWidget {
                   // Handle button press
                 },
                 style: ElevatedButton.styleFrom(
-                  primary: Colors.deepPurple.shade400, // Set button color to purple
+                  primary: Colors.deepPurple, // Set button color to purple
                 ),
                 child: Text('Submit'),
               ),
