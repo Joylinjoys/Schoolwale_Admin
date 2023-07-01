@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:web_dashboard_app_tut/screens/aboutschool.dart';
 import 'package:web_dashboard_app_tut/screens/teachers.dart';
 
 import 'Result.dart';
@@ -101,7 +102,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   label: Text("Timetable"),
                 ),
                 NavigationRailDestination(
-                  icon: Icon(Icons.domain),
+                  icon: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CollegeDetails ()),
+                      );
+                    },
+                    child: Icon(Icons.domain),
+                  ),
                   label: Text("About School"),
                 ),
                 NavigationRailDestination(
