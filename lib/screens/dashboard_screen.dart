@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:web_dashboard_app_tut/screens/teachers.dart';
 
 import 'Result.dart';
+import 'RulesRegulation.dart';
 import 'studentList.dart';
 import 'Resultfirst.dart';
 
@@ -80,7 +81,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     },
                     child: Icon(Icons.people_outline),
                   ),
-                 
+
                   label: Text("Students"),
                 ),
                 NavigationRailDestination(
@@ -104,8 +105,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   label: Text("About School"),
                 ),
                 NavigationRailDestination(
-                  icon: Icon(Icons.rule_folder_outlined),
-                  label: Text("Rules and Regulation"),
+                  icon: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) =>  RulesRegulation ()),
+                      );
+                    },
+                    child: Icon(Icons.rule_folder_outlined),
+                  ),
+                  label: Text("Rules and regulation"),
                 ),
               ],
               selectedIndex: 0),
