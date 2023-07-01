@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'addStudent.dart';
 
 class Student_main extends StatefulWidget {
   const Student_main({super.key});
@@ -147,152 +148,173 @@ class _Student_mainState extends State<Student_main> {
                   ),
                 ],
               ),
+              SizedBox(height: 20),
               SingleChildScrollView(
                 
                 child: 
-              DataTable(
-                columnSpacing: 20.0,
-                columns: [
-                  DataColumn(
-                      label: Text(
-                    'Register No',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )),
-                  DataColumn(
-                      label: Text(
-                    'Name',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )),
-                  DataColumn(
-                      label: Text(
-                    'Class',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )),
-                  DataColumn(
-                      label: Text(
-                    'Section',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )),
-                  DataColumn(
-                      label: Text(
-                    'Profile',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )),
-                  DataColumn(
-                      label: Text(
-                    'Virtual ID',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )),
-                  DataColumn(
-                      label: Text(
-                    'Delete',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  )),
-                ],
-                rows: students.map((student) {
-                  return DataRow(
-                    cells: [
-                      DataCell(
-                        Flexible(
-                          child: Text(student['regno'] ?? ''),
-                        ),
+              Center(
+                child: DataTable(
+                  columnSpacing: 100.0,
+                  columns: [
+                    DataColumn(
+                        label: Text(
+                      'Register No',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
                       ),
-                      DataCell(
-                        Flexible(
-                          child: Text(student['name'] ?? ''),
-                        ),
+                    )),
+                    DataColumn(
+                        label: Text(
+                      'Name',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
                       ),
-                      DataCell(
-                        Flexible(
-                          child: Text(student['class'] ?? ''),
-                        ),
+                    )),
+                    DataColumn(
+                        label: Text(
+                      'Class',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
                       ),
-                      DataCell(
-                        Flexible(
-                          child: Text(student['section'] ?? ''),
-                        ),
+                    )),
+                    DataColumn(
+                        label: Text(
+                      'Section',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
                       ),
-                      DataCell(Flexible(
-                        child: ElevatedButton(
-                          child: Text('view profile'),
-                          onPressed: () {},
+                    )),
+                    DataColumn(
+                        label: Text(
+                      'Profile',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )),
+                    DataColumn(
+                        label: Text(
+                      'Virtual ID',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )),
+                    DataColumn(
+                        label: Text(
+                      'Delete',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )),
+                  ],
+                  rows: students.map((student) {
+                    return DataRow(
+                      cells: [
+                        DataCell(
+                          Flexible(
+                            child: Text(student['regno'] ?? ''),
+                          ),
                         ),
-                      )),
-                      DataCell(Flexible(
-                        child: ElevatedButton(
-                          child: Text('view virtual ID'),
-                          onPressed: () {},
+                        DataCell(
+                          Flexible(
+                            child: Text(student['name'] ?? ''),
+                          ),
                         ),
-                      )),
-                      DataCell(Flexible(
-                        child: ElevatedButton(
-                          child: Text('delete'),
-                          onPressed: () {showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: Text('Confirmation'),
-                                      content: Text('Are you sure you want to delete?'),
-                                      actions: [
-                                        TextButton(
-                                          onPressed: () {
-                                            // Perform delete operation
-                                            // You can add your logic here to delete the teacher record
-                                            Navigator.of(context).pop(); // Close the dialog
-                                          },
-                                          child: Text('Yes'),
-                                        ),
-                                        TextButton(
-                                          onPressed: () {
-                                            Navigator.of(context).pop(); // Close the dialog
-                                          },
-                                          child: Text('No'),
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                           },
+                        DataCell(
+                          Flexible(
+                            child: Text(student['class'] ?? ''),
+                          ),
                         ),
-                      ))
-                     
-                    ],
-                  );
-                }).toList(),
+                        DataCell(
+                          Flexible(
+                            child: Text(student['section'] ?? ''),
+                          ),
+                        ),
+                        DataCell(Flexible(
+                          child: ElevatedButton(
+                            child: Text('view profile'),
+                            style: ElevatedButton.styleFrom(
+                      primary: Colors.deepPurple, // Set button color to purple
+                    ),
+                            onPressed: () {},
+                          ),
+                        )),
+                        DataCell(Flexible(
+                          child: ElevatedButton(
+                            child: Text('view virtual ID'),
+                            style: ElevatedButton.styleFrom(
+                      primary: Colors.deepPurple, // Set button color to purple
+                    ),
+                            onPressed: () {},
+                          ),
+                        )),
+                        DataCell(Flexible(
+                          child: ElevatedButton(
+                            child: Text('delete'),
+                            style: ElevatedButton.styleFrom(
+                      primary: Colors.deepPurple, // Set button color to purple
+                    ),
+                            onPressed: () {showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return AlertDialog(
+                                        title: Text('Confirmation'),
+                                        content: Text('Are you sure you want to delete?'),
+                                        actions: [
+                                          TextButton(
+                                            onPressed: () {
+                                              // Perform delete operation
+                                              // You can add your logic here to delete the teacher record
+                                              Navigator.of(context).pop(); // Close the dialog
+                                            },
+                                            child: Text('Yes'),
+                                          ),
+                                          TextButton(
+                                            onPressed: () {
+                                              Navigator.of(context).pop(); // Close the dialog
+                                            },
+                                            child: Text('No'),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  );
+                             },
+                          ),
+                        ))
+                       
+                      ],
+                    );
+                  }).toList(),
+                ),
               ),),
                SizedBox(height: 16),
-            Center(
-              child: ElevatedButton(
-                onPressed: () {
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(builder: (context) => const AddTeacherPage()),
-                  // );
-                },
-                child: Text('ADD'),
-              ),
-            ),
+          Center(
+                    child: SizedBox(
+                      width: 140,
+                      height: 40,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const AddStudent()),
+                          );
+                        },
+                        child: Text('ADD',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24)),
+                        style: ElevatedButton.styleFrom(
+                          primary:
+                              Colors.deepPurple, // Set button color to purple
+                        ),
+                      ),
+                    ),
+                  ),
             ],
           ),
         ),
