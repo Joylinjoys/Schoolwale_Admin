@@ -84,7 +84,8 @@ class _AddStudentState extends State<AddStudent> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(
+                      Flexible(
+                        flex: 1,
                         child: Card(
                           child: Padding(
                             padding: const EdgeInsets.all(18.0),
@@ -129,7 +130,8 @@ class _AddStudentState extends State<AddStudent> {
                         ),
                       ),
                       SizedBox(width: 30),
-                      Expanded(
+                      Flexible(
+                        flex: 1,
                         child: Card(
                           child: Padding(
                             padding: const EdgeInsets.all(18.0),
@@ -174,7 +176,8 @@ class _AddStudentState extends State<AddStudent> {
                         ),
                       ),
                       SizedBox(width: 30),
-                      Expanded(
+                      Flexible(
+                        flex: 1,
                         child: Card(
                           child: Padding(
                             padding: const EdgeInsets.all(18.0),
@@ -194,7 +197,7 @@ class _AddStudentState extends State<AddStudent> {
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Expanded(
+                                    Flexible(
                                       child: _image == null
                                           ? Text('No image selected.')
                                           : Image.file(_image!),
@@ -226,7 +229,8 @@ class _AddStudentState extends State<AddStudent> {
                         ),
                       ),
                       SizedBox(width: 30),
-                      Expanded(
+                      Flexible(
+                        flex: 1,
                         child: StudentInput(
                           textContent: "Enter Phone Number",
                           label: " Phone Number",
@@ -383,10 +387,10 @@ class _AddStudentState extends State<AddStudent> {
                       width: 140,
                       height: 40,
                       child: ElevatedButton(
-                        onPressed: () {
-                         
-                        },
-                        child: Text('Submit',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24)),
+                        onPressed: () {},
+                        child: Text('Submit',
+                            style: TextStyle(
+                                fontWeight: FontWeight.bold, fontSize: 24)),
                         style: ElevatedButton.styleFrom(
                           primary:
                               Colors.deepPurple, // Set button color to purple

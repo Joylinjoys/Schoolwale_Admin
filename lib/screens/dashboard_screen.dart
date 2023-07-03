@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:web_dashboard_app_tut/screens/aboutschool.dart';
 import 'package:web_dashboard_app_tut/screens/teachers.dart';
+import 'addEvents.dart';
 
 import 'Result.dart';
 import 'RulesRegulation.dart';
@@ -89,8 +90,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   icon: Icon(Icons.calendar_month_outlined),
                   label: Text("Attendance"),
                 ),
+                // NavigationRailDestination(
+                //   icon: Icon(Icons.celebration_outlined),
+                //   label: Text("Events"),
+                // ),
                 NavigationRailDestination(
-                  icon: Icon(Icons.celebration_outlined),
+                  icon: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const AdminEvent ()),
+                      );
+                    },
+                    child: Icon(Icons.celebration_outlined),
+                  ),
+
                   label: Text("Events"),
                 ),
                 NavigationRailDestination(
