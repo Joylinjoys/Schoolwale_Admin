@@ -64,7 +64,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const  TeacherPage ()),
+                        MaterialPageRoute(builder: (context) => TeacherPage ()),
                       );
                     },
                     child: Icon(Icons.person),

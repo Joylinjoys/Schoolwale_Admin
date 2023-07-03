@@ -13,6 +13,7 @@ class AddStudent extends StatefulWidget {
 class _AddStudentState extends State<AddStudent> {
   final ImagePicker _picker = ImagePicker();
   File? _image;
+  
   var items1 = ['choose class', '1', '2', ' 3', '4', '7', '8', ' 9', '10'];
   var items2 = ['choose section', 'A', 'B', 'C'];
   String dropdownvalue1 = 'choose class';
