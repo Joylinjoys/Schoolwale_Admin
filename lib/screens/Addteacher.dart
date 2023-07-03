@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class AddTeacherPage extends StatefulWidget {
   const AddTeacherPage({Key? key}) : super(key: key);
 
@@ -25,103 +24,175 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
         ),
         backgroundColor: Colors.deepPurple.shade400,
       ),
-      body: Center(
-        child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Center(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
             child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Center(
-                  child: Text(
-                    'Enter Teacher Details',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                Text(
+                  'Enter Teacher Details',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 16),
+                Container(
+                  width: 300,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Enter Teacher Name:',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey[300],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 12.0,
+                            horizontal: 16.0,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(height: 16),
-                Text(
-                  'Enter Teacher Name:',
-                  style: TextStyle(fontSize: 18),
-                ),
-                SizedBox(height: 8),
-                TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
+                Container(
+                  width: 300,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Choose Subject:',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey[300],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 12.0,
+                            horizontal: 16.0,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 SizedBox(height: 16),
-                Text(
-                  'Choose Subject:',
-                  style: TextStyle(fontSize: 18),
-                ),
-                SizedBox(height: 8),
-                TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                SizedBox(height: 16),
-                Text(
-                  'Upload Image:',
-                  style: TextStyle(fontSize: 18),
-                ),
-                SizedBox(height: 8),
-                ElevatedButton(
-                  onPressed: () {
-                    // Handle image upload
-                  },
-                  child: Text('Upload'),
-                ),
-                SizedBox(height: 16),
-                Text(
-                  'Enter Qualification:',
-                  style: TextStyle(fontSize: 18),
-                ),
-                SizedBox(height: 8),
-                TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                SizedBox(height: 16),
-                Text(
-                  'Enter Phone No:',
-                  style: TextStyle(fontSize: 18),
-                ),
-                SizedBox(height: 8),
-                TextField(
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                SizedBox(height: 16),
-                Text(
-                  'Staff:',
-                  style: TextStyle(fontSize: 18),
-                ),
-                SizedBox(height: 8),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Radio<String>(
-                      value: 'Teaching',
-                      groupValue: staffType,
-                      onChanged: (value) {
-                        setState(() {
-                          staffType = value!;
-                        });
-                      },
+                    Text(
+                      'Upload Image:',
+                      style: TextStyle(fontSize: 18),
                     ),
-                    Text('Teaching'),
-                    Radio<String>(
-                      value: 'NonTeaching',
-                      groupValue: staffType,
-                      onChanged: (value) {
-                        setState(() {
-                          staffType = value!;
-                        });
+                    SizedBox(width: 8),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Handle image upload
                       },
+                      child: Text('Upload'),
                     ),
-                    Text('Non-Teaching'),
+                  ],
+                ),
+                SizedBox(height: 16),
+                Container(
+                  width: 300,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Enter Qualification:',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey[300],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 12.0,
+                            horizontal: 16.0,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 16),
+                Container(
+                  width: 300,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Enter Phone No:',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey[300],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 12.0,
+                            horizontal: 16.0,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 16),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Staff:',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                    SizedBox(width: 8),
+                    Row(
+                      children: [
+                        Radio<String>(
+                          value: 'Teaching',
+                          groupValue: staffType,
+                          onChanged: (value) {
+                            setState(() {
+                              staffType = value!;
+                            });
+                          },
+                        ),
+                        Text('Teaching'),
+                        Radio<String>(
+                          value: 'NonTeaching',
+                          groupValue: staffType,
+                          onChanged: (value) {
+                            setState(() {
+                              staffType = value!;
+                            });
+                          },
+                        ),
+                        Text('Non-Teaching'),
+                      ],
+                    ),
                   ],
                 ),
                 SizedBox(height: 16),

@@ -1,7 +1,12 @@
+
 import 'package:flutter/material.dart';
 import 'package:web_dashboard_app_tut/screens/aboutschool.dart';
 import 'package:web_dashboard_app_tut/screens/teachers.dart';
+<<<<<<< HEAD
 import 'addEvents.dart';
+=======
+import 'package:web_dashboard_app_tut/screens/timtable.dart';
+>>>>>>> b20042c6e7f12bb937d2e6a75d0a58554755ae38
 
 import 'Result.dart';
 import 'RulesRegulation.dart';
@@ -16,38 +21,40 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  //setting the expansion function for the navigation rail
   bool isExpanded = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
       body: Row(
         children: [
+          LayoutBuilder(
+            builder: (context, constraints) {
+              // Responsive breakpoint: When the available width is less than 600 pixels, show the navigation rail in a collapsed state
+              final isSmallScreen = constraints.maxWidth < 600;
 
-          NavigationRail(
-              extended: isExpanded,
-              backgroundColor: Colors.deepPurple.shade400,
-              unselectedIconTheme: IconThemeData(color: Colors.white, opacity: 1),
-              unselectedLabelTextStyle: TextStyle(
-                color: Colors.white,
-              ),
-              selectedIconTheme: IconThemeData(color: Colors.deepPurple.shade900),
-              destinations: [
-                NavigationRailDestination(
-                  icon: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const DashboardScreen()),
-                      );
-                    },
-                    child: Icon(Icons.dashboard),
-                  ),
-                  label: Text("Dashboard"),
+              return NavigationRail(
+                extended: !isSmallScreen && isExpanded,
+                backgroundColor: Colors.deepPurple.shade400,
+                unselectedIconTheme: IconThemeData(color: Colors.white, opacity: 1),
+                unselectedLabelTextStyle: TextStyle(
+                  color: Colors.white,
                 ),
-
-                NavigationRailDestination(
+                selectedIconTheme: IconThemeData(color: Colors.deepPurple.shade900),
+                destinations: [
+                  NavigationRailDestination(
+                    icon: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const DashboardScreen()),
+                        );
+                      },
+                      child: Icon(Icons.dashboard),
+                    ),
+                    label: Text("Dashboard"),
+                  ),
+                  NavigationRailDestination(
                   icon: GestureDetector(
                     onTap: () {
                       Navigator.push(
@@ -65,7 +72,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const  TeacherPage ()),
+                        MaterialPageRoute(builder: (context) => TeacherPage ()),
                       );
                     },
                     child: Icon(Icons.person),
@@ -76,10 +83,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 NavigationRailDestination(
                   icon: GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const Student_main ()),
-                      );
+
                     },
                     child: Icon(Icons.people_outline),
                   ),
@@ -111,10 +115,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   icon: Icon(Icons.campaign_outlined),
                   label: Text("Annoucements"),
                 ),
-                NavigationRailDestination(
-                  icon: Icon(Icons.pending_actions_outlined),
-                  label: Text("Timetable"),
-                ),
+                  NavigationRailDestination(
+                    icon: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => TimetableScreen()),
+                        );
+                      },
+                      child: Icon(Icons.pending_actions_outlined),
+                    ),
+                    label: Text("TimeTabel"),
+                  ),
                 NavigationRailDestination(
                   icon: GestureDetector(
                     onTap: () {
@@ -139,23 +151,67 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   ),
                   label: Text("Rules and regulation"),
                 ),
-              ],
-              selectedIndex: 0),
+                  // Add more navigation options here
+
+                ],
+                selectedIndex: 0,
+                onDestinationSelected: (int index) {
+                  if (isSmallScreen) {
+                    // Close the navigation rail when a destination is selected on small screens
+                    setState(() {
+                      isExpanded = false;
+                    });
+                  }
+
+                  // Navigate to the selected screen
+                  switch (index) {
+                    case 1:
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const Resultfirst()),
+                      );
+                      break;
+                    case 2:
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const TeacherPage()),
+                      );
+                      break;
+                    case 3:
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const Student_main()),
+                      );
+                      break;
+                    case 8:
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => CollegeDetails()),
+                      );
+                      break;
+                    case 9:
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => RulesRegulation()),
+                      );
+                      break;
+                  }
+                },
+              );
+            },
+          ),
           Expanded(
             child: Padding(
-              padding: EdgeInsets.all(60.0),
-              // child: SingleChildScrollView(
+              padding: EdgeInsets.all(20.0),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    //let's add the navigation menu for this project
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         IconButton(
                           onPressed: () {
-                            //let's trigger the navigation expansion
                             setState(() {
                               isExpanded = !isExpanded;
                             });
@@ -172,8 +228,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     SizedBox(
                       height: 9.0,
                     ),
-                    //Now let's start with the dashboard main rapports
-                    Row(
+                Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         Flexible(
@@ -338,7 +393,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       fontSize: 36,
                                       color: Colors.green,
                                       fontWeight: FontWeight.bold,
-                                    ),
+    ),
                                   )
                                 ],
                               ),
@@ -357,10 +412,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
               ),
             ),
 
-        ],
+    ],
       ),
-      //let's add the floating action button
-
     );
   }
 }
