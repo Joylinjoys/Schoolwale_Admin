@@ -75,10 +75,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 NavigationRailDestination(
                   icon: GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const Student_main ()),
-                      );
+
                     },
                     child: Icon(Icons.people_outline),
                   ),

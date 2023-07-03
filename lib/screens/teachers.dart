@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:web_dashboard_app_tut/screens/Addteacher.dart';
 
+import 'Editteacher.dart';
+
 class TeacherPage extends StatelessWidget {
   const TeacherPage({Key? key}) : super(key: key);
 
@@ -125,6 +127,10 @@ class TeacherPage extends StatelessWidget {
                           children: [
                             IconButton(
                               onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) => const EditTeacherPage()),
+                                );
                                 // Handle edit button press
                                 // You can navigate to an edit screen or show a dialog
                               },
