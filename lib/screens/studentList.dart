@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'addStudent.dart';
-
+import 'viewProfile.dart';
 class Student_main extends StatefulWidget {
   const Student_main({super.key});
 
@@ -242,7 +242,11 @@ class _Student_mainState extends State<Student_main> {
                             style: ElevatedButton.styleFrom(
                       primary: Colors.deepPurple, // Set button color to purple
                     ),
-                            onPressed: () {},
+                            onPressed: () { Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const ViewStudent()),
+                          );},
                           ),
                         )),
                         DataCell(Flexible(

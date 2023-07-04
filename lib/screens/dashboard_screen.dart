@@ -2,11 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:web_dashboard_app_tut/screens/aboutschool.dart';
 import 'package:web_dashboard_app_tut/screens/teachers.dart';
-<<<<<<< HEAD
 import 'addEvents.dart';
-=======
 import 'package:web_dashboard_app_tut/screens/timtable.dart';
->>>>>>> b20042c6e7f12bb937d2e6a75d0a58554755ae38
 
 import 'Result.dart';
 import 'RulesRegulation.dart';
