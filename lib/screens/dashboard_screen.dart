@@ -5,6 +5,7 @@ import 'package:web_dashboard_app_tut/screens/teachers.dart';
 import 'addEvents.dart';
 import 'package:web_dashboard_app_tut/screens/timtable.dart';
 
+import 'AnnouncementList.dart';
 import 'Result.dart';
 import 'RulesRegulation.dart';
 import 'studentList.dart';
@@ -80,6 +81,11 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 NavigationRailDestination(
                   icon: GestureDetector(
                     onTap: () {
+                 Navigator.push(
+                      context,
+                             MaterialPageRoute(builder: (context) =>  Student_main  ()),
+                         );
+
 
                     },
                     child: Icon(Icons.people_outline),
@@ -108,10 +114,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
                   label: Text("Events"),
                 ),
-                NavigationRailDestination(
-                  icon: Icon(Icons.campaign_outlined),
-                  label: Text("Annoucements"),
-                ),
+                  NavigationRailDestination(
+                    icon: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => AnnouncementsPage ()),
+                        );
+
+
+                      },
+                      child: Icon(Icons.campaign),
+                    ),
+
+                    label: Text("Announcements"),
+                  ),
                   NavigationRailDestination(
                     icon: GestureDetector(
                       onTap: () {
