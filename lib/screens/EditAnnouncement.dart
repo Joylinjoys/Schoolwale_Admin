@@ -310,6 +310,7 @@ class _EditAnnouncementPageState extends State<EditAnnouncementPage> {
           ),
         ),
       ),
-    );
+
+  );
   }
 }
