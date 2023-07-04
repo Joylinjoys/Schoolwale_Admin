@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class EditAnnouncementPage extends StatefulWidget {
   const EditAnnouncementPage({Key? key}) : super(key: key);
@@ -8,17 +9,59 @@ class EditAnnouncementPage extends StatefulWidget {
 }
 
 class _EditAnnouncementPageState extends State<EditAnnouncementPage> {
-  String selectedClass = ''; // Variable to hold the selected class
-  String selectedSection = ''; // Variable to hold the selected section
-  String title = ''; // Variable to hold the entered title
-  String description = ''; // Variable to hold the entered description
-  String selectedDate = ''; // Variable to hold the selected date
-  TimeOfDay selectedTime = TimeOfDay.now(); // Variable to hold the selected time
+  TextEditingController idController = TextEditingController();
+  TextEditingController titleController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  String selectedClass = '';
+  String selectedSection = '';
+
+  DateTime selectedDate = DateTime.now();
+  TimeOfDay selectedTime = TimeOfDay.now();
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+      });
+  }
+
+  Future<void> _selectTime(BuildContext context) async {
+    final TimeOfDay? picked = await showTimePicker(
+      context: context,
+      initialTime: selectedTime,
+    );
+    if (picked != null && picked != selectedTime)
+      setState(() {
+        selectedTime = picked;
+      });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize the text controllers and set the initial values
+    idController.text = '123'; // Set the initial ID value
+    titleController.text = 'Sample Title'; // Set the initial title value
+    descriptionController.text =
+    'Sample Description'; // Set the initial description value
+  }
+
+  @override
+  void dispose() {
+    idController.dispose();
+    titleController.dispose();
+    descriptionController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final double textFieldWidth = MediaQuery.of(context).size.width * 0.5;
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -32,240 +75,241 @@ class _EditAnnouncementPageState extends State<EditAnnouncementPage> {
         backgroundColor: Colors.deepPurple.shade400,
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 16),
-            Text(
-              'Select Class:',
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(height: 8),
-            Container(
-              width: textFieldWidth,
-              child: TextField(
-                readOnly: true,
-                onTap: () {
-                  // Open class dropdown
-                  _showClassDropdown(context);
-                },
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.grey[300],
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: 8.0,
-                    horizontal: 12.0,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: BorderSide.none,
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Enter Announcement Details',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                ),
+                SizedBox(height: 16),
+                Container(
+                  width: 300,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Select Class:',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      // Replace the TextField with your class selection logic
+                      // For example, you can use a dropdown menu or a list to select the class
+                      TextField(
+                        readOnly: true,
+                        onTap: () {
+                          // Implement your class selection logic
+                          // For example, you can show a dropdown menu or navigate to a class selection screen
+                        },
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey[300],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 12.0,
+                            horizontal: 16.0,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                controller: TextEditingController(text: selectedClass),
-              ),
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Select Section:',
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(height: 8),
-            Container(
-              width: textFieldWidth,
-              child: TextField(
-                readOnly: true,
-                onTap: () {
-                  // Open section dropdown
-                  _showSectionDropdown(context);
-                },
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.grey[300],
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: 8.0,
-                    horizontal: 12.0,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-                controller: TextEditingController(text: selectedSection),
-              ),
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Enter Title:',
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(height: 8),
-            Container(
-              width: textFieldWidth,
-              child: TextFormField(
-                onChanged: (value) {
-                  setState(() {
-                    title = value;
-                  });
-                },
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.grey[300],
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: 8.0,
-                    horizontal: 12.0,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: BorderSide.none,
+                SizedBox(height: 16),
+                Container(
+                  width: 300,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Select Section:',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      // Replace the TextField with your section selection logic
+                      // For example, you can use a dropdown menu or a list to select the section
+                      TextField(
+                        readOnly: true,
+                        onTap: () {
+                          // Implement your section selection logic
+                          // For example, you can show a dropdown menu or navigate to a section selection screen
+                        },
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey[300],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 12.0,
+                            horizontal: 16.0,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Enter Description:',
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(height: 8),
-            Container(
-              width: textFieldWidth,
-              child: TextFormField(
-                onChanged: (value) {
-                  setState(() {
-                    description = value;
-                  });
-                },
-                maxLines: 3,
-                decoration: InputDecoration(
-                  filled: true,
-                  fillColor: Colors.grey[300],
-                  contentPadding: EdgeInsets.symmetric(
-                    vertical: 8.0,
-                    horizontal: 12.0,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Enter Date:',
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(height: 8),
-            GestureDetector(
-              onTap: () {
-                // Open date picker
-                _showDatePicker(context);
-              },
-              child: Container(
-                width: textFieldWidth,
-                child: TextField(
-                  readOnly: true,
-                  controller: TextEditingController(text: selectedDate),
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.grey[300],
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 8.0,
-                      horizontal: 12.0,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide.none,
-                    ),
+                SizedBox(height: 16),
+                Container(
+                  width: 300,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Enter Title:',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      TextFormField(
+                        controller: titleController,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey[300],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 12.0,
+                            horizontal: 16.0,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
-            ),
-            SizedBox(height: 16),
-            Text(
-              'Enter Time:',
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(height: 8),
-            GestureDetector(
-              onTap: () {
-                // Open time picker
-                _showTimePicker(context);
-              },
-              child: Container(
-                width: textFieldWidth,
-                child: TextField(
-                  readOnly: true,
-                  controller: TextEditingController(
-                    text: selectedTime.format(context),
-                  ),
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.grey[300],
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 8.0,
-                      horizontal: 12.0,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide.none,
-                    ),
+                SizedBox(height: 16),
+                Container(
+                  width: 300,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Enter Description:',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      TextFormField(
+                        controller: descriptionController,
+                        maxLines: 3,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey[300],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 12.0,
+                            horizontal: 16.0,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ),
+                SizedBox(height: 16),
+                Container(
+                  width: 300,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Enter Date:',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      TextFormField(
+                        readOnly: true,
+                        controller: TextEditingController(
+                          text: DateFormat('yyyy-MM-dd').format(selectedDate),
+                        ),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey[300],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 12.0,
+                            horizontal: 16.0,
+                          ),
+                          suffixIcon: IconButton(
+                            onPressed: () => _selectDate(context),
+                            icon: Icon(Icons.calendar_today),
+                          ),
+                        ),
+                        onTap: () => _selectDate(context),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 16),
+                Container(
+                  width: 300,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Enter Time:',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      TextFormField(
+                        readOnly: true,
+                        controller: TextEditingController(
+                          text: selectedTime.format(context),
+                        ),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey[300],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 12.0,
+                            horizontal: 16.0,
+                          ),
+                          suffixIcon: IconButton(
+                            onPressed: () => _selectTime(context),
+                            icon: Icon(Icons.access_time),
+                          ),
+                        ),
+                        onTap: () => _selectTime(context),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    String id = idController.text;
+                    String title = titleController.text;
+                    String description = descriptionController.text;
+                    String date = DateFormat('yyyy-MM-dd').format(selectedDate);
+                    String time = selectedTime.format(context);
+
+                    // Handle button press
+                    // Add logic to update the announcement with the entered details
+                  },
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.deepPurple, // Set button color to purple
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(width: 9),
+                      Text('Update'),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          // Save the announcement
-          _saveAnnouncement();
-        },
-        child: Icon(Icons.save),
-        backgroundColor: Colors.deepPurple.shade400,
-      ),
     );
-  }
-
-  void _showClassDropdown(BuildContext context) {
-    // TODO: Implement class dropdown logic
-  }
-
-  void _showSectionDropdown(BuildContext context) {
-    // TODO: Implement section dropdown logic
-  }
-
-  void _showDatePicker(BuildContext context) async {
-    final DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(2100),
-    );
-
-    if (pickedDate != null) {
-      setState(() {
-        selectedDate = pickedDate.toString(); // Store the selected date
-      });
-    }
-  }
-
-  void _showTimePicker(BuildContext context) async {
-    final TimeOfDay? pickedTime = await showTimePicker(
-      context: context,
-      initialTime: TimeOfDay.now(),
-    );
-
-    if (pickedTime != null) {
-      setState(() {
-        selectedTime = pickedTime; // Store the selected time
-      });
-    }
-  }
-
-  void _saveAnnouncement() {
-    // TODO: Implement save announcement logic
   }
 }
