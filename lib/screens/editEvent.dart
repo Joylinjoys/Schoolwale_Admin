@@ -3,14 +3,14 @@ import 'package:web_dashboard_app_tut/widgets/eventInput.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-class AdminEvent extends StatefulWidget {
-  const AdminEvent({super.key});
+class EditEvent extends StatefulWidget {
+  const EditEvent({super.key});
 
   @override
-  State<AdminEvent> createState() => _AdminEventState();
+  State<EditEvent> createState() => _EditEventState();
 }
 
-class _AdminEventState extends State<AdminEvent> {
+class _EditEventState extends State<EditEvent> {
    final ImagePicker _picker = ImagePicker();
 
   File? _image;
@@ -178,8 +178,7 @@ class _AdminEventState extends State<AdminEvent> {
                      width: 250,
                  //  height: 500,
                      child: TextField(
-                     // maxLines: 10,
-                     maxLength: 200,
+                       maxLength: 200,
                         // controller: nameController,
                         decoration: InputDecoration(
                           labelText: "Description",
@@ -200,7 +199,7 @@ class _AdminEventState extends State<AdminEvent> {
                       height: 40,
                       child: ElevatedButton(
                         onPressed: () {},
-                        child: Text('Submit',
+                        child: Text('Update',
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 24)),
                         style: ElevatedButton.styleFrom(
