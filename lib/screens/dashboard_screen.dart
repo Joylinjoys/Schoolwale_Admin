@@ -4,7 +4,7 @@ import 'package:web_dashboard_app_tut/screens/aboutschool.dart';
 import 'package:web_dashboard_app_tut/screens/teachers.dart';
 import 'addEvents.dart';
 import 'package:web_dashboard_app_tut/screens/timtable.dart';
-
+import 'eventList.dart';
 import 'AnnouncementList.dart';
 import 'Result.dart';
 import 'RulesRegulation.dart';
@@ -106,7 +106,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const AdminEvent ()),
+                        MaterialPageRoute(builder: (context) => const EventsPage ()),
                       );
                     },
                     child: Icon(Icons.celebration_outlined),
