@@ -13,19 +13,18 @@ class AnnouncementsPage extends StatefulWidget {
 class _AnnouncementsPageState extends State<AnnouncementsPage> {
   List<Map<String, String>> announcements = [
     {
-      'id': '1',
       'title': 'Announcement 1',
       'date': '2023-06-30',
       'time': '10:00 AM',
     },
     {
-      'id': '2',
+
       'title': 'Announcement 2',
       'date': '2023-07-01',
       'time': '11:30 AM',
     },
     {
-      'id': '3',
+
       'title': 'Announcement 3',
       'date': '2023-07-02',
       'time': '02:15 PM',
@@ -42,15 +41,6 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.deepPurple.shade400,
-        actions: [
-          IconButton(
-            onPressed: () {
-              // Handle add button press
-              // Implement your logic here to add a new announcement
-            },
-            icon: Icon(Icons.add),
-          ),
-        ],
       ),
       body: Center(
         child: Padding(
@@ -67,15 +57,7 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                 child: DataTable(
                   columnSpacing: 100.0,
                   columns: [
-                    DataColumn(
-                      label: Text(
-                        'ID',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
+
                     DataColumn(
                       label: Text(
                         'Title',
@@ -125,9 +107,7 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                   rows: announcements.map((announcement) {
                     return DataRow(
                       cells: [
-                        DataCell(
-                          Text(announcement['id'] ?? ''),
-                        ),
+
                         DataCell(
                           Text(announcement['title'] ?? ''),
                         ),
