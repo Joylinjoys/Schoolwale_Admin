@@ -186,5 +186,7 @@ class _EventsPageState extends State<EventsPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
+
   }
 }
+

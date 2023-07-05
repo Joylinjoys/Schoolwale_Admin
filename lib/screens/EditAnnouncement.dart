@@ -187,11 +187,13 @@ class _EditAnnouncementPageState extends State<EditAnnouncementPage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+
                       Text(
                         'Enter Description:',
                         style: TextStyle(fontSize: 18),
                       ),
                       TextFormField(
+                        maxLength: 200,
                         controller: descriptionController,
                         maxLines: 3,
                         decoration: InputDecoration(
