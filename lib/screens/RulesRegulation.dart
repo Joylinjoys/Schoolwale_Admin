@@ -8,6 +8,15 @@ class RulesRegulation extends StatefulWidget {
 class _RulesRegulationState extends State<RulesRegulation> {
   final TextEditingController _textEditingController = TextEditingController();
   bool _isEditing = false;
+  String _currentText = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _currentText =
+    "All students are expected to greet their school teachers when they meet them whether they actually teach them or not.\n• No books (other than text books or library books), magazines Cds, Pen Drive etc should be brought to school.\n• If they are brought, they will be confiscated.\n• Students are expected to respect school property.\n• No student should damage any school furniture,\n write or draw anything on the walls irregular or in any way damage things belonging to others.\n• Any school property damaged even by accident should be reported at once to the class teacher or to the Principal.\n• A student must always come to school in uniform, even during the Practical and special classes.\n• Chewing chocolates and gum in the school premises is strictly forbidden.\n• No students shall indulge in any of the following practices:\n   - spitting in or near the school building.\n   - disfiguring or damaging any school property.\n   - smoking any form of gambling.\n   - use of drugs or intoxicants except on prescription by a regular medical practitioner.";
+    _textEditingController.text = _currentText;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,8 +44,7 @@ class _RulesRegulationState extends State<RulesRegulation> {
                   maxLines: null,
                   readOnly: !_isEditing,
                   decoration: InputDecoration(
-                    hintText:
-                    "All students are expected to greet their school teachers when they meet them whether they actually teach them or not.\n• No books (other than text books or library books), magazines Cds, Pen Drive etc should be brought to school.\n• If they are brought, they will be confiscated.\n• Students are expected to respect school property.\n• No student should damage any school furniture,\n write or draw anything on the walls irregular or in any way damage things belonging to others.\n• Any school property damaged even by accident should be reported at once to the class teacher or to the Principal.\n• A student must always come to school in uniform, even during the Practical and special classes.\n• Chewing chocolates and gum in the school premises is strictly forbidden.\n• No students shall indulge in any of the following practices:\n   - spitting in or near the school building.\n   - disfiguring or damaging any school property.\n   - smoking any form of gambling.\n   - use of drugs or intoxicants except on prescription by a regular medical practitioner.",
+                    hintText: "Enter the rules and regulations...",
                   ),
                 ),
               ),
@@ -47,6 +55,9 @@ class _RulesRegulationState extends State<RulesRegulation> {
                   ElevatedButton(
                     onPressed: () {
                       setState(() {
+                        if (_isEditing) {
+                          _currentText = _textEditingController.text;
+                        }
                         _isEditing = !_isEditing;
                       });
                     },
@@ -61,9 +72,11 @@ class _RulesRegulationState extends State<RulesRegulation> {
                   SizedBox(width: 10),
                   ElevatedButton(
                     onPressed: () {
-                      String enteredText = _textEditingController.text;
-                      // Perform update action here with enteredText
-                      print('Text entered: $enteredText');
+                      setState(() {
+                        _currentText = _textEditingController.text;
+                        // Perform update action here with _currentText
+                        print('Text updated: $_currentText');
+                      });
                     },
                     style: ElevatedButton.styleFrom(
                       primary: Colors.deepPurple,

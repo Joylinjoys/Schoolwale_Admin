@@ -1,7 +1,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:web_dashboard_app_tut/screens/aboutschool.dart';
-import 'package:web_dashboard_app_tut/screens/eventList.dart';
 import 'package:web_dashboard_app_tut/screens/teachers.dart';
 
 import 'addEvents.dart';
@@ -110,7 +109,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const EventsPage()),
+                        MaterialPageRoute(builder: (context) => const AdminEvent ()),
                       );
                     },
                     child: Icon(Icons.celebration_outlined),
@@ -143,14 +142,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       },
                       child: Icon(Icons.pending_actions_outlined),
                     ),
-                    label: Text("TimeTable"),
+                    label: Text("TimeTabel"),
                   ),
                 NavigationRailDestination(
                   icon: GestureDetector(
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => CollegeDetails ()),
+                        MaterialPageRoute(builder: (context) => SchoolDetails ()),
                       );
                     },
                     child: Icon(Icons.domain),
@@ -204,7 +203,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     case 8:
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => CollegeDetails()),
+                        MaterialPageRoute(builder: (context) => SchoolDetails()),
                       );
                       break;
                     case 9:
