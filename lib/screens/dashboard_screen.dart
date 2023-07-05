@@ -149,7 +149,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => CollegeDetails ()),
+                        MaterialPageRoute(builder: (context) => SchoolDetails ()),
                       );
                     },
                     child: Icon(Icons.domain),
@@ -203,7 +203,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     case 8:
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => CollegeDetails()),
+                        MaterialPageRoute(builder: (context) => SchoolDetails()),
                       );
                       break;
                     case 9:
