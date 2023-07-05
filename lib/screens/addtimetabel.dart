@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
-class SchoolDetails extends StatefulWidget {
-  const SchoolDetails({Key? key}) : super(key: key);
+class AddTimetable extends StatefulWidget {
+  const AddTimetable({Key? key}) : super(key: key);
 
   @override
-  _SchoolDetailsState createState() => _SchoolDetailsState();
+  _AddTimetableState createState() => _AddTimetableState();
 }
 
-class _SchoolDetailsState extends State<SchoolDetails> {
+class _AddTimetableState extends State<AddTimetable> {
   final ImagePicker _picker = ImagePicker();
   File? _image;
 
@@ -19,7 +19,7 @@ class _SchoolDetailsState extends State<SchoolDetails> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'School Details',
+          'Add Timetable',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.deepPurple.shade400,
@@ -35,7 +35,7 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                 children: [
                   SizedBox(height: 20),
                   Text(
-                    'School Details',
+                    'Add Timetable',
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   SizedBox(height: 20),
@@ -43,7 +43,7 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Enter School Name',
+                        'Enter Class Name',
                         style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(width: 50),
@@ -51,8 +51,8 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                         width: 250,
                         child: TextField(
                           decoration: InputDecoration(
-                            labelText: "School Name",
-                            hintText: "Enter School Name",
+                            labelText: "Class Name",
+                            hintText: "Enter Class Name",
                             border: OutlineInputBorder(),
                           ),
                         ),
@@ -64,7 +64,28 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Upload School Photo',
+                        'Enter Section',
+                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(width: 50),
+                      SizedBox(
+                        width: 250,
+                        child: TextField(
+                          decoration: InputDecoration(
+                            labelText: "Section",
+                            hintText: "Enter Section",
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Upload Timetable Image',
                         style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                       ),
                       SizedBox(width: 50),
@@ -103,57 +124,13 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                     ],
                   ),
                   SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Enter Description',
-                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(width: 50),
-                      SizedBox(
-                        width: 250,
-                        child: TextField(
-                          maxLength: 200,
-                          decoration: InputDecoration(
-                            labelText: "Description",
-                            hintText: "Enter Description",
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Enter Mission',
-                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(width: 50),
-                      SizedBox(
-                        width: 250,
-                        child: TextField(
-                          maxLength: 200,
-                          decoration: InputDecoration(
-                            labelText: "Mission",
-                            hintText: "Enter Mission",
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
                   SizedBox(
                     width: 140,
                     height: 40,
                     child: ElevatedButton(
                       onPressed: () {},
                       child: Text(
-                        'Submit',
+                        'Add',
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
                       ),
                       style: ElevatedButton.styleFrom(

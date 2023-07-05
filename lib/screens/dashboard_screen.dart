@@ -1,16 +1,13 @@
 
 import 'package:flutter/material.dart';
+import 'package:web_dashboard_app_tut/screens/AnnouncementList.dart';
 import 'package:web_dashboard_app_tut/screens/aboutschool.dart';
 import 'package:web_dashboard_app_tut/screens/teachers.dart';
-
-import 'addEvents.dart';
-
 import 'package:web_dashboard_app_tut/screens/timtable.dart';
 
-
-import 'AnnouncementList.dart';
 import 'Result.dart';
 import 'RulesRegulation.dart';
+import 'addEvents.dart';
 import 'studentList.dart';
 import 'Resultfirst.dart';
 
@@ -81,56 +78,48 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   label: Text("Teachers"),
                 ),
 
-                NavigationRailDestination(
-                  icon: GestureDetector(
-                    onTap: () {
-                 Navigator.push(
-                      context,
-                             MaterialPageRoute(builder: (context) =>  Student_main  ()),
-                         );
 
-
-                    },
-                    child: Icon(Icons.people_outline),
-                  ),
-
-                  label: Text("Students"),
-                ),
-                NavigationRailDestination(
-                  icon: Icon(Icons.calendar_month_outlined),
-                  label: Text("Attendance"),
-                ),
-                // NavigationRailDestination(
-                //   icon: Icon(Icons.celebration_outlined),
-                //   label: Text("Events"),
-                // ),
-                NavigationRailDestination(
-                  icon: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const AdminEvent ()),
-                      );
-                    },
-                    child: Icon(Icons.celebration_outlined),
-                  ),
-
-                  label: Text("Events"),
-                ),
                   NavigationRailDestination(
                     icon: GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => AnnouncementsPage ()),
+                          MaterialPageRoute(builder: (context) => const Student_main()),
                         );
-
-
                       },
-                      child: Icon(Icons.campaign),
+                      child: Icon(Icons.people_sharp),
                     ),
+                    label: Text("Student"),
+                  ),
+                NavigationRailDestination(
+                  icon: Icon(Icons.calendar_month_outlined),
+                  label: Text("Attendance"),
+                ),
 
-                    label: Text("Announcements"),
+                  NavigationRailDestination(
+                    icon: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const AdminEvent()),
+                        );
+                      },
+                      child: Icon(Icons.celebration_outlined),
+                    ),
+                    label: Text("Events"),
+                  ),
+
+                  NavigationRailDestination(
+                    icon: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const AnnouncementsPage()),
+                        );
+                      },
+                      child: Icon(Icons.campaign_outlined),
+                    ),
+                    label: Text("Annoucements"),
                   ),
                   NavigationRailDestination(
                     icon: GestureDetector(
@@ -149,7 +138,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => CollegeDetails ()),
+                        MaterialPageRoute(builder: (context) => SchoolDetails ()),
                       );
                     },
                     child: Icon(Icons.domain),
@@ -203,7 +192,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     case 8:
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => CollegeDetails()),
+                        MaterialPageRoute(builder: (context) => SchoolDetails()),
                       );
                       break;
                     case 9:
@@ -237,7 +226,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ),
                         CircleAvatar(
                           backgroundImage: NetworkImage(
-                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREgU4XUc2HEmT28R4cbmxLFcmPRIvmF0WUEMRztghFhxw_FKXUiJi7CNrVUmEt6NUfbUY&usqp=CAU"),
+                              "https://img.freepik.com/premium-vector/people-ribbon-logo-modern-leadership-logo-human-charity-logo_327835-2463.jpg"),
                           radius: 28.0,
                         ),
                       ],

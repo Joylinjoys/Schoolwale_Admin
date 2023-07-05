@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:web_dashboard_app_tut/screens/addtimetabel.dart';
 
 class TimetableScreen extends StatelessWidget {
+  get onAddImage => null;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,10 +35,20 @@ class TimetableScreen extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    // Handle Add button tap
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => AddTimetable(),
+                      ),
+                    );
                   },
-                  child: Icon(Icons.add),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.deepPurple),
+                    foregroundColor: MaterialStateProperty.all(Colors.white),
+                  ),
+                  child: Text('Add'),
                 ),
+
               ],
             ),
           ),
