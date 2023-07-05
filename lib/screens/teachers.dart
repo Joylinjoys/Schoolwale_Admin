@@ -25,13 +25,13 @@ class TeacherPage extends StatelessWidget {
         'name': 'Mike Johnson',
         'subject': 'Science',
         'qualification': 'B.Sc., M.Ed.',
-        'phone no': 'N/A',
+        'phone no': '9591205729',
       },
       {
         'name': 'Rick Johnson',
         'subject': 'Science',
         'qualification': 'B.Sc., M.Ed.',
-        'phone no': 'N/A',
+        'phone no': '7899325930',
       },
     ];
 
@@ -40,29 +40,30 @@ class TeacherPage extends StatelessWidget {
         centerTitle: true,
         title: Text(
           'Teachers',
-          style: TextStyle(
-            fontSize: 29,
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.deepPurple.shade400,
       ),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(40.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Text(
+                'Teachers List',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 20),
               SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
                 child: DataTable(
-                  columnSpacing: 20.0,
-                  columns: const [
+                  columnSpacing: 100.0,
+                  columns: [
                     DataColumn(
                       label: Text(
                         'Name',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 24,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -71,7 +72,7 @@ class TeacherPage extends StatelessWidget {
                       label: Text(
                         'Subject',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 24,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -80,7 +81,7 @@ class TeacherPage extends StatelessWidget {
                       label: Text(
                         'Qualification',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 24,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -89,85 +90,92 @@ class TeacherPage extends StatelessWidget {
                       label: Text(
                         'Phone No',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 24,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                     DataColumn(
-                      label: SizedBox(),
+                      label: Text(
+                        'Edit',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        'Delete',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ),
                   ],
-                  rows: teachers.map((teacher) {
+                  rows: teachers.map((List) {
                     return DataRow(
                       cells: [
                         DataCell(
-                          Flexible(
-                            child: Text(teacher['name'] ?? ''),
+                          Text(List['name'] ?? ''),
+                        ),
+                        DataCell(
+                          Text(List['subject'] ?? ''),
+                        ),
+                        DataCell(
+                          Text(List['qualification'] ?? ''),
+                        ),
+                        DataCell(
+                          Text(List['phone no'] ?? ''),
+                        ),
+                        DataCell(
+                          ElevatedButton(
+                            child: Text('Edit'),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.deepPurple,
+                            ),
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => EditTeacherPage()),
+                              );
+                              // Navigate to edit announcement page
+                            },
                           ),
                         ),
                         DataCell(
-                          Flexible(
-                            child: Text(teacher['subject'] ?? ''),
-                          ),
-                        ),
-                        DataCell(
-                          Flexible(
-                            child: Text(teacher['qualification'] ?? ''),
-                          ),
-                        ),
-                        DataCell(
-                          Flexible(
-                            child: Text(teacher['phone no'] ?? ''),
-                          ),
-                        ),
-                        DataCell(
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => const EditTeacherPage()),
-                                  );
-                                  // Handle edit button press
-                                  // You can navigate to an edit screen or show a dialog
-                                },
-                                icon: Icon(Icons.edit),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: Text('Confirmation'),
-                                        content: Text('Are you sure you want to delete?'),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () {
-                                              // Perform delete operation
-                                              // You can add your logic here to delete the teacher record
-                                              Navigator.of(context).pop(); // Close the dialog
-                                            },
-                                            child: Text('Yes'),
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop(); // Close the dialog
-                                            },
-                                            child: Text('No'),
-                                          ),
-                                        ],
-                                      );
-                                    },
+                          ElevatedButton(
+                            child: Text('Delete'),
+                            style: ElevatedButton.styleFrom(
+                              primary: Colors.deepPurple,
+                            ),
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text('Confirmation'),
+                                    content: Text('Are you sure you want to delete?'),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          // Perform delete operation
+                                          Navigator.of(context).pop(); // Close the dialog
+                                        },
+                                        child: Text('Yes'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop(); // Close the dialog
+                                        },
+                                        child: Text('No'),
+                                      ),
+                                    ],
                                   );
                                 },
-                                icon: Icon(Icons.delete),
-                                color: Colors.red,
-                              ),
-                            ],
+                              );
+                            },
                           ),
                         ),
                       ],
@@ -175,20 +183,23 @@ class TeacherPage extends StatelessWidget {
                   }).toList(),
                 ),
               ),
-              SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const AddTeacherPage()),
-                  );
-                },
-                child: Text('ADD'),
-              ),
             ],
           ),
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AddTeacherPage ()),
+          );
+          // Handle add button press
+          // Implement your logic here to add a new announcement
+        },
+        child: Text('ADD'), // Added the text 'ADD' to the button
+        backgroundColor: Colors.deepPurple.shade400,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
