@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:web_dashboard_app_tut/screens/finalmarks.dart';
 
-class ResultPage extends StatefulWidget {
-  const ResultPage({Key? key}) : super(key: key);
+class Finalexam extends StatefulWidget {
+  const Finalexam({Key? key}) : super(key: key);
 
   @override
-  _ResultPageState createState() => _ResultPageState();
+  _FinalexamState createState() => _FinalexamState();
 }
 
-class _ResultPageState extends State<ResultPage> {
+class _FinalexamState extends State<Finalexam> {
   final _formKey = GlobalKey<FormState>();
   final _examNameController = TextEditingController();
   final _totalMarksController = TextEditingController();
@@ -42,7 +41,7 @@ class _ResultPageState extends State<ResultPage> {
       print('Passing Marks: $passingMarksValue');
       print('Marks Obtained: $marksObtainedValue');
 
-      // TODO: Handle form submission and further actions
+
     }
   }
 
@@ -71,7 +70,7 @@ class _ResultPageState extends State<ResultPage> {
                 child: Column(
                   children: [
                     Text(
-                      'Enter Examination Details',
+                      'Enter  Final Examination Details',
                       style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 20),
@@ -149,7 +148,7 @@ class _ResultPageState extends State<ResultPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Total Marks',
+                          'Written Exam Marks',
                           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(width: 50),
@@ -158,8 +157,8 @@ class _ResultPageState extends State<ResultPage> {
                           child: TextFormField(
                             controller: _totalMarksController,
                             decoration: InputDecoration(
-                              labelText: "Total Marks",
-                              hintText: "Total Marks",
+                              labelText: "Written Exam",
+                              hintText: "Written Exam  Marks /80",
                               border: OutlineInputBorder(),
                             ),
                           ),
@@ -171,7 +170,7 @@ class _ResultPageState extends State<ResultPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Passing Marks',
+                          'Internal Assesment Marks',
                           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(width: 50),
@@ -180,8 +179,8 @@ class _ResultPageState extends State<ResultPage> {
                           child: TextFormField(
                             controller: _passingMarksController,
                             decoration: InputDecoration(
-                              labelText: "Passing Marks",
-                              hintText: "Passing Marks",
+                              labelText: "Internal Assesment",
+                              hintText: "Internal Assessment Marks /20",
                               border: OutlineInputBorder(),
                             ),
                           ),
@@ -227,29 +226,6 @@ class _ResultPageState extends State<ResultPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Finalexam()),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.deepPurple, // Set button color to purple
-                          minimumSize: Size(200, 50), // Increase button size
-                        ),
-                        child: Text(
-                          'Add Final Exam Marks',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-
                   ],
                 ),
               ),

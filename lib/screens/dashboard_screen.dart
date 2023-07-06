@@ -237,7 +237,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ),
                         CircleAvatar(
                           backgroundImage: NetworkImage(
-                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcREgU4XUc2HEmT28R4cbmxLFcmPRIvmF0WUEMRztghFhxw_FKXUiJi7CNrVUmEt6NUfbUY&usqp=CAU"),
+                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQbh5cSiQvrbRD1wVsbv0L1hUolQIXgU6iTTdqsZf2pErDYjmUx1kCjXo_r_0TN_kMQ5c&usqp=CAU"),
                           radius: 28.0,
                         ),
                       ],
