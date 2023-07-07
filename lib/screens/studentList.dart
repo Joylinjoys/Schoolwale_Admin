@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'addStudent.dart';
 import 'viewProfile.dart';
 import 'virtualID.dart';
+import 'editProfile.dart';
 class Student_main extends StatefulWidget {
   const Student_main({super.key});
 
@@ -16,10 +17,10 @@ class _Student_mainState extends State<Student_main> {
   String dropdownvalue = 'choose class';
   var items = [
     'choose class',
-    '1 st ',
-    '2 nd',
-    '3 rd',
-    '4 th',
+    '1 ',
+    '2 ',
+    '3 ',
+    '4 ',
   ];
 
   //selectedIndex=1;
@@ -41,7 +42,7 @@ class _Student_mainState extends State<Student_main> {
       {
         'regno': '301',
         'name': 'Winston',
-        'class': '5',
+        'class': 'LKG',
         'section': 'A',
       },
       {
@@ -66,7 +67,7 @@ class _Student_mainState extends State<Student_main> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
@@ -125,6 +126,25 @@ class _Student_mainState extends State<Student_main> {
                       )
                     ]),
                   ),
+                    SizedBox(
+                      
+                      width: 140,
+                      height: 40,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const AddStudent()),
+                          );
+                        },
+                        child: Text('ADD',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24)),
+                        style: ElevatedButton.styleFrom(
+                          primary:
+                              Colors.deepPurple, // Set button color to purple
+                        ),
+                      ),
+                    ),
                   DropdownButton(
                     // Initial Value
                     value: dropdownvalue,
@@ -161,7 +181,7 @@ class _Student_mainState extends State<Student_main> {
                         label: Text(
                       'Register No',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     )),
@@ -169,7 +189,7 @@ class _Student_mainState extends State<Student_main> {
                         label: Text(
                       'Name',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     )),
@@ -177,7 +197,7 @@ class _Student_mainState extends State<Student_main> {
                         label: Text(
                       'Class',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     )),
@@ -185,7 +205,7 @@ class _Student_mainState extends State<Student_main> {
                         label: Text(
                       'Section',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     )),
@@ -193,7 +213,7 @@ class _Student_mainState extends State<Student_main> {
                         label: Text(
                       'Profile',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     )),
@@ -201,7 +221,15 @@ class _Student_mainState extends State<Student_main> {
                         label: Text(
                       'Virtual ID',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    )),
+                     DataColumn(
+                        label: Text(
+                      'Edit Profile',
+                      style: TextStyle(
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     )),
@@ -209,7 +237,7 @@ class _Student_mainState extends State<Student_main> {
                         label: Text(
                       'Delete',
                       style: TextStyle(
-                        fontSize: 24,
+                        fontSize: 20,
                         fontWeight: FontWeight.bold,
                       ),
                     )),
@@ -265,6 +293,21 @@ class _Student_mainState extends State<Student_main> {
                             },
                           ),
                         )),
+                         DataCell(Flexible(
+                          child: ElevatedButton(
+                            child: Text('Edit'),
+                            style: ElevatedButton.styleFrom(
+                      primary: Colors.deepPurple, // Set button color to purple
+                    ),
+                            onPressed: () {
+                              Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const EditStudent()),
+                          );
+                            },
+                          ),
+                        )),
                         DataCell(Flexible(
                           child: ElevatedButton(
                             child: Text('delete'),
@@ -306,26 +349,7 @@ class _Student_mainState extends State<Student_main> {
                 ),
               ),),
                SizedBox(height: 16),
-          Center(
-                    child: SizedBox(
-                      width: 140,
-                      height: 40,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const AddStudent()),
-                          );
-                        },
-                        child: Text('ADD',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24)),
-                        style: ElevatedButton.styleFrom(
-                          primary:
-                              Colors.deepPurple, // Set button color to purple
-                        ),
-                      ),
-                    ),
-                  ),
+         
             ],
           ),
         ),

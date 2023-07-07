@@ -13,13 +13,28 @@ class VirtualId extends StatefulWidget {
 class _VirtualIdState extends State<VirtualId> {
    final ImagePicker _picker = ImagePicker();
   File? _image;
-     String selectedClass = ''; // Variable to hold the selected class
-  String selectedSection = ''; // Variable to hold the selected section
+    String? selectedClass;
+  String? selectedSection;
+  //String? selectedRollNo;
+
+  List<String> classes = [
+    'Class 1',
+    'Class 2',
+    'Class 3',
+    // Add more class options here
+  ];
+
+  List<String> sections = [
+    'Section A',
+    'Section B',
+    'Section C',
+    // Add more section options here
+  ]; // Variable to hold the selected section
   String title = '';
   
   @override
   Widget build(BuildContext context) {
-    final double textFieldWidth = MediaQuery.of(context).size.width * 0.5;
+    final double textFieldWidth = MediaQuery.of(context).size.width * 0.2;
    
     return Scaffold(
       appBar: AppBar(
@@ -47,28 +62,26 @@ class _VirtualIdState extends State<VirtualId> {
               ),
               SizedBox(height: 8),
               Container(
-                width: textFieldWidth,
-                child: TextField(
-                  readOnly: true,
-                  onTap: () {
-                    // Open class dropdown
-                    _showClassDropdown(context);
-                  },
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.grey[300],
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 8.0,
-                      horizontal: 12.0,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                  controller: TextEditingController(text: selectedClass),
-                ),
-              ),
+                          width: textFieldWidth,
+                          child: DropdownButtonFormField<String>(
+                            value: selectedClass,
+                            onChanged: (newValue) {
+                              setState(() {
+                                selectedClass = newValue;
+                              });
+                            },
+                            items: classes.map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                            ),
+                          ),
+                        ),
               SizedBox(height: 16),
               Text(
                 'Select Section:',
@@ -76,29 +89,27 @@ class _VirtualIdState extends State<VirtualId> {
               ),
               SizedBox(height: 8),
               Container(
-                width: textFieldWidth,
-                child: TextField(
-                  readOnly: true,
-                  onTap: () {
-                    // Open section dropdown
-                    _showSectionDropdown(context);
-                  },
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.grey[300],
-                    contentPadding: EdgeInsets.symmetric(
-                      vertical: 8.0,
-                      horizontal: 12.0,
-                    ),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                  controller: TextEditingController(text: selectedSection),
-                ),
-              ),
-              SizedBox(height: 16),
+                          width: textFieldWidth,
+                          child: DropdownButtonFormField<String>(
+                            value: selectedSection,
+                            onChanged: (newValue) {
+                              setState(() {
+                                selectedSection = newValue;
+                              });
+                            },
+                            items: sections.map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Text(value),
+                              );
+                            }).toList(),
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                            ),
+                          ),
+                        ),
+              SizedBox(height: 40),
               
               Container(
                 width: textFieldWidth,
@@ -135,10 +146,11 @@ class _VirtualIdState extends State<VirtualId> {
                  
                   ),
                    SizedBox(
-                    height: 20,
+                    height: 50,
                   ),
                    SizedBox(
-                      width: 140,
+                      width: 
+                      140,
                       height: 40,
                       child: ElevatedButton(
                         onPressed: () {},
@@ -160,11 +172,5 @@ class _VirtualIdState extends State<VirtualId> {
     );
   }
 
-  void _showClassDropdown(BuildContext context) {
-    // TODO: Implement class dropdown logic
-  }
-
-  void _showSectionDropdown(BuildContext context) {
-    // TODO: Implement section dropdown logic
-  }
+  
 }
