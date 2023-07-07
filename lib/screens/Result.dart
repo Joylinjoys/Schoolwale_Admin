@@ -86,7 +86,7 @@ class _ResultPageState extends State<ResultPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'Enter Examination Name:',
+                              'Enter Examination Name',
                               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                             SizedBox(width: 8),
@@ -108,7 +108,7 @@ class _ResultPageState extends State<ResultPage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              'Enter Student Reg. No:',
+                              'Enter Student Reg. No',
                               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                             ),
                             SizedBox(width: 8),
