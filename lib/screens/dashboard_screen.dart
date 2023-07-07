@@ -32,18 +32,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
         children: [
           LayoutBuilder(
             builder: (context, constraints) {
-              // Responsive breakpoint: When the available width is less than 600 pixels, show the navigation rail in a collapsed state
+              // Responsive breakpoint: When the available width is less than 500 pixels, show the navigation rail in a collapsed state
               final isSmallScreen = constraints.maxWidth < 500;
 
-              return NavigationRail(
-                extended: !isSmallScreen && isExpanded,
-                backgroundColor: Colors.deepPurple.shade400,
-                unselectedIconTheme: IconThemeData(color: Colors.white, opacity: 1),
-                unselectedLabelTextStyle: TextStyle(
-                  color: Colors.white,
-                ),
-                selectedIconTheme: IconThemeData(color: Colors.deepPurple.shade900),
-                destinations: [
+              return Expanded(
+                child: NavigationRail(
+                    extended: !isSmallScreen && isExpanded,
+                    backgroundColor: Colors.deepPurple.shade400,
+                    unselectedIconTheme: IconThemeData(color: Colors.white, opacity: 1),
+                    unselectedLabelTextStyle: TextStyle(
+                      color: Colors.white,
+                    ),
+                    selectedIconTheme: IconThemeData(color: Colors.deepPurple.shade900),
+              destinations: [
                   NavigationRailDestination(
                     icon: GestureDetector(
                       onTap: () {
@@ -194,59 +195,66 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   }
 
                   // Navigate to the selected screen
-                  switch (index) {
-                    case 1:
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const Resultfirst()),
-                      );
-                      break;
-                    case 2:
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const TeacherPage()),
-                      );
-                      break;
-                    case 3:
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const Student_main()),
-                      );
-                      break;
-                    case 4:
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const AdminEvent()),
-                      );
-                      break;
-                    case 5:
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const AnnouncementsPage()),
-                      );
-                      break;
-                    case 6:
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) =>TimetableScreen()),
-                      );
-                      break;
-
-
-                    case 8:
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) =>const SchoolDetails()),
-                      );
-                      break;
-                    case 9:
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) =>RulesRegulation()),
-                      );
-                      break;
+                  // switch (index) {
+                  //   case 1:
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) => const Resultfirst()),
+                  //     );
+                  //     break;
+                  //   case 2:
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) => const TeacherPage()),
+                  //     );
+                  //     break;
+                  //   case 3:
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) => const Student_main()),
+                  //     );
+                  //     break;
+                  //   case 4:
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) => const AdminEvent()),
+                  //     );
+                  //     break;
+                  //   case 5:
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) => const AnnouncementsPage()),
+                  //     );
+                  //     break;
+                  //   case 6:
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) => const UploadNotes()),
+                  //     );
+                  //     break;
+                  //   case 7:
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) =>TimetableScreen()),
+                  //     );
+                  //     break;
+                  //
+                  //
+                  //   case 8:
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) =>const SchoolDetails()),
+                  //     );
+                  //     break;
+                  //   case 9:
+                  //     Navigator.push(
+                  //       context,
+                  //       MaterialPageRoute(builder: (context) =>RulesRegulation()),
+                  //     );
+                  //     break;
                   }
-                },
+                // },
+                  ),
               );
             },
           ),
@@ -310,7 +318,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     height: 20.0,
                                   ),
                                   Text(
-                                    "967 Students",
+                                    "500 Students",
                                     style: TextStyle(
                                       fontSize: 36,
                                       fontWeight: FontWeight.bold,
@@ -333,15 +341,15 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                       Icon(
                                         Icons.person_outlined,
                                         size: 26.0,
-                                        color: Colors.red,
+                                        color: Colors.blueAccent,
                                       ),
                                       SizedBox(
                                         width: 15.0,
                                       ),
                                       Text(
-                                        " Total boys 179",
+                                        " Boys",
                                         style: TextStyle(
-                                          color: Colors.lightBlueAccent,
+                                          color: Colors.blueAccent,
                                           fontSize: 26.0,
                                           fontWeight: FontWeight.bold,
                                         ),
@@ -352,9 +360,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     height: 20.0,
                                   ),
                                   Text(
-                                    "boys",
+                                    "250 Boys",
                                     style: TextStyle(
-                                      color: Colors.red,
+                                      color: Colors.blueAccent,
                                       fontSize: 36,
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -395,7 +403,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                                     height: 20.0,
                                   ),
                                   Text(
-                                    "Total girls 267",
+                                    "250 Girls",
                                     style: TextStyle(
                                       fontSize: 36,
                                       color: Colors.amber,
