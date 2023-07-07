@@ -13,18 +13,16 @@ class EventsPage extends StatefulWidget {
 class _EventsPageState extends State<EventsPage> {
   List<Map<String, String>> announcements = [
     {
-      'id': '1',
       'name': 'Singing',
       'date': '2023-06-30',
       'image': 'sfsfsfskkkkkkkkkkkkkkkkkkkk',
     },
     {
-       'id': '2',
       'name': 'Dancing',
       'date': '2023-06-30',
       'image': 'sfsfsfskkkkkkkkkkbbkkkkkkkkkk',
     },
-    { 'id': '3',
+    {
       'name': 'Drawing',
       'date': '2023-06-30',
       'image': 'sfsfsfskkkkkkkkkkkkkkkkkkkk',
@@ -41,15 +39,6 @@ class _EventsPageState extends State<EventsPage> {
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.deepPurple.shade400,
-        actions: [
-          IconButton(
-            onPressed: () {
-              // Handle add button press
-              // Implement your logic here to add a new announcement
-            },
-            icon: Icon(Icons.add),
-          ),
-        ],
       ),
       body: Center(
         child: Padding(
@@ -66,15 +55,7 @@ class _EventsPageState extends State<EventsPage> {
                 child: DataTable(
                   columnSpacing: 100.0,
                   columns: [
-                    DataColumn(
-                      label: Text(
-                        'Event ID',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
+
                     DataColumn(
                       label: Text(
                         'Event Name',
@@ -124,9 +105,6 @@ class _EventsPageState extends State<EventsPage> {
                   rows: announcements.map((announcement) {
                     return DataRow(
                       cells: [
-                        DataCell(
-                          Text(announcement['id'] ?? ''),
-                        ),
                         DataCell(
                           Text(announcement['name'] ?? ''),
                         ),
@@ -208,5 +186,7 @@ class _EventsPageState extends State<EventsPage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
+
   }
 }
+

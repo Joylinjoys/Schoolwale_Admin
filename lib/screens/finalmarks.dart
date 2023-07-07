@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:web_dashboard_app_tut/screens/finalmarks.dart';
 
-class ResultPage extends StatefulWidget {
-  const ResultPage({Key? key}) : super(key: key);
+class Finalexam extends StatefulWidget {
+  const Finalexam({Key? key}) : super(key: key);
 
   @override
-  _ResultPageState createState() => _ResultPageState();
+  _FinalexamState createState() => _FinalexamState();
 }
 
-class _ResultPageState extends State<ResultPage> {
+class _FinalexamState extends State<Finalexam> {
   final _formKey = GlobalKey<FormState>();
   final _examNameController = TextEditingController();
   final _totalMarksController = TextEditingController();
@@ -42,7 +41,7 @@ class _ResultPageState extends State<ResultPage> {
       print('Passing Marks: $passingMarksValue');
       print('Marks Obtained: $marksObtainedValue');
 
-      // TODO: Handle form submission and further actions
+
     }
   }
 
@@ -71,155 +70,13 @@ class _ResultPageState extends State<ResultPage> {
                 child: Column(
                   children: [
                     Text(
-                      'Enter Examination Details',
+                      'Enter  Final Examination Details',
                       style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-<<<<<<< HEAD
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Enter Examination Name',
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(width: 8),
-                            Container(
-                              width: 200,
-                              child: TextFormField(
-                                controller: _examNameController,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  contentPadding:
-                                  EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 16),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Enter Student Reg. No',
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(width: 8),
-                            Container(
-                              width: 200,
-                              child: TextFormField(
-                                controller: _regNoController,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  contentPadding:
-                                  EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 16),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Enter Subject Name:',
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(width: 8),
-                            Container(
-                              width: 200,
-                              child: TextFormField(
-                                controller: _subjectNameController,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  contentPadding:
-                                  EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 16),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Total Marks:',
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(width: 8),
-                            Container(
-                              width: 100,
-                              child: TextFormField(
-                                controller: _totalMarksController,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  contentPadding:
-                                  EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-                                ),
-                              ),
-                            ),
-                            SizedBox(width: 16),
-                            Text(
-                              'Passing Marks:',
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(width: 8),
-                            Container(
-                              width: 100,
-                              child: TextFormField(
-                                controller: _passingMarksController,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  contentPadding:
-                                  EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 16),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Marks Obtained:',
-                              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            SizedBox(width: 8),
-                            Container(
-                              width: 100,
-                              child: TextFormField(
-                                controller: _marksObtainedController,
-                                decoration: InputDecoration(
-                                  border: OutlineInputBorder(),
-                                  contentPadding:
-                                  EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: 16),
-                        Center(
-                          child: ElevatedButton(
-                            onPressed: _submitForm,
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.deepPurple, // Set button color to purple
-                              minimumSize: Size(200, 50), // Increase button size
-                            ),
-                            child: Text(
-                              'Submit',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-=======
                         Text(
                           'Enter Examination Name',
                           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
@@ -233,7 +90,6 @@ class _ResultPageState extends State<ResultPage> {
                               labelText: "Examination Name",
                               hintText: "Examination Name",
                               border: OutlineInputBorder(),
->>>>>>> 063c23850ec25b2759c7f6100d6beb85019f94dd
                             ),
                           ),
                         ),
@@ -292,7 +148,7 @@ class _ResultPageState extends State<ResultPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Total Marks',
+                          'Written Exam Marks',
                           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(width: 50),
@@ -301,8 +157,8 @@ class _ResultPageState extends State<ResultPage> {
                           child: TextFormField(
                             controller: _totalMarksController,
                             decoration: InputDecoration(
-                              labelText: "Total Marks",
-                              hintText: "Total Marks",
+                              labelText: "Written Exam",
+                              hintText: "Written Exam  Marks /80",
                               border: OutlineInputBorder(),
                             ),
                           ),
@@ -314,7 +170,7 @@ class _ResultPageState extends State<ResultPage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Passing Marks',
+                          'Internal Assesment Marks',
                           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(width: 50),
@@ -323,8 +179,8 @@ class _ResultPageState extends State<ResultPage> {
                           child: TextFormField(
                             controller: _passingMarksController,
                             decoration: InputDecoration(
-                              labelText: "Passing Marks",
-                              hintText: "Passing Marks",
+                              labelText: "Internal Assesment",
+                              hintText: "Internal Assessment Marks /20",
                               border: OutlineInputBorder(),
                             ),
                           ),
@@ -370,29 +226,6 @@ class _ResultPageState extends State<ResultPage> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 20),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => Finalexam()),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.deepPurple, // Set button color to purple
-                          minimumSize: Size(200, 50), // Increase button size
-                        ),
-                        child: Text(
-                          'Add Final Exam Marks',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-
                   ],
                 ),
               ),

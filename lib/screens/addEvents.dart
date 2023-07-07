@@ -14,6 +14,22 @@ class _AdminEventState extends State<AdminEvent> {
    final ImagePicker _picker = ImagePicker();
 
   File? _image;
+   DateTime? _selectedDate;
+
+   Future<void> _selectDate(BuildContext context) async {
+     final DateTime? pickedDate = await showDatePicker(
+       context: context,
+       initialDate: DateTime.now(),
+       firstDate: DateTime.now(),
+       lastDate: DateTime(2100),
+     );
+
+     if (pickedDate != null && pickedDate != _selectedDate) {
+       setState(() {
+         _selectedDate = pickedDate;
+       });
+     }
+   }
 
   @override
   Widget build(BuildContext context) {
@@ -43,30 +59,7 @@ class _AdminEventState extends State<AdminEvent> {
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                 ),
                 SizedBox(height: 20,),
-                
-                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                     Text(
-                  'Enter Event id',
-                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(width: 50),
-                 SizedBox(
-                     width: 250,
-                    // height: 200,
-                     child: TextField(
-                        // controller: nameController,
-                        decoration: InputDecoration(
-                          labelText: "Event id",
-                          hintText: "enter event id",
-                          border: OutlineInputBorder(),
-                        ),
-                      ),
-                   ),
-                    
-                  ],
-                ),
+
                 // EventInput(
                 //   hght: 200,
                 //   label: "Enter event Id",
@@ -110,11 +103,17 @@ class _AdminEventState extends State<AdminEvent> {
                      width: 250,
                     // height: 200,
                      child: TextField(
+                       readOnly: true,
+                       onTap: () => _selectDate(context),
                         // controller: nameController,
                         decoration: InputDecoration(
                           labelText: "Enter Date",
                           hintText: "  DD | MM | YYYY  ",
                           border: OutlineInputBorder(),
+                          suffixIcon: IconButton(
+                            onPressed: () => _selectDate(context),
+                            icon: Icon(Icons.calendar_today),
+                          ),
                         ),
                       ),
                    ),

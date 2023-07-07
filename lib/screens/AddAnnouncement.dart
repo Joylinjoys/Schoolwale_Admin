@@ -11,8 +11,9 @@ class AddAnnouncementPage extends StatefulWidget {
 class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
   TextEditingController idController = TextEditingController();
   TextEditingController titleController = TextEditingController();
-  TextEditingController dateController = TextEditingController();
-  TextEditingController timeController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
+  String selectedClass = '';
+  String selectedSection = '';
 
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
@@ -27,7 +28,6 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
-        dateController.text = DateFormat('yyyy-MM-dd').format(picked);
       });
   }
 
@@ -39,7 +39,6 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
     if (picked != null && picked != selectedTime)
       setState(() {
         selectedTime = picked;
-        timeController.text = picked.format(context);
       });
   }
 
@@ -47,8 +46,7 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
   void dispose() {
     idController.dispose();
     titleController.dispose();
-    dateController.dispose();
-    timeController.dispose();
+    descriptionController.dispose();
     super.dispose();
   }
 
@@ -84,11 +82,51 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Enter ID:',
+                        'Select Class:',
                         style: TextStyle(fontSize: 18),
                       ),
-                      TextFormField(
-                        controller: idController,
+                      // Replace the TextField with your class selection logic
+                      // For example, you can use a dropdown menu or a list to select the class
+                      TextField(
+                        readOnly: true,
+                        onTap: () {
+                          // Implement your class selection logic
+                          // For example, you can show a dropdown menu or navigate to a class selection screen
+                        },
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey[300],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 12.0,
+                            horizontal: 16.0,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 16),
+                Container(
+                  width: 300,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Select Section:',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      // Replace the TextField with your section selection logic
+                      // For example, you can use a dropdown menu or a list to select the section
+                      TextField(
+                        readOnly: true,
+                        onTap: () {
+                          // Implement your section selection logic
+                          // For example, you can show a dropdown menu or navigate to a section selection screen
+                        },
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.grey[300],
@@ -140,11 +178,44 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
+                        'Enter Description:',
+                        style: TextStyle(fontSize: 18),
+                      ),
+                      TextFormField(
+                        maxLength: 200,
+                        controller: descriptionController,
+                        maxLines: 3,
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: Colors.grey[300],
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(8.0),
+                            borderSide: BorderSide.none,
+                          ),
+                          contentPadding: EdgeInsets.symmetric(
+                            vertical: 12.0,
+                            horizontal: 16.0,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 16),
+                Container(
+                  width: 300,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
                         'Enter Date:',
                         style: TextStyle(fontSize: 18),
                       ),
                       TextFormField(
-                        controller: dateController,
+                        readOnly: true,
+                        controller: TextEditingController(
+                          text: DateFormat('yyyy-MM-dd').format(selectedDate),
+                        ),
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.grey[300],
@@ -177,7 +248,10 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
                         style: TextStyle(fontSize: 18),
                       ),
                       TextFormField(
-                        controller: timeController,
+                        readOnly: true,
+                        controller: TextEditingController(
+                          text: selectedTime.format(context),
+                        ),
                         decoration: InputDecoration(
                           filled: true,
                           fillColor: Colors.grey[300],
@@ -204,8 +278,9 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
                   onPressed: () {
                     String id = idController.text;
                     String title = titleController.text;
-                    String date = dateController.text;
-                    String time = timeController.text;
+                    String description = descriptionController.text;
+                    String date = DateFormat('yyyy-MM-dd').format(selectedDate);
+                    String time = selectedTime.format(context);
 
                     // Handle button press
                     // Add logic to save the announcement with the entered details
@@ -216,9 +291,8 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
                   child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      SizedBox(width: 8),
-                      Icon(Icons.add),
-                      SizedBox(width: 8),
+                      SizedBox(width: 9),
+
                       Text('Add'),
                     ],
                   ),
