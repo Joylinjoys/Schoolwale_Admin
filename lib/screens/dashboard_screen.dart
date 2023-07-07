@@ -14,6 +14,7 @@ import 'Result.dart';
 import 'RulesRegulation.dart';
 import 'studentList.dart';
 import 'Resultfirst.dart';
+import 'eventList.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -108,7 +109,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const AdminEvent ()),
+                        MaterialPageRoute(builder: (context) => const EventsPage ()),
                       );
                     },
                     child: Icon(Icons.celebration_outlined),

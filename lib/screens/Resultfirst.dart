@@ -67,7 +67,7 @@ class _ResultfirstState extends State<Resultfirst> {
                     ),
                     SizedBox(height: 16),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           'Select Class:',
@@ -99,7 +99,7 @@ class _ResultfirstState extends State<Resultfirst> {
                     ),
                     SizedBox(height: 16),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           'Select Section:',
@@ -131,7 +131,7 @@ class _ResultfirstState extends State<Resultfirst> {
                     ),
                     SizedBox(height: 16),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           'Select Roll No:',
