@@ -55,7 +55,7 @@ class _ResultfirstState extends State<Resultfirst> {
             child: Container(
               alignment: Alignment.topCenter,
               child: Container(
-                width:500,
+                width: 500,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -65,26 +65,37 @@ class _ResultfirstState extends State<Resultfirst> {
                         style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                     ),
-<<<<<<< HEAD
                     SizedBox(height: 16),
                     LayoutBuilder(
                       builder: (BuildContext context, BoxConstraints constraints) {
                         final maxWidth = constraints.maxWidth;
-                        final textFieldWidth = maxWidth > 300 ? 300.0 : maxWidth * 0.8;
-              
+                        final textFieldWidth = maxWidth > 500 ? 500.0 : maxWidth * 0.8;
+
                         return Column(
                           children: [
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'Select Class',
+                                  'Select Class:',
                                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(width: 8),
                                 Container(
                                   width: textFieldWidth,
-                                  child: TextField(
+                                  child: DropdownButtonFormField<String>(
+                                    value: selectedClass,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        selectedClass = newValue;
+                                      });
+                                    },
+                                    items: classes.map<DropdownMenuItem<String>>((String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(10.0),
@@ -96,16 +107,28 @@ class _ResultfirstState extends State<Resultfirst> {
                             ),
                             SizedBox(height: 16),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'Select Section',
+                                  'Select Section:',
                                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(width: 8),
                                 Container(
                                   width: textFieldWidth,
-                                  child: TextField(
+                                  child: DropdownButtonFormField<String>(
+                                    value: selectedSection,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        selectedSection = newValue;
+                                      });
+                                    },
+                                    items: sections.map<DropdownMenuItem<String>>((String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(10.0),
@@ -117,123 +140,32 @@ class _ResultfirstState extends State<Resultfirst> {
                             ),
                             SizedBox(height: 16),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'Select Rollno',
+                                  'Select Roll No:',
                                   style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                                 ),
                                 SizedBox(width: 8),
                                 Container(
                                   width: textFieldWidth,
-                                  child: TextField(
+                                  child: DropdownButtonFormField<String>(
+                                    value: selectedRollNo,
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        selectedRollNo = newValue;
+                                      });
+                                    },
+                                    items: rollNos.map<DropdownMenuItem<String>>((String value) {
+                                      return DropdownMenuItem<String>(
+                                        value: value,
+                                        child: Text(value),
+                                      );
+                                    }).toList(),
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(
                                         borderRadius: BorderRadius.circular(10.0),
                                       ),
-=======
-                  ),
-                  SizedBox(height: 16),
-                  LayoutBuilder(
-                    builder: (BuildContext context, BoxConstraints constraints) {
-                      final maxWidth = constraints.maxWidth;
-                      final textFieldWidth = maxWidth > 500 ? 500.0 : maxWidth * 0.8;
-
-                      return Column(
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Select Class:',
-                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(width: 8),
-                              Container(
-                                width: textFieldWidth,
-                                child: DropdownButtonFormField<String>(
-                                  value: selectedClass,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      selectedClass = newValue;
-                                    });
-                                  },
-                                  items: classes.map<DropdownMenuItem<String>>((String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 16),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Select Section:',
-                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(width: 8),
-                              Container(
-                                width: textFieldWidth,
-                                child: DropdownButtonFormField<String>(
-                                  value: selectedSection,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      selectedSection = newValue;
-                                    });
-                                  },
-                                  items: sections.map<DropdownMenuItem<String>>((String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 16),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                'Select RegNo:',
-                                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(width: 8),
-                              Container(
-                                width: textFieldWidth,
-                                child: DropdownButtonFormField<String>(
-                                  value: selectedRollNo,
-                                  onChanged: (newValue) {
-                                    setState(() {
-                                      selectedRollNo = newValue;
-                                    });
-                                  },
-                                  items: rollNos.map<DropdownMenuItem<String>>((String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Text(value),
-                                    );
-                                  }).toList(),
-                                  decoration: InputDecoration(
-                                    border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
->>>>>>> 063c23850ec25b2759c7f6100d6beb85019f94dd
                                     ),
                                   ),
                                 ),
