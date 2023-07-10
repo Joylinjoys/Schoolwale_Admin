@@ -28,7 +28,7 @@ class _ViewStudentState extends State<ViewStudent> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            'Teacher Page',
+            'Profile Pa',
             style: TextStyle(
               fontSize: 29,
               fontWeight: FontWeight.bold,
