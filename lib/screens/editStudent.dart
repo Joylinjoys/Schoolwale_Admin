@@ -3,14 +3,14 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:web_dashboard_app_tut/widgets/addStudentInput.dart';
 
-class ViewStudent extends StatefulWidget {
-  const ViewStudent({Key? key}) : super(key: key);
+class  EditStudent extends StatefulWidget {
+  const EditStudent({Key? key}) : super(key: key);
 
   @override
-  _ViewStudentState createState() => _ViewStudentState();
+  _EditStudentState createState() =>  _EditStudentState();
 }
 
-class _ViewStudentState extends State<ViewStudent> {
+class _EditStudentState extends State<EditStudent> {
   final ImagePicker _picker = ImagePicker();
   File? _image;
   
@@ -28,7 +28,7 @@ class _ViewStudentState extends State<ViewStudent> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            'Profile Page',
+            'Edit Student Page',
             style: TextStyle(
               fontSize: 29,
               fontWeight: FontWeight.bold,

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../Models/student_class.dart';
 import 'addStudent.dart';
 import 'viewProfile.dart';
+import 'editStudent.dart';
+import 'virtualID.dart';
 
 class Student_main extends StatefulWidget {
   const Student_main({super.key});
@@ -119,7 +121,7 @@ class _StudentListTableState extends State<StudentListTable> {
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  //crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       "Student List",
@@ -178,6 +180,7 @@ class _StudentListTableState extends State<StudentListTable> {
                         )
                       ]),
                     ),
+                   
                     DropdownButton(
                       // Initial Value
                       //value: dropdownvalue,
@@ -200,6 +203,26 @@ class _StudentListTableState extends State<StudentListTable> {
                         });
                       },
                     ),
+                     SizedBox(
+                    width: 100,
+                    height: 40,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const AddStudent()),
+                        );
+                      },
+                      child: Text('ADD',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20)),
+                      style: ElevatedButton.styleFrom(
+                        primary:
+                            Colors.deepPurple, // Set button color to purple
+                      ),
+                    ),
+                  ),
                   ],
                 ),
                 SizedBox(height: 20),
@@ -212,7 +235,7 @@ class _StudentListTableState extends State<StudentListTable> {
                             label: Text(
                           'Register No',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 22,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -220,7 +243,7 @@ class _StudentListTableState extends State<StudentListTable> {
                             label: Text(
                           'Name',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 22,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -228,7 +251,7 @@ class _StudentListTableState extends State<StudentListTable> {
                             label: Text(
                           'Class',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 22,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -236,7 +259,7 @@ class _StudentListTableState extends State<StudentListTable> {
                             label: Text(
                           'Section',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 22,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -244,7 +267,7 @@ class _StudentListTableState extends State<StudentListTable> {
                             label: Text(
                           'Profile',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 22,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -252,7 +275,15 @@ class _StudentListTableState extends State<StudentListTable> {
                             label: Text(
                           'Virtual ID',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 22,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )),
+                        DataColumn(
+                            label: Text(
+                          'Edit',
+                          style: TextStyle(
+                            fontSize: 22,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -260,7 +291,7 @@ class _StudentListTableState extends State<StudentListTable> {
                             label: Text(
                           'Delete',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 22,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -317,7 +348,27 @@ class _StudentListTableState extends State<StudentListTable> {
                                   primary: Colors
                                       .deepPurple, // Set button color to purple
                                 ),
-                                onPressed: () {},
+                                onPressed: () {Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const VirtualId()),
+                        );},
+                              ),
+                            )),
+                              DataCell(Flexible(
+                              child: ElevatedButton(
+                                child: Text('Edit Student'),
+                                style: ElevatedButton.styleFrom(
+                                  primary: Colors
+                                      .deepPurple, // Set button color to purple
+                                ),
+                                onPressed: () {
+                                   Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const EditStudent()),
+                        );
+                                },
                               ),
                             )),
                             DataCell(Flexible(
@@ -365,29 +416,7 @@ class _StudentListTableState extends State<StudentListTable> {
                     ),
                   ),
                 ),
-                SizedBox(height: 16),
-                Center(
-                  child: SizedBox(
-                    width: 140,
-                    height: 40,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const AddStudent()),
-                        );
-                      },
-                      child: Text('ADD',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 24)),
-                      style: ElevatedButton.styleFrom(
-                        primary:
-                            Colors.deepPurple, // Set button color to purple
-                      ),
-                    ),
-                  ),
-                ),
+                
               ],
             ),
           ),
