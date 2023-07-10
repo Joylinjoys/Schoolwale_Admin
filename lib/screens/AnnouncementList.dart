@@ -1,5 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-
+import 'package:intl/intl.dart';
+import '../Models/annoncement.dart';
 import 'AddAnnouncement.dart';
 import 'EditAnnouncement.dart';
 
@@ -14,25 +16,45 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
   List<Map<String, String>> announcements = [
     {
       'title': 'Announcement 1',
-      'date': '2023-06-30',
-      'time': '10:00 AM',
+      'datetime': '2023-06-30',
+    //  'time': '10:00 AM',
     },
     {
 
       'title': 'Announcement 2',
-      'date': '2023-07-01',
-      'time': '11:30 AM',
+      'datetime': '2023-07-01',
+      //'time': '11:30 AM',
     },
     {
 
       'title': 'Announcement 3',
-      'date': '2023-07-02',
-      'time': '02:15 PM',
+      'datetime': '2023-07-02',
+      //'time': '02:15 PM',
     },
   ];
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+        body: StreamBuilder(
+      stream: FirebaseFirestore.instance.collection("Announcements").snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        if (snapshot.hasError ||
+            snapshot.connectionState == ConnectionState.waiting) {
+          return Text("Loading");
+        }
+        final documents = snapshot.data!.docs.map((e) {
+          return e.data();
+        });
+
+        final List<AnnouncementInfo> annoncementList = [];
+
+        for (var val in documents) {
+          final object = AnnouncementInfo.fromJson(val);
+
+          annoncementList.add(object);
+        }
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -69,22 +91,14 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                     ),
                     DataColumn(
                       label: Text(
-                        'Date',
+                        'Date & Time',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    DataColumn(
-                      label: Text(
-                        'Time',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
+                    
                     DataColumn(
                       label: Text(
                         'Edit',
@@ -104,19 +118,17 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                       ),
                     ),
                   ],
-                  rows: announcements.map((announcement) {
+                  rows: annoncementList.map((announcementList) {
                     return DataRow(
                       cells: [
 
                         DataCell(
-                          Text(announcement['title'] ?? ''),
+                          Text(announcementList.name as String?? ''),
                         ),
                         DataCell(
-                          Text(announcement['date'] ?? ''),
+                          Text(DateFormat.yMd().add_jm().format((announcementList.date as Timestamp).toDate()) ?? ''),
                         ),
-                        DataCell(
-                          Text(announcement['time'] ?? ''),
-                        ),
+                      
                         DataCell(
                           ElevatedButton(
                             child: Text('Edit'),
@@ -188,6 +200,9 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
         backgroundColor: Colors.deepPurple.shade400,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+    );
+      },
+        )
     );
   }
 }
