@@ -1,0 +1,90 @@
+{
+  "project_info": {
+    "project_number": "532192140200",
+    "project_id": "schoolwale-application",
+    "storage_bucket": "schoolwale-application.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:532192140200:android:d2c8dc8955058fdae35b9d",
+        "android_client_info": {
+          "package_name": "com.example.schoolwale"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "532192140200-p5qffcmvspg35sqp0kjb6ds7sh6t1co6.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.schoolwale",
+            "certificate_hash": "414518c58f87aa67805ca01841b1754120031d5b"
+          }
+        },
+        {
+          "client_id": "532192140200-e0hks1vnvoceerfl0qb3rtr4trmcbi29.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwf-jOkFG1JmdSC7b4_IxvOmzjitBd0FA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "532192140200-e0hks1vnvoceerfl0qb3rtr4trmcbi29.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "532192140200-bimda0m9iq2f13talhkbd7d404c0hglu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.schoolwale"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:532192140200:android:2e3f5b87cc27987ce35b9d",
+        "android_client_info": {
+          "package_name": "com.example.web_dashboard_app_tut"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "532192140200-e0hks1vnvoceerfl0qb3rtr4trmcbi29.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwf-jOkFG1JmdSC7b4_IxvOmzjitBd0FA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "532192140200-e0hks1vnvoceerfl0qb3rtr4trmcbi29.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "532192140200-bimda0m9iq2f13talhkbd7d404c0hglu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.schoolwale"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
