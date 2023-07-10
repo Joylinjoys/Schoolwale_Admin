@@ -34,14 +34,6 @@ class _MyPhoneState extends State<MyPhone> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              /* Stack(
-              children:<Widget>[Text('SCHOOLWALE',style: TextStyle(
-                  fontSize: 40,foreground: Paint()..style=PaintingStyle.stroke
-                  ..strokeWidth=6
-                  ..color=Color.fromARGB(255, 242, 243, 244)!,
-              ),),
-             Text('SCHOOLWALE',style: TextStyle(fontSize: 40,color: Colors.white),
-              ),],),*/
               Image.network(
                 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbWx_ymuO6mVG7bemHGxXk2mF-7E-_5Y_CbxA7BUBlxR6xpYFxV28Qikfxrz8jHz3B1g&usqp=CAU', // Replace with the URL of your school name image
                 height: 100,
