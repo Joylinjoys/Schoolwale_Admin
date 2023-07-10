@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:web_dashboard_app_tut/screens/aboutschool.dart';
 import 'package:web_dashboard_app_tut/screens/teachers.dart';
@@ -7,7 +6,6 @@ import 'UploadNotes.dart';
 import 'addEvents.dart';
 
 import 'package:web_dashboard_app_tut/screens/timtable.dart';
-
 
 import 'AnnouncementList.dart';
 import 'Result.dart';
@@ -38,18 +36,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
               return NavigationRail(
                 extended: !isSmallScreen && isExpanded,
                 backgroundColor: Colors.deepPurple.shade400,
-                unselectedIconTheme: IconThemeData(color: Colors.white, opacity: 1),
+                unselectedIconTheme:
+                    IconThemeData(color: Colors.white, opacity: 1),
                 unselectedLabelTextStyle: TextStyle(
                   color: Colors.white,
                 ),
-                selectedIconTheme: IconThemeData(color: Colors.deepPurple.shade900),
+                selectedIconTheme:
+                    IconThemeData(color: Colors.deepPurple.shade900),
                 destinations: [
                   NavigationRailDestination(
                     icon: GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const DashboardScreen()),
+                          MaterialPageRoute(
+                              builder: (context) => const DashboardScreen()),
                         );
                       },
                       child: Icon(Icons.dashboard),
@@ -57,77 +58,75 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     label: Text("Dashboard"),
                   ),
                   NavigationRailDestination(
-                  icon: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const Resultfirst ()),
-                      );
-                    },
-                    child: Icon(Icons.bar_chart),
-                  ),
-                  label: Text("Results"),
-                ),
-
-                NavigationRailDestination(
-                  icon: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const TeacherPage ()),
-                      );
-                    },
-                    child: Icon(Icons.person),
-                  ),
-                  label: Text("Teachers"),
-                ),
-
-                NavigationRailDestination(
-                  icon: GestureDetector(
-                    onTap: () {
-                 Navigator.push(
-                      context,
-                             MaterialPageRoute(builder: (context) =>const  Student_main()),
-                         );
-
-
-                    },
-                    child: Icon(Icons.people_outline),
+                    icon: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Resultfirst()),
+                        );
+                      },
+                      child: Icon(Icons.bar_chart),
+                    ),
+                    label: Text("Results"),
                   ),
 
-                  label: Text("Students"),
-                ),
-                NavigationRailDestination(
-                  icon: Icon(Icons.calendar_month_outlined),
-                  label: Text("Attendance"),
-                ),
-
-                NavigationRailDestination(
-                  icon: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const AdminEvent ()),
-                      );
-                    },
-                    child: Icon(Icons.celebration_outlined),
-                  ),
-
-                  label: Text("Events"),
-                ),
                   NavigationRailDestination(
                     icon: GestureDetector(
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) =>const AnnouncementsPage ()),
+                          MaterialPageRoute(
+                              builder: (context) => const TeacherPage()),
                         );
+                      },
+                      child: Icon(Icons.person),
+                    ),
+                    label: Text("Teachers"),
+                  ),
 
+                  NavigationRailDestination(
+                    icon: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const Student_main()),
+                        );
+                      },
+                      child: Icon(Icons.people_outline),
+                    ),
+                    label: Text("Students"),
+                  ),
+                  NavigationRailDestination(
+                    icon: Icon(Icons.calendar_month_outlined),
+                    label: Text("Attendance"),
+                  ),
 
+                  NavigationRailDestination(
+                    icon: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const AdminEvent()),
+                        );
+                      },
+                      child: Icon(Icons.celebration_outlined),
+                    ),
+                    label: Text("Events"),
+                  ),
+                  NavigationRailDestination(
+                    icon: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const AnnouncementsPage()),
+                        );
                       },
                       child: Icon(Icons.campaign),
                     ),
-
                     label: Text("Announcements"),
                   ),
                   NavigationRailDestination(
@@ -135,14 +134,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) =>const UploadNotes ()),
+                          MaterialPageRoute(
+                              builder: (context) => const UploadNotes()),
                         );
-
-
                       },
                       child: Icon(Icons.menu_book_outlined),
                     ),
-
                     label: Text("Upload Notes"),
                   ),
                   NavigationRailDestination(
@@ -150,39 +147,41 @@ class _DashboardScreenState extends State<DashboardScreen> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) =>TimetableScreen()),
+                          MaterialPageRoute(
+                              builder: (context) => TimetableScreen()),
                         );
                       },
                       child: Icon(Icons.pending_actions_outlined),
                     ),
                     label: Text("TimeTable"),
                   ),
-                NavigationRailDestination(
-                  icon: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) =>const SchoolDetails ()),
-                      );
-                    },
-                    child: Icon(Icons.domain),
+                  NavigationRailDestination(
+                    icon: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SchoolDetails()),
+                        );
+                      },
+                      child: Icon(Icons.domain),
+                    ),
+                    label: Text("About School"),
                   ),
-                  label: Text("About School"),
-                ),
-                NavigationRailDestination(
-                  icon: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) =>  RulesRegulation ()),
-                      );
-                    },
-                    child: Icon(Icons.rule_folder_outlined),
+                  NavigationRailDestination(
+                    icon: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => RulesRegulation()),
+                        );
+                      },
+                      child: Icon(Icons.rule_folder_outlined),
+                    ),
+                    label: Text("Rules and regulation"),
                   ),
-                  label: Text("Rules and regulation"),
-                ),
                   // Add more navigation options here
-
                 ],
                 selectedIndex: 0,
                 onDestinationSelected: (int index) {
@@ -198,51 +197,58 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     case 1:
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const Resultfirst()),
+                        MaterialPageRoute(
+                            builder: (context) => const Resultfirst()),
                       );
                       break;
                     case 2:
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const TeacherPage()),
+                        MaterialPageRoute(
+                            builder: (context) => const TeacherPage()),
                       );
                       break;
                     case 3:
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const Student_main()),
+                        MaterialPageRoute(
+                            builder: (context) => const Student_main()),
                       );
                       break;
                     case 4:
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const AdminEvent()),
+                        MaterialPageRoute(
+                            builder: (context) => const AdminEvent()),
                       );
                       break;
                     case 5:
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => const AnnouncementsPage()),
+                        MaterialPageRoute(
+                            builder: (context) => const AnnouncementsPage()),
                       );
                       break;
                     case 6:
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) =>TimetableScreen()),
+                        MaterialPageRoute(
+                            builder: (context) => TimetableScreen()),
                       );
                       break;
-
 
                     case 8:
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) =>const SchoolDetails()),
+                        MaterialPageRoute(
+                            builder: (context) => const SchoolDetails()),
                       );
                       break;
                     case 9:
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) =>RulesRegulation()),
+                        MaterialPageRoute(
+                            builder: (context) => RulesRegulation()),
                       );
                       break;
                   }
@@ -253,216 +259,214 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Expanded(
             child: Padding(
               padding: EdgeInsets.all(20.0),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          onPressed: () {
-                            setState(() {
-                              isExpanded = !isExpanded;
-                            });
-                          },
-                          icon: Icon(Icons.menu),
-                        ),
-                        CircleAvatar(
-                          backgroundImage: NetworkImage(
-                              "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQbh5cSiQvrbRD1wVsbv0L1hUolQIXgU6iTTdqsZf2pErDYjmUx1kCjXo_r_0TN_kMQ5c&usqp=CAU"),
-                          radius: 28.0,
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 9.0,
-                    ),
-                Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        Flexible(
-                          child: Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(18.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.people_outline,
-                                        size: 26.0,
-                                      ),
-                                      SizedBox(
-                                        width: 15.0,
-                                      ),
-                                      Text(
-                                        "Total Student",
-                                        style: TextStyle(
-                                          fontSize: 26.0,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 20.0,
-                                  ),
-                                  Text(
-                                    "967 Students",
-                                    style: TextStyle(
-                                      fontSize: 36,
-                                      fontWeight: FontWeight.bold,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      IconButton(
+                        onPressed: () {
+                          setState(() {
+                            isExpanded = !isExpanded;
+                          });
+                        },
+                        icon: Icon(Icons.menu),
+                      ),
+                      CircleAvatar(
+                        backgroundImage: NetworkImage(
+                            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTQbh5cSiQvrbRD1wVsbv0L1hUolQIXgU6iTTdqsZf2pErDYjmUx1kCjXo_r_0TN_kMQ5c&usqp=CAU"),
+                        radius: 28.0,
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 9.0,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Flexible(
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(18.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.people_outline,
+                                      size: 26.0,
                                     ),
-                                  )
-                                ],
-                              ),
+                                    SizedBox(
+                                      width: 15.0,
+                                    ),
+                                    Text(
+                                      "Total Student",
+                                      style: TextStyle(
+                                        fontSize: 26.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 20.0,
+                                ),
+                                Text(
+                                  "967 Students",
+                                  style: TextStyle(
+                                    fontSize: 36,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              ],
                             ),
                           ),
                         ),
-                        Flexible(
-                          child: Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(18.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.person_outlined,
-                                        size: 26.0,
-                                        color: Colors.red,
-                                      ),
-                                      SizedBox(
-                                        width: 15.0,
-                                      ),
-                                      Text(
-                                        " Total boys 179",
-                                        style: TextStyle(
-                                          color: Colors.lightBlueAccent,
-                                          fontSize: 26.0,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 20.0,
-                                  ),
-                                  Text(
-                                    "boys",
-                                    style: TextStyle(
+                      ),
+                      Flexible(
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(18.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.person_outlined,
+                                      size: 26.0,
                                       color: Colors.red,
-                                      fontSize: 36,
-                                      fontWeight: FontWeight.bold,
                                     ),
-                                  )
-                                ],
-                              ),
+                                    SizedBox(
+                                      width: 15.0,
+                                    ),
+                                    Text(
+                                      " Total boys 179",
+                                      style: TextStyle(
+                                        color: Colors.lightBlueAccent,
+                                        fontSize: 26.0,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 20.0,
+                                ),
+                                Text(
+                                  "boys",
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontSize: 36,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              ],
                             ),
                           ),
                         ),
-                        Flexible(
-                          child: Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(18.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.woman,
-                                        size: 26.0,
-                                        color: Colors.amber,
-                                      ),
-                                      SizedBox(
-                                        width: 15.0,
-                                      ),
-                                      Text(
-                                        "Girls",
-                                        style: TextStyle(
-                                          fontSize: 26.0,
-                                          color: Colors.amber,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 20.0,
-                                  ),
-                                  Text(
-                                    "Total girls 267",
-                                    style: TextStyle(
-                                      fontSize: 36,
+                      ),
+                      Flexible(
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(18.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.woman,
+                                      size: 26.0,
                                       color: Colors.amber,
-                                      fontWeight: FontWeight.bold,
                                     ),
-                                  )
-                                ],
-                              ),
+                                    SizedBox(
+                                      width: 15.0,
+                                    ),
+                                    Text(
+                                      "Girls",
+                                      style: TextStyle(
+                                        fontSize: 26.0,
+                                        color: Colors.amber,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 20.0,
+                                ),
+                                Text(
+                                  "Total girls 267",
+                                  style: TextStyle(
+                                    fontSize: 36,
+                                    color: Colors.amber,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              ],
                             ),
                           ),
                         ),
-                        Flexible(
-                          child: Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(18.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Icon(
-                                        Icons.person,
-                                        size: 26.0,
-                                        color: Colors.green,
-                                      ),
-                                      SizedBox(
-                                        width: 15.0,
-                                      ),
-                                      Text(
-                                        "Teacher",
-                                        style: TextStyle(
-                                          fontSize: 26.0,
-                                          color: Colors.green,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  SizedBox(
-                                    height: 20.0,
-                                  ),
-                                  Text(
-                                    " 56 teachers",
-                                    style: TextStyle(
-                                      fontSize: 36,
+                      ),
+                      Flexible(
+                        child: Card(
+                          child: Padding(
+                            padding: const EdgeInsets.all(18.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Row(
+                                  children: [
+                                    Icon(
+                                      Icons.person,
+                                      size: 26.0,
                                       color: Colors.green,
-                                      fontWeight: FontWeight.bold,
-    ),
-                                  )
-                                ],
-                              ),
+                                    ),
+                                    SizedBox(
+                                      width: 15.0,
+                                    ),
+                                    Text(
+                                      "Teacher",
+                                      style: TextStyle(
+                                        fontSize: 26.0,
+                                        color: Colors.green,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    )
+                                  ],
+                                ),
+                                SizedBox(
+                                  height: 20.0,
+                                ),
+                                Text(
+                                  " 56 teachers",
+                                  style: TextStyle(
+                                    fontSize: 36,
+                                    color: Colors.green,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                )
+                              ],
                             ),
                           ),
                         ),
-                      ],
-                    ),
-                    //Now let's set the article section
-                    SizedBox(
-                      height: 30.0,
-                    ),
-
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                  //Now let's set the article section
+                  SizedBox(
+                    height: 30.0,
+                  ),
+                ],
               ),
             ),
-
-    ],
+          ),
+        ],
       ),
     );
   }
