@@ -1,6 +1,9 @@
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SchoolDetails extends StatefulWidget {
   const SchoolDetails({Key? key}) : super(key: key);
@@ -12,6 +15,49 @@ class SchoolDetails extends StatefulWidget {
 class _SchoolDetailsState extends State<SchoolDetails> {
   final ImagePicker _picker = ImagePicker();
   File? _image;
+  TextEditingController _schoolNameController = TextEditingController();
+  TextEditingController _descriptionController = TextEditingController();
+  TextEditingController _missionController = TextEditingController();
+
+  Future<void> uploadImage() async {
+    try {
+      if (_image != null) {
+        firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance
+            .ref()
+            .child('imageUrl')
+            .child('school_photo.jpg');
+        await ref.putFile(_image!);
+      }
+    } catch (e) {
+      print('Error uploading image: $e');
+    }
+  }
+
+  Future<void> saveSchoolDetails() async {
+    try {
+      String schoolName = _schoolNameController.text.trim();
+      String description = _descriptionController.text.trim();
+      String mission = _missionController.text.trim();
+
+      await FirebaseFirestore.instance.collection('About').doc('school').set({
+        'schoolName': schoolName,
+        'description': description,
+        'mission': mission,
+      });
+
+      print('School details saved successfully.');
+    } catch (e) {
+      print('Error saving school details: $e');
+    }
+  }
+
+  @override
+  void dispose() {
+    _schoolNameController.dispose();
+    _descriptionController.dispose();
+    _missionController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +96,7 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                       SizedBox(
                         width: 250,
                         child: TextField(
+                          controller: _schoolNameController,
                           decoration: InputDecoration(
                             labelText: "School Name",
                             hintText: "Enter School Name",
@@ -114,6 +161,7 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                       SizedBox(
                         width: 250,
                         child: TextField(
+                          controller: _descriptionController,
                           maxLength: 200,
                           decoration: InputDecoration(
                             labelText: "Description",
@@ -136,6 +184,7 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                       SizedBox(
                         width: 250,
                         child: TextField(
+                          controller: _missionController,
                           maxLength: 200,
                           decoration: InputDecoration(
                             labelText: "Mission",
@@ -151,7 +200,10 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                     width: 140,
                     height: 40,
                     child: ElevatedButton(
-                      onPressed: () {},
+                      onPressed: () async {
+                        await uploadImage();
+                        await saveSchoolDetails();
+                      },
                       child: Text(
                         'Submit',
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),

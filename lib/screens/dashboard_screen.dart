@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:web_dashboard_app_tut/screens/aboutschool.dart';
 import 'package:web_dashboard_app_tut/screens/teachers.dart';
-
 import 'UploadNotes.dart';
 import 'addEvents.dart';
-
 import 'package:web_dashboard_app_tut/screens/timtable.dart';
 import 'AnnouncementList.dart';
 import 'Result.dart';
@@ -27,223 +25,229 @@ class _DashboardScreenState extends State<DashboardScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Row(
-        children: [
+        children: <Widget>[
           LayoutBuilder(
             builder: (context, constraints) {
               // Responsive breakpoint: When the available width is less than 500 pixels, show the navigation rail in a collapsed state
               final isSmallScreen = constraints.maxWidth < 500;
-
               return Expanded(
-                child: NavigationRail(
-                  extended: !isSmallScreen && isExpanded,
-                  backgroundColor: Colors.deepPurple.shade400,
-                  unselectedIconTheme: IconThemeData(color: Colors.white, opacity: 1),
-                  unselectedLabelTextStyle: TextStyle(
-                    color: Colors.white,
-                  ),
-                  selectedIconTheme: IconThemeData(color: Colors.deepPurple.shade900),
-                  destinations: [
-                    NavigationRailDestination(
-                      icon: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const DashboardScreen()),
-                          );
-                        },
-                        child: Icon(Icons.dashboard),
-                      ),
-                      label: Text("Dashboard"),
+                  child: SingleChildScrollView(
+                  child: ConstrainedBox(
+                  constraints: BoxConstraints(minHeight: constraints.maxHeight),
+              child: IntrinsicHeight(
+              child: NavigationRail(
+                    extended: !isSmallScreen && isExpanded,
+                    backgroundColor: Colors.deepPurple.shade400,
+                    unselectedIconTheme: IconThemeData(color: Colors.white, opacity: 1),
+                    unselectedLabelTextStyle: TextStyle(
+                      color: Colors.white,
                     ),
-                    NavigationRailDestination(
-                      icon: GestureDetector(
-                        onTap: () {
+                    selectedIconTheme: IconThemeData(color: Colors.deepPurple.shade900),
+                    destinations: [
+                      NavigationRailDestination(
+                        icon: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const DashboardScreen()),
+                            );
+                          },
+                          child: Icon(Icons.dashboard),
+                        ),
+                        label: Text("Dashboard"),
+                      ),
+                      NavigationRailDestination(
+                        icon: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const Resultfirst()),
+                            );
+                          },
+                          child: Icon(Icons.bar_chart),
+                        ),
+                        label: Text("Results"),
+                      ),
+                      NavigationRailDestination(
+                        icon: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const TeacherPage()),
+                            );
+                          },
+                          child: Icon(Icons.person),
+                        ),
+                        label: Text("Teachers"),
+                      ),
+                      NavigationRailDestination(
+                        icon: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const Student_main()),
+                            );
+                          },
+                          child: Icon(Icons.people_outline),
+                        ),
+                        label: Text("Students"),
+                      ),
+                      NavigationRailDestination(
+                        icon: Icon(Icons.calendar_month_outlined),
+                        label: Text("Attendance"),
+                      ),
+                      NavigationRailDestination(
+                        icon: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const EventsPage()),
+                            );
+                          },
+                          child: Icon(Icons.celebration_outlined),
+                        ),
+                        label: Text("Events"),
+                      ),
+                      NavigationRailDestination(
+                        icon: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const AnnouncementsPage()),
+                            );
+                          },
+                          child: Icon(Icons.campaign),
+                        ),
+                        label: Text("Announcements"),
+                      ),
+                      NavigationRailDestination(
+                        icon: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const UploadNotes()),
+                            );
+                          },
+                          child: Icon(Icons.menu_book_outlined),
+                        ),
+                        label: Text("Upload Notes"),
+                      ),
+                      NavigationRailDestination(
+                        icon: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => TimetableScreen()),
+                            );
+                          },
+                          child: Icon(Icons.pending_actions_outlined),
+                        ),
+                        label: Text("TimeTable"),
+                      ),
+                      NavigationRailDestination(
+                        icon: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const SchoolDetails()),
+                            );
+                          },
+                          child: Icon(Icons.domain),
+                        ),
+                        label: Text("About School"),
+                      ),
+                      NavigationRailDestination(
+                        icon: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) =>  RulesRegulation()),
+                            );
+                          },
+                          child: Icon(Icons.rule_folder_outlined),
+                        ),
+                        label: Text("Rules and regulation"),
+                      ),
+                      // Add more navigation options here
+                    ],
+                    selectedIndex: 0,
+                    onDestinationSelected: (int index) {
+                      if (isSmallScreen) {
+                        // Close the navigation rail when a destination is selected on small screens
+                        setState(() {
+                          isExpanded = false;
+                        });
+                      }
+
+                      // Navigate to the selected screen
+                      switch (index) {
+                        case 0:
+                        // Navigate to Dashboard
+                          break;
+                        case 1:
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => const Resultfirst()),
                           );
-                        },
-                        child: Icon(Icons.bar_chart),
-                      ),
-                      label: Text("Results"),
-                    ),
-                    NavigationRailDestination(
-                      icon: GestureDetector(
-                        onTap: () {
+                          break;
+                        case 2:
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => const TeacherPage()),
                           );
-                        },
-                        child: Icon(Icons.person),
-                      ),
-                      label: Text("Teachers"),
-                    ),
-                    NavigationRailDestination(
-                      icon: GestureDetector(
-                        onTap: () {
+                          break;
+                        case 3:
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => const Student_main()),
                           );
-                        },
-                        child: Icon(Icons.people_outline),
-                      ),
-                      label: Text("Students"),
-                    ),
-                    NavigationRailDestination(
-                      icon: Icon(Icons.calendar_month_outlined),
-                      label: Text("Attendance"),
-                    ),
-                    NavigationRailDestination(
-                      icon: GestureDetector(
-                        onTap: () {
+                          break;
+                        case 4:
+                        // Handle Attendance
+                          break;
+                        case 5:
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => const EventsPage()),
                           );
-                        },
-                        child: Icon(Icons.celebration_outlined),
-                      ),
-                      label: Text("Events"),
-                    ),
-                    NavigationRailDestination(
-                      icon: GestureDetector(
-                        onTap: () {
+                          break;
+                        case 6:
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => const AnnouncementsPage()),
                           );
-                        },
-                        child: Icon(Icons.campaign),
-                      ),
-                      label: Text("Announcements"),
-                    ),
-                    NavigationRailDestination(
-                      icon: GestureDetector(
-                        onTap: () {
+                          break;
+                        case 7:
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => const UploadNotes()),
                           );
-                        },
-                        child: Icon(Icons.menu_book_outlined),
-                      ),
-                      label: Text("Upload Notes"),
-                    ),
-                    NavigationRailDestination(
-                      icon: GestureDetector(
-                        onTap: () {
+                          break;
+                        case 8:
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => TimetableScreen()),
                           );
-                        },
-                        child: Icon(Icons.pending_actions_outlined),
-                      ),
-                      label: Text("TimeTable"),
-                    ),
-                    NavigationRailDestination(
-                      icon: GestureDetector(
-                        onTap: () {
+                          break;
+                        case 9:
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => const SchoolDetails()),
                           );
-                        },
-                        child: Icon(Icons.domain),
-                      ),
-                      label: Text("About School"),
-                    ),
-                    NavigationRailDestination(
-                      icon: GestureDetector(
-                        onTap: () {
+                          break;
+                        case 10:
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => RulesRegulation()),
+                            MaterialPageRoute(builder: (context) =>  RulesRegulation()),
                           );
-                        },
-                        child: Icon(Icons.rule_folder_outlined),
-                      ),
-                      label: Text("Rules and regulation"),
-                    ),
-                    // Add more navigation options here
-                  ],
-                  selectedIndex: 0,
-                  onDestinationSelected: (int index) {
-                    if (isSmallScreen) {
-                      // Close the navigation rail when a destination is selected on small screens
-                      setState(() {
-                        isExpanded = false;
-                      });
-                    }
-
-                    // Navigate to the selected screen
-                    switch (index) {
-                      case 0:
-                      // Navigate to Dashboard
-                        break;
-                      case 1:
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const Resultfirst()),
-                        );
-                        break;
-                      case 2:
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const TeacherPage()),
-                        );
-                        break;
-                      case 3:
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const Student_main()),
-                        );
-                        break;
-                      case 4:
-                      // Handle Attendance
-                        break;
-                      case 5:
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const EventsPage()),
-                        );
-                        break;
-                      case 6:
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const AnnouncementsPage()),
-                        );
-                        break;
-                      case 7:
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const UploadNotes()),
-                        );
-                        break;
-                      case 8:
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => TimetableScreen()),
-                        );
-                        break;
-                      case 9:
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => const SchoolDetails()),
-                        );
-                        break;
-                      case 10:
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => RulesRegulation()),
-                        );
-                        break;
-                    // Add more cases for additional destinations
-                    }
-                  },
-                ),
+                          break;
+                      // Add more cases for additional destinations
+                      }
+                    },
+              ),
+              ),
+                  ),
+                  ),
               );
             },
           ),

@@ -38,6 +38,14 @@ class _RulesRegulationState extends State<RulesRegulation> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              Text(
+                'All students must follow the below rules:',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 20),
               Expanded(
                 child: TextField(
                   controller: _textEditingController,
@@ -95,3 +103,4 @@ class _RulesRegulationState extends State<RulesRegulation> {
     );
   }
 }
+
