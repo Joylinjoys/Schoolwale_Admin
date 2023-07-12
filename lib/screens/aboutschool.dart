@@ -64,25 +64,25 @@ class _SchoolDetailsState extends State<SchoolDetails> {
 
   @override
   Widget build(BuildContext context) {
-     return Scaffold(
-        body: StreamBuilder(
-      stream: FirebaseFirestore.instance.collection("About").snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if (snapshot.hasError ||
-            snapshot.connectionState == ConnectionState.waiting) {
-          return Text("Loading");
-        }
-        final documents = snapshot.data!.docs.map((e) {
-          return e.data();
-        });
+    //  return Scaffold(
+    //     body: StreamBuilder(
+    //   stream: FirebaseFirestore.instance.collection("About").snapshots(),
+    //   builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+    //     if (snapshot.hasError ||
+    //         snapshot.connectionState == ConnectionState.waiting) {
+    //       return Text("Loading");
+    //     }
+    //     final documents = snapshot.data!.docs.map((e) {
+    //       return e.data();
+    //     });
 
-        final List<SchoolInfo> schoolList = [];
+    //     final List<SchoolInfo> schoolList = [];
 
-        for (var val in documents) {
-          final object = SchoolInfo.fromJson(val);
+    //     for (var val in documents) {
+    //       final object = SchoolInfo.fromJson(val);
 
-          schoolList.add(object);
-        }
+    //       schoolList.add(object);
+    //     }
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -312,8 +312,8 @@ class _SchoolDetailsState extends State<SchoolDetails> {
         ),
       ),
     );
-      },
-        )
-     );
+    //   },
+    //     )
+    //  );
   }
 }
