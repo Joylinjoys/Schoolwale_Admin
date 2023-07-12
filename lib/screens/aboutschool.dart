@@ -172,51 +172,51 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Enter Description',
-                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(width: 50),
-                      SizedBox(
-                        width: 250,
-                        child: TextField(
-                          controller: _descriptionController,
-                          maxLength: 200,
-                          decoration: InputDecoration(
-                            labelText: "Description",
-                            hintText: "Enter Description",
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Enter Mission Header',
-                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(width: 50),
-                      SizedBox(
-                        width: 250,
-                        child: TextField(
-                         // maxLength: 200,
-                          decoration: InputDecoration(
-                            labelText: "Header",
-                            hintText: "Enter Header",
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  // SizedBox(height: 20),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     Text(
+                  //       'Enter Description',
+                  //       style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  //     ),
+                  //     SizedBox(width: 50),
+                  //     SizedBox(
+                  //       width: 250,
+                  //       child: TextField(
+                  //         controller: _descriptionController,
+                  //         maxLength: 200,
+                  //         decoration: InputDecoration(
+                  //           labelText: "Description",
+                  //           hintText: "Enter Description",
+                  //           border: OutlineInputBorder(),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  //SizedBox(height: 20),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     Text(
+                  //       'Enter Mission Header',
+                  //       style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                  //     ),
+                  //     SizedBox(width: 50),
+                  //     SizedBox(
+                  //       width: 250,
+                  //       child: TextField(
+                  //        // maxLength: 200,
+                  //         decoration: InputDecoration(
+                  //           labelText: "Header",
+                  //           hintText: "Enter Header",
+                  //           border: OutlineInputBorder(),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
                    SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -242,29 +242,29 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 20),
                 //   SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Enter Achievement Header',
-                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(width: 50),
-                      SizedBox(
-                        width: 250,
-                        child: TextField(
-                         // maxLength: 200,
-                          decoration: InputDecoration(
-                            labelText: "Header",
-                            hintText: "Enter Header",
-                            border: OutlineInputBorder(),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                // //   SizedBox(height: 20),
+                //   Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       Text(
+                //         'Enter Achievement Header',
+                //         style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                //       ),
+                //       SizedBox(width: 50),
+                //       SizedBox(
+                //         width: 250,
+                //         child: TextField(
+                //          // maxLength: 200,
+                //           decoration: InputDecoration(
+                //             labelText: "Header",
+                //             hintText: "Enter Header",
+                //             border: OutlineInputBorder(),
+                //           ),
+                //         ),
+                //       ),
+                //     ],
+                //   ),
                    SizedBox(height: 20),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
