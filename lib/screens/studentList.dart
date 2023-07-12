@@ -14,6 +14,7 @@ class Student_main extends StatefulWidget {
 }
 
 class _Student_mainState extends State<Student_main> {
+  //String?  _selectedSubject;
   @override
   // bool isExpanded = false;
 
@@ -83,6 +84,8 @@ class _StudentListTableState extends State<StudentListTable> {
     '4 th',
   ];
   int selectedIndex = 0;
+  
+String? _selectedSubject;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -181,28 +184,43 @@ class _StudentListTableState extends State<StudentListTable> {
                       ]),
                     ),
                    
-                    DropdownButton(
-                      // Initial Value
-                      //value: dropdownvalue,
-                      value: items[1],
-                      // Down Arrow Icon
-                      icon: const Icon(Icons.keyboard_arrow_down),
-
-                      // Array list of items
-                      items: items.map((String items) {
-                        return DropdownMenuItem(
-                          value: items,
-                          child: Text(items),
-                        );
-                      }).toList(),
-                      // After selecting the desired option,it will
-                      // change button value to selected value
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          dropdownvalue = newValue!;
-                        });
-                      },
-                    ),
+                    SizedBox(
+                          width: 200,
+                          child: DropdownButtonFormField<String>(
+                            value: _selectedSubject,
+                            onChanged: (newValue) {
+                              setState(() {
+                                _selectedSubject = newValue;
+                              });
+                            },
+                            items: [
+                              DropdownMenuItem(
+                                value: 'Class I',
+                                child: Text('Class I'),
+                              ),
+                              DropdownMenuItem(
+                                value: 'Class II',
+                                child: Text('Class II'),
+                              ),
+                              DropdownMenuItem(
+                                value: 'Class III',
+                                child: Text('Class III'),
+                              ),
+                              DropdownMenuItem(
+                                value: 'Class IV',
+                                child: Text('Class IV'),
+                              ),
+                              DropdownMenuItem(
+                                value: 'Class V',
+                                child: Text('Class V'),
+                              ),
+                            ],
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                            ),
+                          ),
+                        ),
                      SizedBox(
                     width: 100,
                     height: 40,
@@ -235,7 +253,7 @@ class _StudentListTableState extends State<StudentListTable> {
                             label: Text(
                           'Register No',
                           style: TextStyle(
-                            fontSize: 22,
+                            fontSize: 21,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -243,7 +261,7 @@ class _StudentListTableState extends State<StudentListTable> {
                             label: Text(
                           'Name',
                           style: TextStyle(
-                            fontSize: 22,
+                            fontSize: 21,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -251,7 +269,7 @@ class _StudentListTableState extends State<StudentListTable> {
                             label: Text(
                           'Class',
                           style: TextStyle(
-                            fontSize: 22,
+                            fontSize: 21,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -259,7 +277,7 @@ class _StudentListTableState extends State<StudentListTable> {
                             label: Text(
                           'Section',
                           style: TextStyle(
-                            fontSize: 22,
+                            fontSize: 21,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -267,7 +285,7 @@ class _StudentListTableState extends State<StudentListTable> {
                             label: Text(
                           'Profile',
                           style: TextStyle(
-                            fontSize: 22,
+                            fontSize: 21,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -275,7 +293,7 @@ class _StudentListTableState extends State<StudentListTable> {
                             label: Text(
                           'Virtual ID',
                           style: TextStyle(
-                            fontSize: 22,
+                            fontSize: 21,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -283,7 +301,7 @@ class _StudentListTableState extends State<StudentListTable> {
                             label: Text(
                           'Edit',
                           style: TextStyle(
-                            fontSize: 22,
+                            fontSize: 21,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -291,7 +309,7 @@ class _StudentListTableState extends State<StudentListTable> {
                             label: Text(
                           'Delete',
                           style: TextStyle(
-                            fontSize: 22,
+                            fontSize: 21,
                             fontWeight: FontWeight.bold,
                           ),
                         )),

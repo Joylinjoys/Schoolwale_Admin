@@ -1,6 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+
+import 'package:web_dashboard_app_tut/Models/aboutSchool.dart';
 
 class SchoolDetails extends StatefulWidget {
   const SchoolDetails({Key? key}) : super(key: key);
@@ -15,6 +18,25 @@ class _SchoolDetailsState extends State<SchoolDetails> {
 
   @override
   Widget build(BuildContext context) {
+     return Scaffold(
+        body: StreamBuilder(
+      stream: FirebaseFirestore.instance.collection("About").snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+        if (snapshot.hasError ||
+            snapshot.connectionState == ConnectionState.waiting) {
+          return Text("Loading");
+        }
+        final documents = snapshot.data!.docs.map((e) {
+          return e.data();
+        });
+
+        final List<SchoolInfo> schoolList = [];
+
+        for (var val in documents) {
+          final object = SchoolInfo.fromJson(val);
+
+          schoolList.add(object);
+        }
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -50,6 +72,7 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                       SizedBox(
                         width: 250,
                         child: TextField(
+                      //    controller: ,
                           decoration: InputDecoration(
                             labelText: "School Name",
                             hintText: "Enter School Name",
@@ -129,6 +152,28 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
+                        'Enter Mission Header',
+                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(width: 50),
+                      SizedBox(
+                        width: 250,
+                        child: TextField(
+                         // maxLength: 200,
+                          decoration: InputDecoration(
+                            labelText: "Header",
+                            hintText: "Enter Header",
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                   SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
                         'Enter Mission',
                         style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                       ),
@@ -136,7 +181,8 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                       SizedBox(
                         width: 250,
                         child: TextField(
-                          maxLength: 200,
+                          maxLines: 4,
+                          maxLength: 1000,
                           decoration: InputDecoration(
                             labelText: "Mission",
                             hintText: "Enter Mission",
@@ -147,6 +193,51 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                     ],
                   ),
                   SizedBox(height: 20),
+                //   SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Enter Achievement Header',
+                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(width: 50),
+                      SizedBox(
+                        width: 250,
+                        child: TextField(
+                         // maxLength: 200,
+                          decoration: InputDecoration(
+                            labelText: "Header",
+                            hintText: "Enter Header",
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                   SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Enter Achievement',
+                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(width: 50),
+                      SizedBox(
+                        width: 250,
+                        child: TextField(
+                          maxLines: 4,
+                          maxLength: 1000,
+                          decoration: InputDecoration(
+                            labelText: "Achievement",
+                            hintText: "Enter Achievement",
+                            border: OutlineInputBorder(),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                   SizedBox(
                     width: 140,
                     height: 40,
@@ -168,5 +259,8 @@ class _SchoolDetailsState extends State<SchoolDetails> {
         ),
       ),
     );
+      },
+        )
+     );
   }
 }
