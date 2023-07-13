@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
-import 'package:web_dashboard_app_tut/screens/dashboard_screen.dart';
+import 'package:web_dashboard_app_tut/screens/navigation_screen.dart';
 
 import 'adminlogin.dart';
 
@@ -101,7 +101,7 @@ class _MyOtpState extends State<MyOtp> {
                 child: ElevatedButton(onPressed : () async{
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) =>DashboardScreen()),
+                    MaterialPageRoute(builder: (context) =>NavigationScreen()),
                   );
                   PhoneAuthCredential credential = PhoneAuthProvider.credential(verificationId: MyPhone.verify, smsCode: code);
 

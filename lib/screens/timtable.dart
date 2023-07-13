@@ -63,32 +63,32 @@ class TimetableScreen extends StatelessWidget {
                     children: [
                       TimetableCard(
                         image: 'https://images.twinkl.co.uk/tw1n/image/private/t_630/image_repo/fc/33/roi-pa-31-editable-sample-timetable_ver_2.jpg',
-                        text: 'Class I',
-                        subtitle: 'Section A',
+                        text: 'Class I - Section A',
+                        // subtitle: 'Section A',
                         onDelete: () {  }, onAddImage: () {  },
                       ),
                       TimetableCard(
                         image: 'https://images.twinkl.co.uk/tw1n/image/private/t_630/image_repo/fc/33/roi-pa-31-editable-sample-timetable_ver_2.jpg',
-                        text: 'Class II',
-                        subtitle: 'Section B',
+                        text: 'Class II - Section A',
+                        // subtitle: 'Section B',
                          onDelete: () {  }, onAddImage: () {  },
                       ),
                       TimetableCard(
                         image: 'https://images.twinkl.co.uk/tw1n/image/private/t_630/image_repo/fc/33/roi-pa-31-editable-sample-timetable_ver_2.jpg',
-                        text: 'Class III',
-                        subtitle: 'Section A',
+                        text: 'Class III - Section A',
+                        // subtitle: 'Section A',
                         onDelete: () {  }, onAddImage: () {  },
                       ),
                       TimetableCard(
                         image: 'https://images.twinkl.co.uk/tw1n/image/private/t_630/image_repo/fc/33/roi-pa-31-editable-sample-timetable_ver_2.jpg',
-                        text: 'Class IV',
-                        subtitle: 'Section B',
+                        text: 'Class IV - Section A',
+                        // subtitle: 'Section B',
                          onDelete: () {  }, onAddImage: () {  },
                       ),
                     ],
                   ),
                 ),
-                SizedBox(height: 10.0),
+                SizedBox(height: 7.0),
                 Expanded(
                   child: ListView(
                     scrollDirection: Axis.horizontal,
@@ -96,26 +96,26 @@ class TimetableScreen extends StatelessWidget {
                     children: [
                       TimetableCard(
                         image: 'https://images.twinkl.co.uk/tw1n/image/private/t_630/image_repo/fc/33/roi-pa-31-editable-sample-timetable_ver_2.jpg',
-                        text: 'Class V',
-                        subtitle: 'Section A',
+                        text: 'Class V - Section A',
+                        // subtitle: 'Section A',
                         onDelete: () {  }, onAddImage: () {  },
                       ),
                       TimetableCard(
                         image: 'https://images.twinkl.co.uk/tw1n/image/private/t_630/image_repo/fc/33/roi-pa-31-editable-sample-timetable_ver_2.jpg',
-                        text: 'Class VI',
-                        subtitle: 'Section B',
+                        text: 'Class VI - Section A ',
+                        // subtitle: 'Section B',
                          onDelete: () {  }, onAddImage: () {  },
                       ),
                       TimetableCard(
                         image: 'https://images.twinkl.co.uk/tw1n/image/private/t_630/image_repo/fc/33/roi-pa-31-editable-sample-timetable_ver_2.jpg',
-                        text: 'Class VII',
-                        subtitle: 'Section A',
+                        text: 'Class VII - Section A',
+                        // subtitle: 'Section A',
                          onDelete: () {  }, onAddImage: () {  },
                       ),
                       TimetableCard(
                         image: 'https://images.twinkl.co.uk/tw1n/image/private/t_630/image_repo/fc/33/roi-pa-31-editable-sample-timetable_ver_2.jpg',
-                        text: 'Class VIII',
-                        subtitle: 'Section B',
+                        text: 'Class VIII - Section A',
+                        // subtitle: 'Section B',
                         onDelete: () {  }, onAddImage: () {  },
                       ),
                     ],
@@ -134,7 +134,7 @@ class TimetableScreen extends StatelessWidget {
 class TimetableCard extends StatelessWidget {
   final String image;
   final String text;
-  final String subtitle;
+  // final String subtitle;
 
   final VoidCallback onDelete;
   final VoidCallback onAddImage;
@@ -142,7 +142,7 @@ class TimetableCard extends StatelessWidget {
   const TimetableCard({
     required this.image,
     required this.text,
-    required this.subtitle,
+    // required this.subtitle,
     required this.onDelete,
     required this.onAddImage,
     Key? key,
@@ -151,8 +151,8 @@ class TimetableCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 370,
-      height: 210,
+      width: 335,
+      height:180,
       child: Card(
         child: Column(
           children: [
@@ -170,20 +170,20 @@ class TimetableCard extends StatelessWidget {
                   Text(
                     text,
                     style: TextStyle(
-                      fontSize: 16.0,
+                      fontSize: 14.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  SizedBox(height: 4.0),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      fontSize: 14.0,
-                      color: Colors.grey,
-                    ),
-                  ),
-                  SizedBox(height: 4.0),
-                  SizedBox(height: 8.0),
+                  // SizedBox(height: 4.0),
+                  // Text(
+                  //   subtitle,
+                  //   style: TextStyle(
+                  //     fontSize: 14.0,
+                  //     color: Colors.grey,
+                  //   ),
+                  // ),
+                  // SizedBox(height: 3.0),
+                  SizedBox(height: 2.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
