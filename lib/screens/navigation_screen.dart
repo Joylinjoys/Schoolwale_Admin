@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:web_dashboard_app_tut/screens/aboutschool.dart';
+import 'package:web_dashboard_app_tut/screens/attedanceFirst.dart';
 import 'package:web_dashboard_app_tut/screens/teachers.dart';
 import 'UploadNotes.dart';
 import 'addEvents.dart';
@@ -30,6 +31,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
     Resultfirst(),
     TeacherPage(),
     Student_main(),
+    Attendancefirst(),
     EventsPage(),
     AnnouncementsPage(),
     UploadNotes(),

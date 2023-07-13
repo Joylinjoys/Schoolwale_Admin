@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 class RollNoContainer extends StatelessWidget {
   final String rollno;
-  final void Function()? onTap;
-  const RollNoContainer({super.key, required this.rollno, required this.onTap});
+  const RollNoContainer({super.key, required this.rollno});
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
+    return GestureDetector(
+      onTap: (){},
       child: Card(
         
         child: Container(

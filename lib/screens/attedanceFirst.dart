@@ -32,6 +32,7 @@ class _AttendancefirstState extends State<Attendancefirst> {
       });
   }
 
+
   List<String> classes = [
     'Class 1',
     'Class 2',
@@ -111,12 +112,28 @@ class _AttendancefirstState extends State<Attendancefirst> {
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
                               contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                            filled: true,
+                            fillColor: Colors.white,
+                            // border: OutlineInputBorder(
+                            //   borderRadius: BorderRadius.circular(8.0),
+                            //   borderSide: BorderSide.none,
+                            // ),
+                            // contentPadding: EdgeInsets.symmetric(
+                            //   vertical: 12.0,
+                            //   horizontal: 16.0,
+                            // ),
+                            suffixIcon: IconButton(
+                              onPressed: () => _selectDate(context),
+                              icon: Icon(Icons.calendar_today),
                             ),
                           ),
+                          onTap: () => _selectDate(context),
                         ),
+                      ),
+                    
                       ],
                     ),
-                    SizedBox(height: 16),
+                    SizedBox(height: 25),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -143,9 +160,25 @@ class _AttendancefirstState extends State<Attendancefirst> {
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
                               contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                            filled: true,
+                            fillColor: Colors.white,
+                            // border: OutlineInputBorder(
+                            //   borderRadius: BorderRadius.circular(8.0),
+                            //   borderSide: BorderSide.none,
+                            // ),
+                            // contentPadding: EdgeInsets.symmetric(
+                            //   vertical: 12.0,
+                            //   horizontal: 16.0,
+                            // ),
+                            suffixIcon: IconButton(
+                              onPressed: () => _selectDate(context),
+                              icon: Icon(Icons.calendar_today),
                             ),
                           ),
+                          onTap: () => _selectDate(context),
                         ),
+                      ),
+                    
                       ],
                     ),
                     SizedBox(height: 25),
