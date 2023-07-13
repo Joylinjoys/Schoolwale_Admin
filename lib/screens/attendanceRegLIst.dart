@@ -47,14 +47,22 @@ class _AttendanceListState extends State<AttendanceList> {
 
                 children: [
                   Text("Tap On Register Number",style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                  SizedBox(height: 20,),
                   Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                 children: [
+                        const Text("List of present Students", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
+                        Text("List of absentees", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
+                 ],
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                       // crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text("List of students", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
+                         
                            const SizedBox(height: 20),
                          ..._studentList.map((student) =>  RollNoContainer(
                             rollno: student,
@@ -68,10 +76,10 @@ class _AttendanceListState extends State<AttendanceList> {
                         ],
                       ),
                       Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                       // crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("List of absentees", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
+                          
                            SizedBox(height: 20),
                          ..._absentees.map((absent) =>  RollNoContainer(
                             rollno: absent,
