@@ -6,18 +6,12 @@ class RulesRegulations extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xff0660C6),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(Icons.arrow_back_ios),
-        ),
-        title: Text(
-          "Rules And Regulations",
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-        ),
         centerTitle: true,
+        title: Text(
+          'Rules and Regulations',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.deepPurple.shade400,
       ),
       body: FutureBuilder<QuerySnapshot>(
         future: FirebaseFirestore.instance.collection("Rules").get(),
