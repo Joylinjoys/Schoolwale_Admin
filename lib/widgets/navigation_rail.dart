@@ -6,7 +6,7 @@
 // import '../screens/UploadNotes.dart';
 // import '../screens/aboutschool.dart';
 // import '../screens/addEvents.dart';
-// import '../screens/dashboard_screen.dart';
+// import '../screens/navigation_screen.dart';
 // import '../screens/studentList.dart';
 // import '../screens/teachers.dart';
 // import '../screens/timtable.dart';

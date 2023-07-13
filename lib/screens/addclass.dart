@@ -1,38 +1,80 @@
 import 'package:flutter/material.dart';
-import 'package:web_dashboard_app_tut/screens/Result.dart';
+import 'package:web_dashboard_app_tut/screens/addclassList.dart';
 
-class Resultfirst extends StatefulWidget {
-  const Resultfirst({Key? key}) : super(key: key);
+class classfirst extends StatefulWidget {
+  const classfirst({Key? key}) : super(key: key);
 
   @override
-  _ResultfirstState createState() => _ResultfirstState();
+  _classfirstState createState() => _classfirstState();
 }
 
-class _ResultfirstState extends State<Resultfirst> {
+class _classfirstState extends State<classfirst> {
+  TextEditingController sectionController = TextEditingController();
+
   String? selectedClass;
   String? selectedSection;
-  String? selectedRollNo;
+  String? section;
 
   List<String> classes = [
-    'Class 1',
-    'Class 2',
-    'Class 3',
+    ' 1',
+    ' 2',
+    ' 3',
+    ' 4',
+    ' 5',
+    ' 6',
+    ' 7',
+    ' 8',
+    ' 9',
+    ' 10',
     // Add more class options here
   ];
 
-  List<String> sections = [
-    'Section A',
-    'Section B',
-    'Section C',
-    // Add more section options here
+  List<String> sections = [];
+
+  List<Map<String, String>> classList = [
+    {
+      'Class': '1',
+      'Section': 'A',
+    },
+    {
+      'Class': '2',
+      'Section': 'C',
+    },
+    {
+      'Class': '3',
+      'Section': 'D',
+    },
+    {
+      'Class': '1',
+      'Section': 'A',
+    },
   ];
 
-  List<String> rollNos = [
-    'Roll No 1',
-    'Roll No 2',
-    'Roll No 3',
-    // Add more roll number options here
-  ];
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  void addToClassList() {
+    setState(() {
+      String selectedClassValue = selectedClass ?? '';
+      String sectionValue = sectionController.text;
+
+      if (selectedClassValue.isNotEmpty && sectionValue.isNotEmpty) {
+        Map<String, String> classInfo = {
+          'Class': selectedClassValue,
+          'Section': sectionValue,
+        };
+
+        classList.add(classInfo);
+
+        selectedClass = null;
+        sectionController.text = '';
+      }
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +82,7 @@ class _ResultfirstState extends State<Resultfirst> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'Result Page',
+          'Add classes Page',
           style: TextStyle(
             fontSize: 29,
             fontWeight: FontWeight.bold,
@@ -48,8 +90,7 @@ class _ResultfirstState extends State<Resultfirst> {
         ),
         backgroundColor: Colors.deepPurple.shade400,
       ),
-      body:
-      SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -60,19 +101,13 @@ class _ResultfirstState extends State<Resultfirst> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Center(
-                      child: Text(
-                        'Enter Student Results',
-                        style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                      ),
-                    ),
                     SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Select Class:',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          'Add Class',
+                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(width: 8),
                         Container(
@@ -103,60 +138,18 @@ class _ResultfirstState extends State<Resultfirst> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Select Section:',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          'Add section',
+                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(width: 8),
-                        Container(
+                        SizedBox(width: 50),
+                        SizedBox(
                           width: 250,
-                          child: DropdownButtonFormField<String>(
-                            value: selectedSection,
-                            onChanged: (newValue) {
-                              setState(() {
-                                selectedSection = newValue;
-                              });
-                            },
-                            items: sections.map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
+                          child: TextField(
+                            controller: sectionController,
                             decoration: InputDecoration(
+                              labelText: "Add section",
+                              hintText: "Enter section",
                               border: OutlineInputBorder(),
-                              contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Select Roll No:',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(width: 8),
-                        Container(
-                          width: 250,
-                          child: DropdownButtonFormField<String>(
-                            value: selectedRollNo,
-                            onChanged: (newValue) {
-                              setState(() {
-                                selectedRollNo = newValue;
-                              });
-                            },
-                            items: rollNos.map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
                             ),
                           ),
                         ),
@@ -165,10 +158,27 @@ class _ResultfirstState extends State<Resultfirst> {
                     SizedBox(height: 16),
                     Center(
                       child: ElevatedButton(
+                        onPressed: addToClassList,
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.deepPurple,
+                          minimumSize: Size(200, 50),
+                        ),
+                        child: Text(
+                          'ADD',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    Center(
+                      child: ElevatedButton(
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => ResultPage()),
+                            MaterialPageRoute(builder: (context) => AddPageList(classList: classList)),
                           );
                         },
                         style: ElevatedButton.styleFrom(
@@ -176,7 +186,7 @@ class _ResultfirstState extends State<Resultfirst> {
                           minimumSize: Size(200, 50),
                         ),
                         child: Text(
-                          'Submit',
+                          'View Classes',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,

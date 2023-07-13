@@ -51,7 +51,7 @@ class _AttendanceListState extends State<AttendanceList> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                  children: [
-                        const Text("List of present Students", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
+                        const Text("List of present", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
                         Text("List of absentees", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
                  ],
                   ),
