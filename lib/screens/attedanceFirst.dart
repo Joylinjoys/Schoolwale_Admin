@@ -1,18 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:web_dashboard_app_tut/screens/Result.dart';
+import 'attendanceRegLIst.dart';
+import 'package:intl/intl.dart';
 
-
-class Resultfirst extends StatefulWidget {
-  const Resultfirst({Key? key}) : super(key: key);
+class Attendancefirst extends StatefulWidget {
+  const Attendancefirst({Key? key}) : super(key: key);
+  
 
   @override
-  _ResultfirstState createState() => _ResultfirstState();
+  _AttendancefirstState createState() => _AttendancefirstState();
 }
 
-class _ResultfirstState extends State<Resultfirst> {
+class _AttendancefirstState extends State<Attendancefirst> {
   String? selectedClass;
   String? selectedSection;
   String? selectedRollNo;
+  
+  DateTime selectedDate = DateTime.now();
+ // TimeOfDay selectedTime = TimeOfDay.now();
+
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(1900),
+      lastDate: DateTime(2100),
+    );
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+      });
+  }
 
   List<String> classes = [
     'Class 1',
@@ -41,7 +59,7 @@ class _ResultfirstState extends State<Resultfirst> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'Result Page',
+          'Attendance Page',
           style: TextStyle(
             fontSize: 29,
             fontWeight: FontWeight.bold,
@@ -66,7 +84,7 @@ class _ResultfirstState extends State<Resultfirst> {
                         style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    SizedBox(height: 16),
+                    SizedBox(height: 25),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -130,45 +148,86 @@ class _ResultfirstState extends State<Resultfirst> {
                         ),
                       ],
                     ),
-                    SizedBox(height: 16),
+                    SizedBox(height: 25),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          'Select Roll No:',
-                          style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(width: 8),
-                        Container(
-                          width: 250,
-                          child: DropdownButtonFormField<String>(
-                            value: selectedRollNo,
-                            onChanged: (newValue) {
-                              setState(() {
-                                selectedRollNo = newValue;
-                              });
-                            },
-                            items: rollNos.map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
+                        
+                      Text(
+                        'Enter Date:',
+                        style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(width: 8,),
+                      Container(
+                        width: 250,
+                        child: TextFormField(
+                          
+                          readOnly: true,
+                          controller: TextEditingController(
+                            text: DateFormat('yyyy-MM-dd').format(selectedDate),
+                          ),
+                          decoration: InputDecoration(
+                             border: OutlineInputBorder(),
                               contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                            filled: true,
+                            fillColor: Colors.white,
+                            // border: OutlineInputBorder(
+                            //   borderRadius: BorderRadius.circular(8.0),
+                            //   borderSide: BorderSide.none,
+                            // ),
+                            // contentPadding: EdgeInsets.symmetric(
+                            //   vertical: 12.0,
+                            //   horizontal: 16.0,
+                            // ),
+                            suffixIcon: IconButton(
+                              onPressed: () => _selectDate(context),
+                              icon: Icon(Icons.calendar_today),
                             ),
                           ),
+                          onTap: () => _selectDate(context),
                         ),
+                      ),
+                    
                       ],
                     ),
-                    SizedBox(height: 16),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [
+                    //     Text(
+                    //       'Select Roll No:',
+                    //       style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    //     ),
+                    //     SizedBox(width: 8),
+                    //     Container(
+                    //       width: 250,
+                    //       child: DropdownButtonFormField<String>(
+                    //         value: selectedRollNo,
+                    //         onChanged: (newValue) {
+                    //           setState(() {
+                    //             selectedRollNo = newValue;
+                    //           });
+                    //         },
+                    //         items: rollNos.map<DropdownMenuItem<String>>((String value) {
+                    //           return DropdownMenuItem<String>(
+                    //             value: value,
+                    //             child: Text(value),
+                    //           );
+                    //         }).toList(),
+                    //         decoration: InputDecoration(
+                    //           border: OutlineInputBorder(),
+                    //           contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ],
+                    // ),
+                     SizedBox(height: 16),
                     Center(
                       child: ElevatedButton(
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => ResultPage()),
+                            MaterialPageRoute(builder: (context) => AttendanceList()),
                           );
                         },
                         style: ElevatedButton.styleFrom(

@@ -10,6 +10,7 @@ import 'RulesRegulation.dart';
 import 'eventList.dart';
 import 'studentList.dart';
 import 'Resultfirst.dart';
+import 'attedanceFirst.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -92,9 +93,21 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ),
                         label: Text("Students"),
                       ),
-                      NavigationRailDestination(
-                        icon: Icon(Icons.calendar_month_outlined),
-                        label: Text("Attendance"),
+                      // NavigationRailDestination(
+                      //   icon: Icon(Icons.calendar_month_outlined),
+                      //   label: Text("Attendance"),
+                      // ),
+                       NavigationRailDestination(
+                        icon: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const Attendancefirst()),
+                            );
+                          },
+                          child: Icon(Icons.calendar_month_outlined),
+                        ),
+                        label: Text("Attedance"),
                       ),
                       NavigationRailDestination(
                         icon: GestureDetector(
@@ -203,6 +216,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           );
                           break;
                         case 4:
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const Attendancefirst()),
+                          );
                         // Handle Attendance
                           break;
                         case 5:
