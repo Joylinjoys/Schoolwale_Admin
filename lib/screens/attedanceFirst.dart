@@ -170,7 +170,7 @@ class _AttendancefirstState extends State<Attendancefirst> {
                              border: OutlineInputBorder(),
                               contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
                             filled: true,
-                            fillColor: Colors.white,
+                            fillColor: Colors.white12,
                             // border: OutlineInputBorder(
                             //   borderRadius: BorderRadius.circular(8.0),
                             //   borderSide: BorderSide.none,
