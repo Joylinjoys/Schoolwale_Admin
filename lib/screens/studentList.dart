@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:web_dashboard_app_tut/services/student_service.dart';
 import '../Models/student_class.dart';
 import 'addStudent.dart';
 import 'viewProfile.dart';
@@ -85,23 +86,14 @@ class _StudentListTableState extends State<StudentListTable> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: StreamBuilder(
-      stream: FirebaseFirestore.instance.collection("Students").snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+      stream: StudentService().studentList,
+      builder:
+          (BuildContext context, AsyncSnapshot<List<StudentInfo>> snapshot) {
         if (snapshot.hasError ||
             snapshot.connectionState == ConnectionState.waiting) {
           return Text("Loading");
         }
-        final documents = snapshot.data!.docs.map((e) {
-          return e.data();
-        });
-
-        final List<StudentInfo> studentList = [];
-
-        for (var val in documents) {
-          final object = StudentInfo.fromJson(val);
-
-          studentList.add(object);
-        }
+        final documents = snapshot.data ?? [];
 
         return Scaffold(
           appBar: AppBar(
@@ -196,6 +188,7 @@ class _StudentListTableState extends State<StudentListTable> {
                       // change button value to selected value
                       onChanged: (String? newValue) {
                         setState(() {
+                          selectedIndex = newValue! as int;
                           dropdownvalue = newValue!;
                         });
                       },
@@ -266,31 +259,28 @@ class _StudentListTableState extends State<StudentListTable> {
                         )),
                       ],
                       //students
-                      rows: studentList.map((studentList) {
+                      rows: documents.map((student) {
                         return DataRow(
                           cells: [
                             DataCell(
                               Flexible(
                                 child: Text(
-                                    studentList.registerNumber.toString() ??
-                                        ''),
+                                    student.registerNumber.toString() ?? ''),
                               ),
                             ),
                             DataCell(
                               Flexible(
-                                child: Text(studentList.name as String ?? ''),
+                                child: Text(student.name as String ?? ''),
                               ),
                             ),
                             DataCell(
                               Flexible(
-                                child:
-                                    Text(studentList.className as String ?? ''),
+                                child: Text(student.className as String ?? ''),
                               ),
                             ),
                             DataCell(
                               Flexible(
-                                child:
-                                    Text(studentList.className as String ?? ''),
+                                child: Text(student.className as String ?? ''),
                               ),
                             ),
                             DataCell(Flexible(

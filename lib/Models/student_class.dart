@@ -9,6 +9,7 @@ class StudentInfo {
   final String className;
   final String address;
   final String dob;
+
   StudentInfo(
       {required this.registerNumber,
       this.phoneNumber,
