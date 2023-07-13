@@ -96,7 +96,8 @@ class _ResultfirstState extends State<Resultfirst> {
         ),
         backgroundColor: Colors.deepPurple.shade400,
       ),
-      body: SingleChildScrollView(
+      body:
+      SingleChildScrollView(
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(16.0),

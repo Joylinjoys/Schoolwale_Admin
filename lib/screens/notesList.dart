@@ -1,65 +1,35 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import '../Models/annoncement.dart';
-import 'AddAnnouncement.dart';
-import 'EditAnnouncement.dart';
+//import 'editNotes.dart';
+import 'Editteacher.dart';
+import 'UploadNotes.dart';
 
-class AnnouncementsPage extends StatefulWidget {
-  const AnnouncementsPage({Key? key}) : super(key: key);
-
-  @override
-  State<AnnouncementsPage> createState() => _AnnouncementsPageState();
-}
-
-class _AnnouncementsPageState extends State<AnnouncementsPage> {
-  List<Map<String, String>> announcements = [
-    {
-      'title': 'Announcement 1',
-      'datetime': '2023-06-30',
-    //  'time': '10:00 AM',
-    },
-    {
-
-      'title': 'Announcement 2',
-      'datetime': '2023-07-01',
-      //'time': '11:30 AM',
-    },
-    {
-
-      'title': 'Announcement 3',
-      'datetime': '2023-07-02',
-      //'time': '02:15 PM',
-    },
-  ];
+class NotesPage extends StatelessWidget {
+  const NotesPage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: StreamBuilder(
-      stream: FirebaseFirestore.instance.collection("Announcements").snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-        if (snapshot.hasError ||
-            snapshot.connectionState == ConnectionState.waiting) {
-          return Text("Loading");
-        }
-        final documents = snapshot.data!.docs.map((e) {
-          return e.data();
-        });
-
-        final List<AnnouncementInfo> annoncementList = [];
-
-        for (var val in documents) {
-          final object = AnnouncementInfo.fromJson(val);
-
-          annoncementList.add(object);
-        }
+    // Dummy data for teachers (replace with your actual data)
+    List<Map<String, String>> notes = [
+      {
+        'class': '1',
+        'section': 'A',
+        'subject': 'English',
+        'unit': '1 unit',
+      },
+      {
+       'class': '2',
+        'section': 'A',
+        'subject': 'Maths',
+        'unit': '2 unit',
+      },
+     
+    ];
 
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'Announcements',
+          'Notes',
           style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.deepPurple.shade400,
@@ -71,7 +41,7 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
-                'Announcement List',
+                'Notes List',
                 style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
               ),
               SizedBox(height: 20),
@@ -79,10 +49,9 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                 child: DataTable(
                   columnSpacing: 100.0,
                   columns: [
-
                     DataColumn(
                       label: Text(
-                        'Title',
+                        'Class',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
@@ -91,14 +60,31 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                     ),
                     DataColumn(
                       label: Text(
-                        'Date & Time',
+                        'Section',
                         style: TextStyle(
                           fontSize: 24,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
-                    
+                    DataColumn(
+                      label: Text(
+                        'Subject',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                    DataColumn(
+                      label: Text(
+                        'Unit',
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
                     DataColumn(
                       label: Text(
                         'Edit',
@@ -118,17 +104,21 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                       ),
                     ),
                   ],
-                  rows: annoncementList.map((announcementList) {
+                  rows: notes.map((List) {
                     return DataRow(
                       cells: [
-
                         DataCell(
-                          Text(announcementList.name as String?? ''),
+                          Text(List['class'] ?? ''),
                         ),
                         DataCell(
-                          Text(DateFormat.yMd().add_jm().format((announcementList.date as Timestamp).toDate()) ?? ''),
+                          Text(List['section'] ?? ''),
                         ),
-                      
+                        DataCell(
+                          Text(List['subject'] ?? ''),
+                        ),
+                        DataCell(
+                          Text(List['unit'] ?? ''),
+                        ),
                         DataCell(
                           ElevatedButton(
                             child: Text('Edit'),
@@ -136,10 +126,10 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                               primary: Colors.deepPurple,
                             ),
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) =>  EditAnnouncementPage()),
-                              );
+                              // Navigator.push(
+                              //   context,
+                              //   MaterialPageRoute(builder: (context) => EditNotes()),
+                              // );
                               // Navigate to edit announcement page
                             },
                           ),
@@ -191,7 +181,7 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) =>  AddAnnouncementPage()),
+            MaterialPageRoute(builder: (context) =>  UploadNotes()),
           );
           // Handle add button press
           // Implement your logic here to add a new announcement
@@ -200,9 +190,6 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
         backgroundColor: Colors.deepPurple.shade400,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-    );
-      },
-        )
     );
   }
 }
