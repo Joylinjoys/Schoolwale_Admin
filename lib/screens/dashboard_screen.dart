@@ -7,6 +7,7 @@ import 'package:web_dashboard_app_tut/screens/timtable.dart';
 import 'AnnouncementList.dart';
 import 'Result.dart';
 import 'RulesRegulation.dart';
+import 'addclassList.dart';
 import 'eventList.dart';
 import 'studentList.dart';
 import 'Resultfirst.dart';
@@ -174,7 +175,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) =>  RulesRegulation()),
+                              MaterialPageRoute(builder: (context) =>  RulesRegulations()),
                             );
                           },
                           child: Icon(Icons.rule_folder_outlined),
@@ -255,7 +256,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         case 10:
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) =>  RulesRegulation()),
+                            MaterialPageRoute(builder: (context) =>  RulesRegulations()),
                           );
                           break;
                       // Add more cases for additional destinations
@@ -464,8 +465,63 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           ),
                         ),
                       ),
+                      Flexible(
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AddPageList(),
+                              ),
+                            );
+                          },
+                          child: Card(
+                            child: Padding(
+                              padding: const EdgeInsets.all(18.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.add,
+                                        size: 26.0,
+                                        color: Colors.deepPurple,
+                                      ),
+                                      SizedBox(
+                                        width: 15.0,
+                                      ),
+                                      Text(
+                                        "classes",
+                                        style: TextStyle(
+                                          fontSize: 26.0,
+                                          color: Colors.deepPurple,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 20.0,
+                                  ),
+                                  Text(
+                                    "Add Class",
+                                    style: TextStyle(
+                                      fontSize: 36,
+                                      color: Colors.deepPurple,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+
                     ],
                   ),
+
                   //Now let's set the article section
                   SizedBox(
                     height: 30.0,
