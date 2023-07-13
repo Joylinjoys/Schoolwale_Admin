@@ -1,10 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:web_dashboard_app_tut/widgets/AttedanceRegNo.dart';
-class AttendanceList extends StatelessWidget {
+
+class AttendanceList extends StatefulWidget {
   const AttendanceList({super.key});
 
   @override
+  State<AttendanceList> createState() => _AttendanceListState();
+}
+
+class _AttendanceListState extends State<AttendanceList> {
+
+  final _studentList = [
+    '211901',
+    '211902',
+    '211903',
+    '211904',
+    '211905',
+    '211906',
+    '211907',
+    '211908',
+    '211909',
+  ];
+
+  final _absentees = [];
+
+  @override
   Widget build(BuildContext context) {
+    print('123');
     return Scaffold(
        appBar: AppBar(
             centerTitle: true,
@@ -16,60 +38,67 @@ class AttendanceList extends StatelessWidget {
           ),
           body: Padding(
             padding: const EdgeInsets.all(16.0),
-
+            
            // child: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+             //   crossAxisAlignment: CrossAxisAlignment.start,
+
                 children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("List of students", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
-                       SizedBox(height: 20),
-                      RollNoContainer(
-                        rollno: "211901"
-                      ),
-                     // SizedBox(height: 10),
-                      RollNoContainer(
-                        rollno: "211902"
-                      ),
-                       RollNoContainer(
-                        rollno: "211903"
-                      ),
-                   //   SizedBox(height: 10),
-                      RollNoContainer(
-                        rollno: "211904"
-                      ),
-                       RollNoContainer(
-                        rollno: "211905"
-                      ),
-                    //  SizedBox(height: 10),
-                      RollNoContainer(
-                        rollno: "211906"
-                      ),
-                       RollNoContainer(
-                        rollno: "211907"
-                      ),
-                     // SizedBox(height: 10),
-                      RollNoContainer(
-                        rollno: "211908"
-                      ),
-                    ],
+                  Text("Tap On Register Number",style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                  SizedBox(height: 20,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                 children: [
+                        const Text("List of present", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
+                        Text("List of absentees", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
+                 ],
                   ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      Text("List of absentees", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
-                       SizedBox(height: 20),
-                     
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                       // crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                         
+                           const SizedBox(height: 20),
+                         ..._studentList.map((student) =>  RollNoContainer(
+                            rollno: student,
+                            onTap: () {
+                             setState(() {
+                                _studentList.remove(student);
+                                _absentees.add(student);
+                             });
+                            },
+                          ))
+                        ],
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                       // crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          
+                           SizedBox(height: 20),
+                         ..._absentees.map((absent) =>  RollNoContainer(
+                            rollno: absent,
+                            onTap: () {
+                              setState(() {
+                                _absentees.remove(absent);
+                                _studentList.add(absent);
+                             });
+                            },
+                          ))
+                        ],
+                      ),
                     ],
                   ),
                 ],
               ),
           //  ),
           ),
+          
     );
   }
 }
