@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:web_dashboard_app_tut/screens/addclass.dart';
 
 import 'addclassList.dart';
 
@@ -215,7 +216,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => AddPageList(classList: [],),
+                        builder: (context)=>classfirst(),
                       ),
                     );
                   },

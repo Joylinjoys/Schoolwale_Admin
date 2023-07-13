@@ -13,7 +13,6 @@ class AddPageList extends StatefulWidget {
 
 class _AddPageListState extends State<AddPageList> {
 
-
   void deleteClass(int index) {
     setState(() {
       widget.classList.removeAt(index);
@@ -34,13 +33,11 @@ class _AddPageListState extends State<AddPageList> {
         ),
         backgroundColor: Colors.deepPurple.shade400,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
+      body: Center(
+
           child: DataTable(
-            columnSpacing: 20.0,
-            dividerThickness: 1.0,
+            columnSpacing: 10.0,
+            dividerThickness: 3.0,
             decoration: BoxDecoration(
               border: Border.all(
                 color: Colors.black,
@@ -137,6 +134,8 @@ class _AddPageListState extends State<AddPageList> {
                                 );
                               },
                             );
+
+
                           },
                           icon: Icon(Icons.delete),
                           color: Colors.red,
@@ -149,7 +148,7 @@ class _AddPageListState extends State<AddPageList> {
             }).toList(),
           ),
         ),
-      ),
-    );
+      );
+
   }
 }
