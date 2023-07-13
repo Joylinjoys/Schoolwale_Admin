@@ -23,14 +23,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              IconButton(
-                onPressed: () {
-                  setState(() {
-                    isExpanded = !isExpanded;
-                  });
-                },
-                icon: Icon(Icons.menu),
-              ),
+              // IconButton(
+              //   onPressed: () {
+              //     setState(() {
+              //       isExpanded = !isExpanded;
+              //     });
+              //   },
+              //   // icon: Icon(Icons.menu),
+              // ),
 
             ],
           ),
@@ -71,7 +71,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         Text(
                           "500 Students",
                           style: TextStyle(
-                            fontSize: 36,
+                            fontSize: 32,
                             fontWeight: FontWeight.bold,
                           ),
                         )
@@ -197,7 +197,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           height: 20.0,
                         ),
                         Text(
-                          " 56 teachers",
+                          " 56 Teachers",
                           style: TextStyle(
                             fontSize: 36,
                             color: Colors.green,
