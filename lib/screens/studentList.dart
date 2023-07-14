@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:web_dashboard_app_tut/services/student_service.dart';
+import '../Models/class_and_section.dart';
 import '../Models/student_class.dart';
 import 'addStudent.dart';
 import 'viewProfile.dart';
@@ -13,6 +16,7 @@ class Student_main extends StatefulWidget {
 }
 
 class _Student_mainState extends State<Student_main> {
+ 
   @override
   // bool isExpanded = false;
 
@@ -61,6 +65,7 @@ class _Student_mainState extends State<Student_main> {
 }
 
 class StudentListTable extends StatefulWidget {
+  
   //final List<Map<String, String>> studentsList;
   const StudentListTable({Key? key}) : super(key: key);
 
@@ -69,6 +74,9 @@ class StudentListTable extends StatefulWidget {
 }
 
 class _StudentListTableState extends State<StudentListTable> {
+   String? selectedClass;
+  
+  String? selectedClassSection;
   bool folded = true;
 
   //late List<Map<String, String>> students;
@@ -82,6 +90,9 @@ class _StudentListTableState extends State<StudentListTable> {
     '4 th',
   ];
   int selectedIndex = 0;
+  final sectionStream = StreamController<List<String>>();
+   bool ischange = false;
+ // var selectedClass;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -176,29 +187,92 @@ class _StudentListTableState extends State<StudentListTable> {
                         )
                       ]),
                     ),
-                    DropdownButton(
-                      // Initial Value
-                      //value: dropdownvalue,
-                      value: items[1],
-                      // Down Arrow Icon
-                      icon: const Icon(Icons.keyboard_arrow_down),
+                   Container(
+                          width: 250,
+                          child: StreamBuilder(
+                              stream: FirebaseFirestore.instance
+                                  .collection("ClassSections")
+                                  .snapshots(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<dynamic> snapshot) {
+                                if (snapshot.hasError ||
+                                    snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                  return Text("Loading");
+                                }
 
-                      // Array list of items
-                      items: items.map((String items) {
-                        return DropdownMenuItem(
-                          value: items,
-                          child: Text(items),
+                                // final classData = snapshot.data ?? [];
+                                final List<String> classData = [];
+                                final documents = snapshot.data!.docs.map((e) {
+                                  classData.add(e.id);
+                                  return e.data();
+                                });
+                                //final dd = classData;
+                                final List<Sections> teacherList = [];
+
+                                for (var val in documents) {
+                                  final object = Sections.fromJson(val);
+
+                                  teacherList.add(object);
+                                }
+
+                                // print(teacherList[4].sections);
+
+                                return DropdownButtonFormField<String>(
+                                  value: selectedClass,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      //sectionStream.add([]);
+                                      selectedClass = newValue;
+                                      List<String> section = teacherList[
+                                              (int.parse(selectedClass!)) - 1]
+                                          .sections
+                                          .cast<String>()
+                                          .toList();
+                                      // print(section);
+                                      //
+                                      // print(sectionStream);
+
+                                      sectionStream.add(section);
+                                      ischange = true;
+                                    });
+                                  }, //items=classData
+                                  items: classData
+                                      .map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                    return DropdownMenuItem<String>(
+                                      value: value,
+                                      child: Text(value),
+                                    );
+                                  }).toList(),
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 8, horizontal: 4),
+                                  ),
+                                );
+                              }),
+                        ),
+                        SizedBox(
+                    width: 140,
+                    height: 40,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const AddStudent()),
                         );
-                      }).toList(),
-                      // After selecting the desired option,it will
-                      // change button value to selected value
-                      onChanged: (String? newValue) {
-                        setState(() {
-                          selectedIndex = newValue! as int;
-                          dropdownvalue = newValue!;
-                        });
                       },
+                      child: Text('ADD',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 24)),
+                      style: ElevatedButton.styleFrom(
+                        primary:
+                            Colors.deepPurple, // Set button color to purple
+                      ),
                     ),
+                  ),
                   ],
                 ),
                 SizedBox(height: 20),
@@ -362,28 +436,9 @@ class _StudentListTableState extends State<StudentListTable> {
                   ),
                 ),
                 SizedBox(height: 16),
-                Center(
-                  child: SizedBox(
-                    width: 140,
-                    height: 40,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const AddStudent()),
-                        );
-                      },
-                      child: Text('ADD',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 24)),
-                      style: ElevatedButton.styleFrom(
-                        primary:
-                            Colors.deepPurple, // Set button color to purple
-                      ),
-                    ),
-                  ),
-                ),
+                // Center(
+                //   child: 
+                // ),
               ],
             ),
           ),
