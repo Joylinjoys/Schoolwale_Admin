@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:web_dashboard_app_tut/screens/adminlogin.dart';
+
 import 'package:web_dashboard_app_tut/screens/navigation_screen.dart';
 //import 'package:web_dashboard_app_tut/screens/studentList.dart';
 import 'package:firebase_core/firebase_core.dart';

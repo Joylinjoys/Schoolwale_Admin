@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:web_dashboard_app_tut/screens/Result.dart';
 import 'attendanceRegLIst.dart';
 import 'package:intl/intl.dart';
 
