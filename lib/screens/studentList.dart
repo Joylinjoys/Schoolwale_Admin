@@ -91,7 +91,13 @@ class _StudentListTableState extends State<StudentListTable> {
           (BuildContext context, AsyncSnapshot<List<StudentInfo>> snapshot) {
         if (snapshot.hasError ||
             snapshot.connectionState == ConnectionState.waiting) {
-          return Text("Loading");
+          print(snapshot.error);
+          return Center(
+            child: CircularProgressIndicator(
+              backgroundColor: Colors.white,
+              strokeWidth: 6,
+            ),
+          );
         }
         final documents = snapshot.data ?? [];
 

@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:html';
-import 'dart:js_interop';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -96,8 +94,7 @@ class _ResultfirstState extends State<Resultfirst> {
         ),
         backgroundColor: Colors.deepPurple.shade400,
       ),
-      body:
-      SingleChildScrollView(
+      body: SingleChildScrollView(
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -167,9 +164,6 @@ class _ResultfirstState extends State<Resultfirst> {
                                           .sections
                                           .cast<String>()
                                           .toList();
-                                      // print(section);
-                                      //
-                                      // print(sectionStream);
 
                                       sectionStream.add(section);
                                       ischange = true;
@@ -273,8 +267,7 @@ class _ResultfirstState extends State<Resultfirst> {
                                   lss.add(e.id.toString());
                                   return e.data();
                                 });
-                                print(documents);
-                                print(selectedClassSection);
+
                                 return DropdownButtonFormField<String>(
                                   value: selectedRollNo,
                                   onChanged: (newValue) {

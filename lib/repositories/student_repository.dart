@@ -12,5 +12,5 @@ class StudentRepository {
       _firestore.collection('Students').withConverter(
           fromFirestore: (snapshot, _) =>
               StudentInfo.fromJson(snapshot.data()!),
-          toFirestore: (student, _) => {});
+          toFirestore: (student, _) => student.toJson());
 }
