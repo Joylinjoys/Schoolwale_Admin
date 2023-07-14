@@ -20,6 +20,15 @@ class _AttendanceListState extends State<AttendanceList> {
     '211907',
     '211908',
     '211909',
+    '211901',
+    '211902',
+    '211903',
+    '211904',
+    '211905',
+    '211906',
+    '211907',
+    '211908',
+    '211909',
   ];
 
   final _absentees = [];
@@ -39,7 +48,9 @@ class _AttendanceListState extends State<AttendanceList> {
           body: Padding(
             padding: const EdgeInsets.all(16.0),
             
-           // child: Center(
+            child: SingleChildScrollView(
+             
+           
               
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -94,11 +105,33 @@ class _AttendanceListState extends State<AttendanceList> {
                       ),
                     ],
                   ),
+                  SizedBox(height: 20,),
+                   Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => AttendanceList()),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.deepPurple,
+                          minimumSize: Size(200, 50),
+                        ),
+                        child: Text(
+                          'Submit',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
                 ],
               ),
           //  ),
           ),
-          
+          ), 
     );
   }
 }

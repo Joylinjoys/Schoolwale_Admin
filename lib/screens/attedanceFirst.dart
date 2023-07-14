@@ -122,12 +122,12 @@ class _AttendancefirstState extends State<Attendancefirst> {
                             //   vertical: 12.0,
                             //   horizontal: 16.0,
                             // ),
-                            suffixIcon: IconButton(
-                              onPressed: () => _selectDate(context),
-                              icon: Icon(Icons.calendar_today),
-                            ),
+                            // suffixIcon: IconButton(
+                            //   onPressed: () => _selectDate(context),
+                            //   icon: Icon(Icons.calendar_today),
+                            // ),
                           ),
-                          onTap: () => _selectDate(context),
+                         // onTap: () => _selectDate(context),
                         ),
                       ),
                     
@@ -170,12 +170,12 @@ class _AttendancefirstState extends State<Attendancefirst> {
                             //   vertical: 12.0,
                             //   horizontal: 16.0,
                             // ),
-                            suffixIcon: IconButton(
-                              onPressed: () => _selectDate(context),
-                              icon: Icon(Icons.calendar_today),
-                            ),
+                            // suffixIcon: IconButton(
+                            //   onPressed: () => _selectDate(context),
+                            //   icon: Icon(Icons.calendar_today),
+                            // ),
                           ),
-                          onTap: () => _selectDate(context),
+                          //onTap: () => _selectDate(context),
                         ),
                       ),
                     
