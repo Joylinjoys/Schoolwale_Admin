@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:web_dashboard_app_tut/Models/student_class.dart';
 import 'package:web_dashboard_app_tut/widgets/AttedanceRegNo.dart';
 
 class AttendanceList extends StatefulWidget {
-  const AttendanceList({super.key});
+  final String className;
+  final String sectionName;
+  const AttendanceList({super.key, required this.className, required this.sectionName});
 
   @override
   State<AttendanceList> createState() => _AttendanceListState();
@@ -10,28 +13,15 @@ class AttendanceList extends StatefulWidget {
 
 class _AttendanceListState extends State<AttendanceList> {
 
-  final _studentList = [
-    '211901',
-    '211902',
-    '211903',
-    '211904',
-    '211905',
-    '211906',
-    '211907',
-    '211908',
-    '211909',
-    '211901',
-    '211902',
-    '211903',
-    '211904',
-    '211905',
-    '211906',
-    '211907',
-    '211908',
-    '211909',
-  ];
+  final List<StudentInfo> _studentList = [];
 
-  final _absentees = [];
+  final List<StudentInfo> _absentees = [];
+
+  @override
+  void initState() {
+    _studentList.addAll(students.where((element) => element.className == widget.className && element.section == widget.sectionName).toList());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,6 +51,7 @@ class _AttendanceListState extends State<AttendanceList> {
                   SizedBox(height: 20,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                  children: [
                         const Text("List of present", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
                         Text("List of absentees", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
@@ -73,10 +64,12 @@ class _AttendanceListState extends State<AttendanceList> {
                         mainAxisAlignment: MainAxisAlignment.end,
                        // crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          
+                         
                          
                            const SizedBox(height: 20),
                          ..._studentList.map((student) =>  RollNoContainer(
-                            rollno: student,
+                            rollno: student.registerNumber.toString(),
                             onTap: () {
                              setState(() {
                                 _studentList.remove(student);
@@ -93,7 +86,7 @@ class _AttendanceListState extends State<AttendanceList> {
                           
                            SizedBox(height: 20),
                          ..._absentees.map((absent) =>  RollNoContainer(
-                            rollno: absent,
+                            rollno: absent.registerNumber.toString(),
                             onTap: () {
                               setState(() {
                                 _absentees.remove(absent);
@@ -109,10 +102,10 @@ class _AttendanceListState extends State<AttendanceList> {
                    Center(
                       child: ElevatedButton(
                         onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => AttendanceList()),
-                          );
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(builder: (context) => AttendanceList()),
+                          // );
                         },
                         style: ElevatedButton.styleFrom(
                           primary: Colors.deepPurple,
