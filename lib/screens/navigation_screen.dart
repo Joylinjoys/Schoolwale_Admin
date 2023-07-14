@@ -37,7 +37,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
     UploadNotes(),
     TimetableScreen(),
     SchoolDetails(),
-    RulesRegulations()
+    RulesRegulation()
   ];
 
   @override

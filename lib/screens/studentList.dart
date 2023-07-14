@@ -1,10 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:web_dashboard_app_tut/services/student_service.dart';
 import '../Models/student_class.dart';
 import 'addStudent.dart';
 import 'viewProfile.dart';
-import 'editStudent.dart';
-import 'virtualID.dart';
 
 class Student_main extends StatefulWidget {
   const Student_main({super.key});
@@ -14,7 +13,6 @@ class Student_main extends StatefulWidget {
 }
 
 class _Student_mainState extends State<Student_main> {
-  //String?  _selectedSubject;
   @override
   // bool isExpanded = false;
 
@@ -84,29 +82,18 @@ class _StudentListTableState extends State<StudentListTable> {
     '4 th',
   ];
   int selectedIndex = 0;
-  
-String? _selectedSubject;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: StreamBuilder(
-      stream: FirebaseFirestore.instance.collection("Students").snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+      stream: StudentService().studentList,
+      builder:
+          (BuildContext context, AsyncSnapshot<List<StudentInfo>> snapshot) {
         if (snapshot.hasError ||
             snapshot.connectionState == ConnectionState.waiting) {
           return Text("Loading");
         }
-        final documents = snapshot.data!.docs.map((e) {
-          return e.data();
-        });
-
-        final List<StudentInfo> studentList = [];
-
-        for (var val in documents) {
-          final object = StudentInfo.fromJson(val);
-
-          studentList.add(object);
-        }
+        final documents = snapshot.data ?? [];
 
         return Scaffold(
           appBar: AppBar(
@@ -124,7 +111,7 @@ String? _selectedSubject;
               children: [
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  //crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       "Student List",
@@ -183,64 +170,29 @@ String? _selectedSubject;
                         )
                       ]),
                     ),
-                   
-                    SizedBox(
-                          width: 200,
-                          child: DropdownButtonFormField<String>(
-                            value: _selectedSubject,
-                            onChanged: (newValue) {
-                              setState(() {
-                                _selectedSubject = newValue;
-                              });
-                            },
-                            items: [
-                              DropdownMenuItem(
-                                value: 'Class I',
-                                child: Text('Class I'),
-                              ),
-                              DropdownMenuItem(
-                                value: 'Class II',
-                                child: Text('Class II'),
-                              ),
-                              DropdownMenuItem(
-                                value: 'Class III',
-                                child: Text('Class III'),
-                              ),
-                              DropdownMenuItem(
-                                value: 'Class IV',
-                                child: Text('Class IV'),
-                              ),
-                              DropdownMenuItem(
-                                value: 'Class V',
-                                child: Text('Class V'),
-                              ),
-                            ],
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-                            ),
-                          ),
-                        ),
-                     SizedBox(
-                    width: 100,
-                    height: 40,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const AddStudent()),
+                    DropdownButton(
+                      // Initial Value
+                      //value: dropdownvalue,
+                      value: items[1],
+                      // Down Arrow Icon
+                      icon: const Icon(Icons.keyboard_arrow_down),
+
+                      // Array list of items
+                      items: items.map((String items) {
+                        return DropdownMenuItem(
+                          value: items,
+                          child: Text(items),
                         );
+                      }).toList(),
+                      // After selecting the desired option,it will
+                      // change button value to selected value
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          selectedIndex = newValue! as int;
+                          dropdownvalue = newValue!;
+                        });
                       },
-                      child: Text('ADD',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold, fontSize: 20)),
-                      style: ElevatedButton.styleFrom(
-                        primary:
-                            Colors.deepPurple, // Set button color to purple
-                      ),
                     ),
-                  ),
                   ],
                 ),
                 SizedBox(height: 20),
@@ -253,7 +205,7 @@ String? _selectedSubject;
                             label: Text(
                           'Register No',
                           style: TextStyle(
-                            fontSize: 21,
+                            fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -261,7 +213,7 @@ String? _selectedSubject;
                             label: Text(
                           'Name',
                           style: TextStyle(
-                            fontSize: 21,
+                            fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -269,7 +221,7 @@ String? _selectedSubject;
                             label: Text(
                           'Class',
                           style: TextStyle(
-                            fontSize: 21,
+                            fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -277,7 +229,7 @@ String? _selectedSubject;
                             label: Text(
                           'Section',
                           style: TextStyle(
-                            fontSize: 21,
+                            fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -285,7 +237,7 @@ String? _selectedSubject;
                             label: Text(
                           'Profile',
                           style: TextStyle(
-                            fontSize: 21,
+                            fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -293,15 +245,7 @@ String? _selectedSubject;
                             label: Text(
                           'Virtual ID',
                           style: TextStyle(
-                            fontSize: 21,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        )),
-                        DataColumn(
-                            label: Text(
-                          'Edit',
-                          style: TextStyle(
-                            fontSize: 21,
+                            fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -309,37 +253,34 @@ String? _selectedSubject;
                             label: Text(
                           'Delete',
                           style: TextStyle(
-                            fontSize: 21,
+                            fontSize: 24,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
                       ],
                       //students
-                      rows: studentList.map((studentList) {
+                      rows: documents.map((student) {
                         return DataRow(
                           cells: [
                             DataCell(
                               Flexible(
                                 child: Text(
-                                    studentList.registerNumber.toString() ??
-                                        ''),
+                                    student.registerNumber.toString() ?? ''),
                               ),
                             ),
                             DataCell(
                               Flexible(
-                                child: Text(studentList.name as String ?? ''),
+                                child: Text(student.name as String ?? ''),
                               ),
                             ),
                             DataCell(
                               Flexible(
-                                child:
-                                    Text(studentList.className as String ?? ''),
+                                child: Text(student.className as String ?? ''),
                               ),
                             ),
                             DataCell(
                               Flexible(
-                                child:
-                                    Text(studentList.className as String ?? ''),
+                                child: Text(student.className as String ?? ''),
                               ),
                             ),
                             DataCell(Flexible(
@@ -366,27 +307,7 @@ String? _selectedSubject;
                                   primary: Colors
                                       .deepPurple, // Set button color to purple
                                 ),
-                                onPressed: () {Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const VirtualId()),
-                        );},
-                              ),
-                            )),
-                              DataCell(Flexible(
-                              child: ElevatedButton(
-                                child: Text('Edit Student'),
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors
-                                      .deepPurple, // Set button color to purple
-                                ),
-                                onPressed: () {
-                                   Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const EditStudent()),
-                        );
-                                },
+                                onPressed: () {},
                               ),
                             )),
                             DataCell(Flexible(
@@ -434,7 +355,29 @@ String? _selectedSubject;
                     ),
                   ),
                 ),
-                
+                SizedBox(height: 16),
+                Center(
+                  child: SizedBox(
+                    width: 140,
+                    height: 40,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const AddStudent()),
+                        );
+                      },
+                      child: Text('ADD',
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 24)),
+                      style: ElevatedButton.styleFrom(
+                        primary:
+                            Colors.deepPurple, // Set button color to purple
+                      ),
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
