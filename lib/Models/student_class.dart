@@ -54,7 +54,7 @@ class StudentInfo {
     };
   }
 }
-//
+
 // final StudentInfo s1 = StudentInfo(
 //     registerNumber: 20230001,
 //     name: "Chintu",
@@ -99,49 +99,49 @@ class StudentInfo {
 //     sectionName: "B",
 //     address: "Mangalore",
 //     dob: "01-04-2009");
-// final List<StudentInfo> students = [
-//   StudentInfo(
-//       registerNumber: 20230004,
-//       name: "Angie",
-//       gender: "Female",
-//       schoolName: "NIT",
-//       fatherName: "Cena",
-//       motherName: "Bella",
-//       className: "3",
-//       sectionName: "B",
-//       address: "Mangalore",
-//       dob: "01-04-2009"),
-//   StudentInfo(
-//       registerNumber: 20230003,
-//       name: "Azar",
-//       gender: "Male",
-//       schoolName: "NIT",
-//       fatherName: "Irfan",
-//       motherName: "Riya",
-//       className: "5",
-//       sectionName: "A",
-//       address: "Mangalore",
-//       dob: "23-12-2009"),
-//   StudentInfo(
-//       registerNumber: 20230002,
-//       name: "Joylin",
-//       gender: "Female",
-//       schoolName: "NIT",
-//       fatherName: "Johnson",
-//       motherName: "Jenny",
-//       className: "3",
-//       sectionName: "A",
-//       address: "Mudipu",
-//       dob: "20-05-2009"),
-//   StudentInfo(
-//       registerNumber: 20230001,
-//       name: "Chintu",
-//       gender: "Male",
-//       schoolName: "NIT",
-//       fatherName: "Ramesh",
-//       motherName: "Laila",
-//       className: "3",
-//       sectionName: "A",
-//       address: "Mangalore",
-//       dob: "20-02-2009")
-// ];
+final List<StudentInfo> students = [
+  StudentInfo(
+      registerNumber: 20230004,
+      name: "Angie",
+      gender: "Female",
+      schoolName: "NIT",
+      fatherName: "Cena",
+      motherName: "Bella",
+      className: "3",
+      sectionName: "B",
+      address: "Mangalore",
+      dob: "01-04-2009"),
+  StudentInfo(
+      registerNumber: 20230003,
+      name: "Azar",
+      gender: "Male",
+      schoolName: "NIT",
+      fatherName: "Irfan",
+      motherName: "Riya",
+      className: "5",
+      sectionName: "A",
+      address: "Mangalore",
+      dob: "23-12-2009"),
+  StudentInfo(
+      registerNumber: 20230002,
+      name: "Joylin",
+      gender: "Female",
+      schoolName: "NIT",
+      fatherName: "Johnson",
+      motherName: "Jenny",
+      className: "3",
+      sectionName: "A",
+      address: "Mudipu",
+      dob: "20-05-2009"),
+  StudentInfo(
+      registerNumber: 20230001,
+      name: "Chintu",
+      gender: "Male",
+      schoolName: "NIT",
+      fatherName: "Ramesh",
+      motherName: "Laila",
+      className: "3",
+      sectionName: "A",
+      address: "Mangalore",
+      dob: "20-02-2009")
+];
