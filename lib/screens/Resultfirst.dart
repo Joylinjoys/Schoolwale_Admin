@@ -252,8 +252,8 @@ class _ResultfirstState extends State<Resultfirst> {
                           child: StreamBuilder(
                               stream: FirebaseFirestore.instance
                                   .collection("Students")
-                                  .where('Class',
-                                      isEqualTo: selectedClassSection)
+                                  .where('Class', isEqualTo: selectedClass)
+                                  .where('Section', isEqualTo: selectedSection)
                                   .snapshots(),
                               builder: (BuildContext context,
                                   AsyncSnapshot<dynamic> snapshot) {
@@ -267,6 +267,9 @@ class _ResultfirstState extends State<Resultfirst> {
                                   lss.add(e.id.toString());
                                   return e.data();
                                 });
+                                //dont remove below line
+                                documents.toString();
+                                //print(lss);
 
                                 return DropdownButtonFormField<String>(
                                   value: selectedRollNo,
@@ -299,7 +302,9 @@ class _ResultfirstState extends State<Resultfirst> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ResultPage()),
+                                builder: (context) => ResultPage(
+                                      regNo: selectedRollNo.toString(),
+                                    )),
                           );
                         },
                         style: ElevatedButton.styleFrom(
