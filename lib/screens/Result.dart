@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:web_dashboard_app_tut/screens/finalmarks.dart';
 
@@ -33,6 +34,13 @@ class _ResultPageState extends State<ResultPage> {
     super.dispose();
   }
 
+  void _clearText() {
+    _examNameController.clear();
+    _totalMarksController.clear();
+    _passingMarksController.clear();
+    _marksObtainedController.clear();
+  }
+
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
       // Form is valid, perform form submission
@@ -65,10 +73,16 @@ class _ResultPageState extends State<ResultPage> {
             },
             SetOptions(merge: true),
           )
-          .then((value) => print("Inserted..."))
+          .then((value) => CoolAlert.show(
+                context: context,
+                type: CoolAlertType.success,
+                text: "Inserted Successfuly...",
+                width: MediaQuery.of(context).size.width / 5,
+              ))
           .catchError((onError) => print("Error:$onError"));
       //TODO: Handle form submission and further actions
     }
+    _clearText();
   }
 
   @override
