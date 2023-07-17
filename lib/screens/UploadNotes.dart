@@ -1,5 +1,10 @@
+import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
+
 import 'package:flutter/material.dart';
-import 'package:web_dashboard_app_tut/screens/finalmarks.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class UploadNotes extends StatefulWidget {
   const UploadNotes({Key? key}) : super(key: key);
@@ -9,40 +14,63 @@ class UploadNotes extends StatefulWidget {
 }
 
 class _UploadNotesState extends State<UploadNotes> {
+  PlatformFile? _platformFile;
   final _formKey = GlobalKey<FormState>();
-  final _examNameController = TextEditingController();
-  final _totalMarksController = TextEditingController();
-  final _passingMarksController = TextEditingController();
+
   final _marksObtainedController = TextEditingController();
 
+  String? _selectedClass;
+  String? _selectedSection;
   String? _selectedSubject;
+  String? _selectedTitle;
 
-  @override
-  void dispose() {
-    _examNameController.dispose();
-    _totalMarksController.dispose();
-    _passingMarksController.dispose();
-    _marksObtainedController.dispose();
-    super.dispose();
+
+  Future<void> _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      // Form validation passed, handle form submission
+      if (_platformFile != null) {
+        // Generate a unique filename
+        String fileName = DateTime.now().millisecondsSinceEpoch.toString() + '.pdf';
+        firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child(fileName);
+
+        // Upload the file
+        if (kIsWeb) {
+          await ref.putData(_platformFile!.bytes!);
+        } else {
+          await ref.putFile(File(_platformFile!.path!));
+        }
+
+        // Get the download URL of the uploaded file
+        String downloadUrl = await ref.getDownloadURL();
+        print(downloadUrl);
+
+        // Store the download URL in Firestore, under the specified document and subcollection
+        await FirebaseFirestore.instance.collection('Notes').doc('3 A').set({
+          'Mathematics': {
+            'Unit 1': downloadUrl,
+          },
+          // 'pdfFilePath': downloadUrl,
+        });
+
+        // Reset the form and clear the file
+        _formKey.currentState!.reset();
+        setState(() {
+          _platformFile = null;
+        });
+      }
+    }
   }
 
-  void _submitForm() {
-    if (_formKey.currentState?.validate() ?? false) {
-      // Form is valid, perform form submission
-      final examNameValue = _examNameController.text;
-      final subjectNameValue = _selectedSubject;
-      final totalMarksValue = _totalMarksController.text;
-      final passingMarksValue = _passingMarksController.text;
-      final marksObtainedValue = _marksObtainedController.text;
 
-      // Example: Print form values
-      print('Exam Name: $examNameValue');
-      print('Subject Name: $subjectNameValue');
-      print('Total Marks: $totalMarksValue');
-      print('Passing Marks: $passingMarksValue');
-      print('Marks Obtained: $marksObtainedValue');
 
-      // TODO: Handle form submission and further actions
+
+  Future<void> _selectFile() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles();
+
+    if (result != null && result.files.isNotEmpty) {
+      setState(() {
+        _platformFile = result.files.first;
+      });
     }
   }
 
@@ -87,10 +115,10 @@ class _UploadNotesState extends State<UploadNotes> {
                         SizedBox(
                           width: 250,
                           child: DropdownButtonFormField<String>(
-                            value: _selectedSubject,
+                            value: _selectedClass,
                             onChanged: (newValue) {
                               setState(() {
-                                _selectedSubject = newValue;
+                                _selectedClass = newValue;
                               });
                             },
                             items: [
@@ -135,10 +163,10 @@ class _UploadNotesState extends State<UploadNotes> {
                         SizedBox(
                           width: 250,
                           child: DropdownButtonFormField<String>(
-                            value: _selectedSubject,
+                            value: _selectedSection,
                             onChanged: (newValue) {
                               setState(() {
-                                _selectedSubject = newValue;
+                                _selectedSection = newValue;
                               });
                             },
                             items: [
@@ -148,7 +176,7 @@ class _UploadNotesState extends State<UploadNotes> {
                               ),
                               DropdownMenuItem(
                                 value: 'Section B',
-                                child: Text('Sectio B'),
+                                child: Text('Section B'),
                               ),
                               DropdownMenuItem(
                                 value: 'Section C',
@@ -158,7 +186,6 @@ class _UploadNotesState extends State<UploadNotes> {
                                 value: 'Section D',
                                 child: Text('Section D'),
                               ),
-
                             ],
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
@@ -228,10 +255,10 @@ class _UploadNotesState extends State<UploadNotes> {
                         SizedBox(
                           width: 250,
                           child: DropdownButtonFormField<String>(
-                            value: _selectedSubject,
+                            value: _selectedTitle,
                             onChanged: (newValue) {
                               setState(() {
-                                _selectedSubject = newValue;
+                                _selectedTitle = newValue;
                               });
                             },
                             items: [
@@ -265,23 +292,38 @@ class _UploadNotesState extends State<UploadNotes> {
                       ],
                     ),
                     SizedBox(height: 20),
+                    SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Upload Link',
+                          'Upload File',
                           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(width: 50),
                         SizedBox(
                           width: 250,
-                          child: TextFormField(
-                            controller: _marksObtainedController,
-                            decoration: InputDecoration(
-                              labelText: "Upload Link",
-                              hintText: "Upload Link",
-                              border: OutlineInputBorder(),
-                            ),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Flexible(
+                                child: _platformFile == null
+                                    ? Text('No file selected.')
+                                    : Text(_platformFile!.name),
+                              ),
+                              SizedBox(width: 10),
+                              SizedBox(
+                                width: 150,
+                                height: 47,
+                                child: ElevatedButton(
+                                  child: Text('Select File'),
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.deepPurple,
+                                  ),
+                                  onPressed: _selectFile,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -303,7 +345,6 @@ class _UploadNotesState extends State<UploadNotes> {
                         ),
                       ),
                     ),
-
                   ],
                 ),
               ),
