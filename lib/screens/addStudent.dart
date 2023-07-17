@@ -28,7 +28,7 @@ class _AddStudentState extends State<AddStudent> {
         appBar: AppBar(
           centerTitle: true,
           title: Text(
-            'Teacher Page',
+            'Student Page',
             style: TextStyle(
               fontSize: 29,
               fontWeight: FontWeight.bold,
