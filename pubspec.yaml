@@ -40,8 +40,10 @@ dependencies:
   firebase_core: ^2.14.0
   firebase_auth: ^4.6.3
   pinput: ^2.2.31
-  firebase_storage: ^11.2.5
-  file_picker: ^5.3.2
+  firebase_storage: ^11.2.4
+  cool_alert: ^2.0.1
+
+
 
 dev_dependencies:
   flutter_test:

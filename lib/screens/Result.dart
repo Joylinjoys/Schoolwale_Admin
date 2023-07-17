@@ -1,14 +1,20 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:web_dashboard_app_tut/screens/finalmarks.dart';
 
 class ResultPage extends StatefulWidget {
-  const ResultPage({Key? key}) : super(key: key);
+  // final String exam;
+  final String regNo;
+  const ResultPage({Key? key, required this.regNo}) : super(key: key);
 
   @override
-  _ResultPageState createState() => _ResultPageState();
+  _ResultPageState createState() => _ResultPageState(regNo);
 }
 
 class _ResultPageState extends State<ResultPage> {
+  //late final String exam;
+  late final String regNo;
   final _formKey = GlobalKey<FormState>();
   final _examNameController = TextEditingController();
   final _totalMarksController = TextEditingController();
@@ -17,6 +23,8 @@ class _ResultPageState extends State<ResultPage> {
 
   String? _selectedSubject;
 
+  _ResultPageState(this.regNo);
+
   @override
   void dispose() {
     _examNameController.dispose();
@@ -24,6 +32,13 @@ class _ResultPageState extends State<ResultPage> {
     _passingMarksController.dispose();
     _marksObtainedController.dispose();
     super.dispose();
+  }
+
+  void _clearText() {
+    _examNameController.clear();
+    _totalMarksController.clear();
+    _passingMarksController.clear();
+    _marksObtainedController.clear();
   }
 
   void _submitForm() {
@@ -36,14 +51,38 @@ class _ResultPageState extends State<ResultPage> {
       final marksObtainedValue = _marksObtainedController.text;
 
       // Example: Print form values
+
       print('Exam Name: $examNameValue');
       print('Subject Name: $subjectNameValue');
       print('Total Marks: $totalMarksValue');
       print('Passing Marks: $passingMarksValue');
       print('Marks Obtained: $marksObtainedValue');
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('users');
 
-      // TODO: Handle form submission and further actions
+      FirebaseFirestore.instance
+          .collection(examNameValue)
+          .doc(regNo)
+          .set(
+            {
+              'Passing_marks': int.parse(passingMarksValue),
+              'Total_marks': int.parse(totalMarksValue),
+              'SubjectMarks': {
+                '$subjectNameValue': int.parse(marksObtainedValue)
+              },
+            },
+            SetOptions(merge: true),
+          )
+          .then((value) => CoolAlert.show(
+                context: context,
+                type: CoolAlertType.success,
+                text: "Inserted Successfuly...",
+                width: MediaQuery.of(context).size.width / 5,
+              ))
+          .catchError((onError) => print("Error:$onError"));
+      //TODO: Handle form submission and further actions
     }
+    _clearText();
   }
 
   @override
@@ -72,7 +111,8 @@ class _ResultPageState extends State<ResultPage> {
                   children: [
                     Text(
                       'Enter Examination Details',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 20),
                     Row(
@@ -80,7 +120,8 @@ class _ResultPageState extends State<ResultPage> {
                       children: [
                         Text(
                           'Enter Examination Name',
-                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(width: 50),
                         SizedBox(
@@ -102,7 +143,8 @@ class _ResultPageState extends State<ResultPage> {
                       children: [
                         Text(
                           'Select Subject',
-                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(width: 50),
                         SizedBox(
@@ -138,7 +180,8 @@ class _ResultPageState extends State<ResultPage> {
                             ],
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
-                              contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 8, horizontal: 4),
                             ),
                           ),
                         ),
@@ -150,7 +193,8 @@ class _ResultPageState extends State<ResultPage> {
                       children: [
                         Text(
                           'Total Marks',
-                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(width: 50),
                         SizedBox(
@@ -172,7 +216,8 @@ class _ResultPageState extends State<ResultPage> {
                       children: [
                         Text(
                           'Passing Marks',
-                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(width: 50),
                         SizedBox(
@@ -194,7 +239,8 @@ class _ResultPageState extends State<ResultPage> {
                       children: [
                         Text(
                           'Marks Obtained',
-                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 22, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(width: 50),
                         SizedBox(
@@ -215,7 +261,8 @@ class _ResultPageState extends State<ResultPage> {
                       child: ElevatedButton(
                         onPressed: _submitForm,
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.deepPurple, // Set button color to purple
+                          primary:
+                              Colors.deepPurple, // Set button color to purple
                           minimumSize: Size(200, 50), // Increase button size
                         ),
                         child: Text(
@@ -233,11 +280,13 @@ class _ResultPageState extends State<ResultPage> {
                         onPressed: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => Finalexam()),
+                            MaterialPageRoute(
+                                builder: (context) => Finalexam()),
                           );
                         },
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.deepPurple, // Set button color to purple
+                          primary:
+                              Colors.deepPurple, // Set button color to purple
                           minimumSize: Size(200, 50), // Increase button size
                         ),
                         child: Text(

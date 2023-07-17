@@ -18,10 +18,10 @@ class _AttendanceListState extends State<AttendanceList> {
   final List<StudentInfo> _absentees = [];
 
   @override
-  // void initState() {
-  //   _studentList.addAll(students.where((element) => element.className == widget.className && element.section == widget.sectionName).toList());
-  //   super.initState();
-  // }
+  void initState() {
+    _studentList.addAll(students.where((element) => element.className == widget.className && element.sectionName == widget.sectionName).toList());
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
