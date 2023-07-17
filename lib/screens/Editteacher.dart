@@ -20,7 +20,7 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'Result Page',
+          'Teacher Page',
           style: TextStyle(
             fontSize: 29,
             fontWeight: FontWeight.bold,

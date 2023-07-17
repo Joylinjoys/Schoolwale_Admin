@@ -48,10 +48,9 @@ class _SchoolDetailsState extends State<SchoolDetails> {
     final String? fileName = pickedFile?.name;
     final ref = FirebaseStorage.instance.ref().child('files/$fileName');
     uploadTask = ref.putData(fileBytes);
-    await uploadTask!.whenComplete(() {});
-    final urlDownload = await ref.getDownloadURL();
-    print('Download Link: $urlDownload');
-    return urlDownload;
+    final TaskSnapshot snapshot = await uploadTask!;
+    final downloadUrl = await snapshot.ref.getDownloadURL();
+    return downloadUrl;
   }
 
   Future<void> saveSchoolDetails(String imageUrl) async {
@@ -60,10 +59,7 @@ class _SchoolDetailsState extends State<SchoolDetails> {
       String description = _descriptionController.text.trim();
       String mission = _missionController.text.trim();
 
-      await FirebaseFirestore.instance
-          .collection('About')
-          .doc('school')
-          .set({
+      await FirebaseFirestore.instance.collection('About').doc('school').set({
         'schoolName': schoolName,
         'description': description,
         'mission': mission,
