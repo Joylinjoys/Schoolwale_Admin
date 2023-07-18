@@ -1,5 +1,11 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:web_dashboard_app_tut/screens/AnnouncementList.dart';
+
+import '../Models/class_and_section.dart';
 
 class AddAnnouncementPage extends StatefulWidget {
   const AddAnnouncementPage({Key? key}) : super(key: key);
@@ -12,8 +18,10 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
   TextEditingController idController = TextEditingController();
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  String selectedClass = '';
-  String selectedSection = '';
+  String? selectedClass;
+  String? selectedSection;
+
+  String? selectedClassSection;
 
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
@@ -42,6 +50,10 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
       });
   }
 
+  final classStream = StreamController<List<String>>();
+  final sectionStream = StreamController<List<String>>();
+  bool ischange = false;
+
   @override
   void dispose() {
     idController.dispose();
@@ -68,236 +80,286 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
         child: Center(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  'Enter Announcement Details',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 16),
-                Container(
-                  width: 300,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Select Class:',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      // Replace the TextField with your class selection logic
-                      // For example, you can use a dropdown menu or a list to select the class
-                      TextField(
-                        readOnly: true,
-                        onTap: () {
-                          // Implement your class selection logic
-                          // For example, you can show a dropdown menu or navigate to a class selection screen
-                        },
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.grey[300],
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            borderSide: BorderSide.none,
-                          ),
-                          contentPadding: EdgeInsets.symmetric(
-                            vertical: 12.0,
-                            horizontal: 16.0,
-                          ),
+            child: Container(
+              alignment: Alignment.topCenter,
+              child: Container(
+                width: 500,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Enter Student Results',
+                      style:
+                      TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Select Class:',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 16),
-                Container(
-                  width: 300,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Select Section:',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      // Replace the TextField with your section selection logic
-                      // For example, you can use a dropdown menu or a list to select the section
-                      TextField(
-                        readOnly: true,
-                        onTap: () {
-                          // Implement your section selection logic
-                          // For example, you can show a dropdown menu or navigate to a section selection screen
-                        },
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.grey[300],
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            borderSide: BorderSide.none,
-                          ),
-                          contentPadding: EdgeInsets.symmetric(
-                            vertical: 12.0,
-                            horizontal: 16.0,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 16),
-                Container(
-                  width: 300,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Enter Title:',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      TextFormField(
-                        controller: titleController,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.grey[300],
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            borderSide: BorderSide.none,
-                          ),
-                          contentPadding: EdgeInsets.symmetric(
-                            vertical: 12.0,
-                            horizontal: 16.0,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 16),
-                Container(
-                  width: 300,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Enter Description:',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      TextFormField(
-                        maxLength: 200,
-                        controller: descriptionController,
-                        maxLines: 3,
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.grey[300],
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            borderSide: BorderSide.none,
-                          ),
-                          contentPadding: EdgeInsets.symmetric(
-                            vertical: 12.0,
-                            horizontal: 16.0,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 16),
-                Container(
-                  width: 300,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Enter Date:',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      TextFormField(
-                        readOnly: true,
-                        controller: TextEditingController(
-                          text: DateFormat('yyyy-MM-dd').format(selectedDate),
-                        ),
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.grey[300],
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            borderSide: BorderSide.none,
-                          ),
-                          contentPadding: EdgeInsets.symmetric(
-                            vertical: 12.0,
-                            horizontal: 16.0,
-                          ),
-                          suffixIcon: IconButton(
-                            onPressed: () => _selectDate(context),
-                            icon: Icon(Icons.calendar_today),
-                          ),
-                        ),
-                        onTap: () => _selectDate(context),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 16),
-                Container(
-                  width: 300,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Enter Time:',
-                        style: TextStyle(fontSize: 18),
-                      ),
-                      TextFormField(
-                        readOnly: true,
-                        controller: TextEditingController(
-                          text: selectedTime.format(context),
-                        ),
-                        decoration: InputDecoration(
-                          filled: true,
-                          fillColor: Colors.grey[300],
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(8.0),
-                            borderSide: BorderSide.none,
-                          ),
-                          contentPadding: EdgeInsets.symmetric(
-                            vertical: 12.0,
-                            horizontal: 16.0,
-                          ),
-                          suffixIcon: IconButton(
-                            onPressed: () => _selectTime(context),
-                            icon: Icon(Icons.access_time),
-                          ),
-                        ),
-                        onTap: () => _selectTime(context),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: () {
-                    String id = idController.text;
-                    String title = titleController.text;
-                    String description = descriptionController.text;
-                    String date = DateFormat('yyyy-MM-dd').format(selectedDate);
-                    String time = selectedTime.format(context);
+                        SizedBox(width: 8),
+                        Container(
+                          width: 250,
+                          child: StreamBuilder(
+                              stream: FirebaseFirestore.instance
+                                  .collection("ClassSections")
+                                  .snapshots(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<dynamic> snapshot) {
+                                if (snapshot.hasError ||
+                                    snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                  return Text("Loading");
+                                }
 
-                    // Handle button press
-                    // Add logic to save the announcement with the entered details
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.deepPurple, // Set button color to purple
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(width: 9),
+                                final List<String> classData = [];
+                                final documents = snapshot.data!.docs.map((e) {
+                                  classData.add(e.id);
+                                  return e.data();
+                                });
 
-                      Text('Add'),
-                    ],
-                  ),
+                                final List<Sections> teacherList = [];
+                                for (var val in documents) {
+                                  final object = Sections.fromJson(val);
+                                  teacherList.add(object);
+                                }
+
+                                return DropdownButtonFormField<String>(
+                                  value: selectedClass,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      selectedClass = newValue;
+                                      List<String> section = teacherList[
+                                      (int.parse(selectedClass!)) - 1]
+                                          .sections
+                                          .cast<String>()
+                                          .toList();
+
+                                      sectionStream.add(section);
+                                      ischange = true;
+                                    });
+                                  },
+                                  items: classData
+                                      .map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 8, horizontal: 4),
+                                  ),
+                                );
+                              }),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Select Section:',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(width: 8),
+                        Container(
+                          width: 250,
+                          child: StreamBuilder(
+                              stream: sectionStream.stream,
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<List<String>> snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return Text('Loading...');
+                                }
+
+                                final sections = snapshot.data ?? [];
+
+                                return DropdownButtonFormField<String>(
+                                  value: selectedSection,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      selectedSection = newValue;
+                                      selectedClassSection = selectedClass! +
+                                          " " +
+                                          selectedSection!;
+                                    });
+                                  },
+                                  items: sections.map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 8, horizontal: 4),
+                                  ),
+                                );
+                              }),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16),
+                    Container(
+                      width: 300,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Enter Title:',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                          TextFormField(
+                            controller: titleController,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.grey[300],
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 8,
+                                horizontal: 4.0,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    Container(
+                      width: 300,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Enter Description:',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                          TextFormField(
+                            maxLength: 200,
+                            controller: descriptionController,
+                            maxLines: 3,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.grey[300],
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 8,
+                                horizontal: 4.0,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    Container(
+                      width: 300,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Enter Date:',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                          TextFormField(
+                            readOnly: true,
+                            controller: TextEditingController(
+                              text: DateFormat('yyyy-MM-dd').format(
+                                selectedDate,
+                              ),
+                            ),
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.grey[300],
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 8,
+                                horizontal: 4.0,
+                              ),
+                              suffixIcon: IconButton(
+                                onPressed: () => _selectDate(context),
+                                icon: Icon(Icons.calendar_today),
+                              ),
+                            ),
+                            onTap: () => _selectDate(context),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    Container(
+                      width: 300,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Enter Time:',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                          TextFormField(
+                            readOnly: true,
+                            controller: TextEditingController(
+                              text: selectedTime.format(context),
+                            ),
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: Colors.grey[300],
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(
+                                vertical: 8,
+                                horizontal: 4.0,
+                              ),
+                              suffixIcon: IconButton(
+                                onPressed: () => _selectTime(context),
+                                icon: Icon(Icons.access_time),
+                              ),
+                            ),
+                            onTap: () => _selectTime(context),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 16),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AnnouncementsPage(
+                                // regNo: selectedRollNo.toString(),
+                              ),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.deepPurple,
+                          minimumSize: Size(200, 50),
+                        ),
+                        child: Text(
+                          'ADD',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
           ),
         ),

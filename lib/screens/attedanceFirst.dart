@@ -277,7 +277,7 @@ class _AttendancefirstState extends State<Attendancefirst> {
                           
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => AttendanceList(className: 'selectedClass', sectionName: 'selectedSection',)),
+                            MaterialPageRoute(builder: (context) => AttendanceList(className: selectedClass.toString(), sectionName: selectedSection.toString(),)),
                           );
                         },
                         style: ElevatedButton.styleFrom(

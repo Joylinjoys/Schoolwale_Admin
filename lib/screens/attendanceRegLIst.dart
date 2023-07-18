@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:web_dashboard_app_tut/Models/student_class.dart';
 import 'package:web_dashboard_app_tut/widgets/AttedanceRegNo.dart';
+import '../services/student_service.dart';
+import 'attedanceStream.dart';
 
 class AttendanceList extends StatefulWidget {
   final String className;
@@ -9,23 +11,81 @@ class AttendanceList extends StatefulWidget {
       {super.key, required this.className, required this.sectionName});
 
   @override
-  State<AttendanceList> createState() => _AttendanceListState();
+  State<AttendanceList> createState() =>
+      _AttendanceListState(className, sectionName);
 }
 
 class _AttendanceListState extends State<AttendanceList> {
+  late final String className;
+  late final String sectionName;
+
+  _AttendanceListState(this.className, this.sectionName);
+
   final List<StudentInfo> _studentList = [];
 
   final List<StudentInfo> _absentees = [];
 
   @override
   void initState() {
-    _studentList.addAll(students.where((element) => element.className == widget.className && element.sectionName == widget.sectionName).toList());
+    List<StudentInfo> documents = [];
+    StreamBuilder(
+      stream: StudentService().studentList,
+      builder:
+          (BuildContext context, AsyncSnapshot<List<StudentInfo>> snapshot) {
+        if (snapshot.hasError ||
+            snapshot.connectionState == ConnectionState.waiting) {
+          print(snapshot.error);
+          return Center(
+            child: CircularProgressIndicator(
+              backgroundColor: Colors.red,
+              strokeWidth: 6,
+            ),
+          );
+        }
+        documents = snapshot.data ?? [];
+        print(documents);
+
+        return Text(" ");
+      },
+    );
+    
+    _studentList.addAll(documents
+        .where((element) =>
+            element.className == widget.className &&
+            element.sectionName == widget.sectionName)
+        .toList());
+    print(_studentList);
+
+    //print(widget.className);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    print('123');
+    // return Scaffold(
+    // body:StreamBuilder(
+    //   stream: StudentService().studentList,
+    //   builder:
+    //       (BuildContext context, AsyncSnapshot<List<StudentInfo>> snapshot) {
+    //     if (snapshot.hasError ||
+    //         snapshot.connectionState == ConnectionState.waiting) {
+    //       print(snapshot.error);
+    //       return Center(
+    //         child: CircularProgressIndicator(
+    //           backgroundColor: Colors.red,
+    //           strokeWidth: 6,
+    //         ),
+    //       );
+    //     }
+    //     final documents = snapshot.data ?? [];
+    //       final List<StudentInfo> students=[];
+    //final List<String> studentList=[];
+
+    //  for (var val in documents) {
+    //   final obj= StudentInfo.fromJson(val);
+    //   students.add(obj);
+
+    // }
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -55,7 +115,7 @@ class _AttendanceListState extends State<AttendanceList> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text(
-                    "List of present",
+                    "List of present Students",
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   Text(
@@ -131,5 +191,10 @@ class _AttendanceListState extends State<AttendanceList> {
         ),
       ),
     );
+    //   },
+
+    //   ),
+
+    // );
   }
 }
