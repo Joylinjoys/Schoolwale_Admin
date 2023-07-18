@@ -1,10 +1,10 @@
-import 'dart:typed_data';
+import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class SchoolDetails extends StatefulWidget {
   const SchoolDetails({Key? key}) : super(key: key);
@@ -14,61 +14,65 @@ class SchoolDetails extends StatefulWidget {
 }
 
 class _SchoolDetailsState extends State<SchoolDetails> {
-  PlatformFile? pickedFile;
-  UploadTask? uploadTask;
+  File? _image;
+  PlatformFile? _platformFile;
+  final _formKey = GlobalKey<FormState>();
+
   TextEditingController _schoolNameController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
   TextEditingController _missionController = TextEditingController();
 
-  Future selectFile() async {
-    final result = await FilePicker.platform.pickFiles();
-    if (result == null) return;
+  Future<void> _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      // Form validation passed, handle form submission
+      if (_platformFile != null) {
+        // Generate a unique filename
+        String fileName = DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
+        firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child(fileName);
 
-    setState(() {
-      pickedFile = result.files.first;
-    });
-  }
+        if (kIsWeb) {
+          // Upload the file data
+          await ref.putData(_platformFile!.bytes!);
+        } else {
+          // Upload the file
+          await ref.putFile(File(_platformFile!.path!));
+        }
 
-  Future<Uint8List?> getFileBytes() async {
-    if (pickedFile == null) return null;
+        // Get the download URL of the uploaded image
+        String downloadUrl = await ref.getDownloadURL();
 
-    if (kIsWeb) {
-      final fileBytes = await pickedFile!.readStream!.first;
-      return Uint8List.fromList(fileBytes);
-    } else {
-      final fileBytes = await pickedFile!.bytes;
-      return fileBytes;
+        // Store the school details in Firestore
+        await FirebaseFirestore.instance.collection('About').doc('school').set({
+          'schoolName': _schoolNameController.text,
+          'description': _descriptionController.text,
+          'mission': _missionController.text,
+          'imageUrl': downloadUrl,
+        });
+
+        // Reset the form and clear the file
+        _formKey.currentState!.reset();
+        setState(() {
+          _platformFile = null;
+        });
+      }
     }
   }
 
-  Future<String?> uploadImage() async {
-    final fileBytes = await getFileBytes();
-    if (fileBytes == null) return null;
-
-    final String? fileName = pickedFile?.name;
-    final ref = FirebaseStorage.instance.ref().child('files/$fileName');
-    uploadTask = ref.putData(fileBytes);
-    final TaskSnapshot snapshot = await uploadTask!;
-    final downloadUrl = await snapshot.ref.getDownloadURL();
-    return downloadUrl;
-  }
-
-  Future<void> saveSchoolDetails(String imageUrl) async {
-    try {
-      String schoolName = _schoolNameController.text.trim();
-      String description = _descriptionController.text.trim();
-      String mission = _missionController.text.trim();
-
-      await FirebaseFirestore.instance.collection('About').doc('school').set({
-        'schoolName': schoolName,
-        'description': description,
-        'mission': mission,
-        'imageUrl': imageUrl,
-      });
-
-      print('School details saved successfully.');
-    } catch (e) {
-      print('Error saving school details: $e');
+  Future<void> _selectImage() async {
+    if (kIsWeb) {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
+      if (result != null && result.files.isNotEmpty) {
+        setState(() {
+          _platformFile = result.files.first;
+        });
+      }
+    } else {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
+      if (result != null && result.files.isNotEmpty) {
+        setState(() {
+          _platformFile = result.files.first;
+        });
+      }
     }
   }
 
@@ -97,120 +101,159 @@ class _SchoolDetailsState extends State<SchoolDetails> {
           child: Center(
             child: Container(
               width: 700,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(height: 20),
-                  Text(
-                    'School Details',
-                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Enter School Name',
-                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(width: 50),
-                      SizedBox(
-                        width: 250,
-                        child: TextField(
-                          controller: _schoolNameController,
-                          decoration: InputDecoration(
-                            labelText: "School Name",
-                            hintText: "Enter School Name",
-                            border: OutlineInputBorder(),
-                          ),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 20),
+                    Text(
+                      'School Details',
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Enter School Name',
+                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Upload School Photo',
-                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(width: 50),
-                      SizedBox(
-                        width: 250,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            if (pickedFile != null)
-                              Flexible(
-                                child: Image.memory(
-                                  pickedFile!.bytes!,
-                                  width: double.infinity,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            SizedBox(width: 10),
-                            SizedBox(
-                              width: 150,
-                              height: 47,
-                              child: ElevatedButton(
-                                child: Text('Upload Image'),
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.deepPurple,
-                                ),
-                                onPressed: selectFile,
-                              ),
+                        SizedBox(width: 50),
+                        SizedBox(
+                          width: 250,
+                          child: TextFormField(
+                            controller: _schoolNameController,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter a school name';
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              labelText: "School Name",
+                              hintText: "Enter School Name",
+                              border: OutlineInputBorder(),
                             ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Enter Mission',
-                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(width: 50),
-                      SizedBox(
-                        width: 250,
-                        child: TextField(
-                          maxLines: 4,
-                          maxLength: 1000,
-                          controller: _missionController,
-                          decoration: InputDecoration(
-                            labelText: "Mission",
-                            hintText: "Enter Mission",
-                            border: OutlineInputBorder(),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  SizedBox(
-                    width: 140,
-                    height: 40,
-                    child: ElevatedButton(
-                      onPressed: () async {
-                        final imageUrl = await uploadImage();
-                        if (imageUrl != null) {
-                          await saveSchoolDetails(imageUrl);
-                        }
-                      },
-                      child: Text(
-                        'Submit',
-                        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                      ),
-                      style: ElevatedButton.styleFrom(
-                        primary: Colors.deepPurple,
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Upload School Photo',
+                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(width: 50),
+                        SizedBox(
+                          width: 250,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 90,
+                                width: 90,
+                                child: _platformFile == null
+                                    ? Text('No image selected.')
+                                    : Text(_platformFile?.name ?? 'No name'),
+                              ),
+                              SizedBox(width: 10),
+                              SizedBox(
+                                width: 150,
+                                height: 47,
+                                child: ElevatedButton(
+                                  child: Text('Select Image'),
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.deepPurple,
+                                  ),
+                                  onPressed: _selectImage,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Enter Discription',
+                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(width: 50),
+                        SizedBox(
+                          width: 250,
+                          child: TextFormField(
+                            maxLines: 4,
+                            maxLength: 1000,
+                            controller: _descriptionController,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter a Discription';
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              labelText: "Discription",
+                              hintText: "Enter Discription",
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Enter Mission',
+                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(width: 50),
+                        SizedBox(
+                          width: 250,
+                          child: TextFormField(
+                            maxLines: 4,
+                            maxLength: 1000,
+                            controller: _missionController,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter a mission';
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              labelText: "Mission",
+                              hintText: "Enter Mission",
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    SizedBox(
+                      width: 140,
+                      height: 40,
+                      child: ElevatedButton(
+                        onPressed: _submitForm,
+                        child: Text(
+                          'Submit',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                        ),
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.deepPurple,
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),
