@@ -42,7 +42,7 @@ dependencies:
   pinput: ^2.2.31
   firebase_storage: ^11.2.4
   cool_alert: ^2.0.1
-  file_picker: ^5.3.2
+  file_picker: ^5.3.0
 
 
 dev_dependencies:
@@ -58,7 +58,8 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
-
+# dependency_overrides:
+#   ffi: ^2.0.1
 # The following section is specific to Flutter packages.
 flutter:
 

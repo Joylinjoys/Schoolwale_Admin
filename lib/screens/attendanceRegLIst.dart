@@ -11,23 +11,23 @@ class AttendanceList extends StatefulWidget {
       {super.key, required this.className, required this.sectionName});
 
   @override
-  State<AttendanceList> createState() => _AttendanceListState(className,sectionName);
+  State<AttendanceList> createState() =>
+      _AttendanceListState(className, sectionName);
 }
 
 class _AttendanceListState extends State<AttendanceList> {
- late final String className;
- late final String sectionName;
+  late final String className;
+  late final String sectionName;
 
-  _AttendanceListState(this.className,this.sectionName);
-  
+  _AttendanceListState(this.className, this.sectionName);
+
   final List<StudentInfo> _studentList = [];
 
   final List<StudentInfo> _absentees = [];
-  
 
   @override
   void initState() {
-    List<StudentInfo> documents=[];
+    List<StudentInfo> documents = [];
     StreamBuilder(
       stream: StudentService().studentList,
       builder:
@@ -42,31 +42,26 @@ class _AttendanceListState extends State<AttendanceList> {
             ),
           );
         }
-         documents = snapshot.data ?? [];
-         print("ggyyfytfytfytfyfyfS");
-//         final List<StudentInfo> students=[];
-//         for (var document in documents) {
-  
-  
-//   students.add(document);
-// }
+        documents = snapshot.data ?? [];
+        print(documents);
 
         return Text(" ");
-          },
-          );
-   //var students;
-   _studentList.addAll(documents.where((element) => element.className == widget.className && element.sectionName == widget.sectionName).toList());
-  print(_studentList);
-   
-   //print(widget.className);
+      },
+    );
+    
+    _studentList.addAll(documents
+        .where((element) =>
+            element.className == widget.className &&
+            element.sectionName == widget.sectionName)
+        .toList());
+    print(_studentList);
+
+    //print(widget.className);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-
-   print(className);
-   print(sectionName);
     // return Scaffold(
     // body:StreamBuilder(
     //   stream: StudentService().studentList,
@@ -84,15 +79,14 @@ class _AttendanceListState extends State<AttendanceList> {
     //     }
     //     final documents = snapshot.data ?? [];
     //       final List<StudentInfo> students=[];
-          //final List<String> studentList=[];
+    //final List<String> studentList=[];
 
-        //  for (var val in documents) {
-        //   final obj= StudentInfo.fromJson(val);
-        //   students.add(obj);
-                                 
-                               // }
+    //  for (var val in documents) {
+    //   final obj= StudentInfo.fromJson(val);
+    //   students.add(obj);
+
+    // }
     return Scaffold(
-      
       appBar: AppBar(
         centerTitle: true,
         title: Text(
@@ -198,9 +192,9 @@ class _AttendanceListState extends State<AttendanceList> {
       ),
     );
     //   },
-          
+
     //   ),
-    
+
     // );
   }
 }
