@@ -40,12 +40,8 @@ class _AddStudentState extends State<AddStudent> {
     if (_formKey.currentState!.validate()) {
       if (_platformFile != null) {
         // Generate a unique filename
-        String fileName = DateTime
-            .now()
-            .millisecondsSinceEpoch
-            .toString() + '.jpg';
-        firebase_storage.Reference ref =
-        firebase_storage.FirebaseStorage.instance.ref().child(fileName);
+        String fileName = DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
+        firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child(fileName);
 
         if (kIsWeb) {
           // Upload the file data
@@ -59,7 +55,7 @@ class _AddStudentState extends State<AddStudent> {
         String downloadUrl = await ref.getDownloadURL();
 
         // Store the student details in Firestore
-        await FirebaseFirestore.instance.collection('Students').add({
+        await FirebaseFirestore.instance.collection('Students').doc('20230001').set({
           'registerNo': _registerNoController.text,
           'name': _nameController.text,
           'schoolName': _schoolNameController.text,
@@ -74,7 +70,6 @@ class _AddStudentState extends State<AddStudent> {
           'gender': selectedGender,
           'isStudent': selectedBool,
           'bloodGroup': _bloodGroupController.text,
-          "imageUrl": downloadUrl,
         });
 
         // Reset the form and clear the file
@@ -106,17 +101,18 @@ class _AddStudentState extends State<AddStudent> {
 
   @override
   void dispose() {
-     _registerNoController.dispose();
-     _nameController.dispose();
-     _schoolNameController.dispose();
-     _phoneNumberController.dispose();
-     _addressController.dispose();
-     _fatherNameController.dispose();
+    _registerNoController.dispose();
+    _nameController.dispose();
+    _schoolNameController.dispose();
+    _phoneNumberController.dispose();
+    _addressController.dispose();
+    _fatherNameController.dispose();
     _motherNameController.dispose();
-     _dobController.dispose();
-     _bloodGroupController.dispose();
+    _dobController.dispose();
+    _bloodGroupController.dispose();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
