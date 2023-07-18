@@ -2,9 +2,10 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
-import 'package:firebase_storage/firebase_storage.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class SchoolDetails extends StatefulWidget {
   const SchoolDetails({Key? key}) : super(key: key);
@@ -14,42 +15,45 @@ class SchoolDetails extends StatefulWidget {
 }
 
 class _SchoolDetailsState extends State<SchoolDetails> {
-  PlatformFile? pickedFile;
+  PlatformFile? pickedImage;
   UploadTask? uploadTask;
   TextEditingController _schoolNameController = TextEditingController();
   TextEditingController _descriptionController = TextEditingController();
   TextEditingController _missionController = TextEditingController();
 
-  Future selectFile() async {
-    final result = await FilePicker.platform.pickFiles();
+  Future selectImage() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+      allowMultiple: false,
+    );
     if (result == null) return;
 
     setState(() {
-      pickedFile = result.files.first;
+      pickedImage = result.files.first;
     });
   }
 
-  Future<Uint8List?> getFileBytes() async {
-    if (pickedFile == null) return null;
+  Future<Uint8List?> getImageBytes() async {
+    if (pickedImage == null) return null;
 
     if (kIsWeb) {
-      final fileBytes = await pickedFile!.readStream!.first;
+      final fileBytes = await pickedImage!.readStream!.first;
       return Uint8List.fromList(fileBytes);
     } else {
-      final fileBytes = await pickedFile!.bytes;
+      final fileBytes = await pickedImage!.bytes;
       return fileBytes;
     }
   }
 
   Future<String?> uploadImage() async {
-    final fileBytes = await getFileBytes();
-    if (fileBytes == null) return null;
+    final imageBytes = await getImageBytes();
+    if (imageBytes == null) return null;
 
-    final String? fileName = pickedFile?.name;
-    final ref = FirebaseStorage.instance.ref().child('files/$fileName');
-    uploadTask = ref.putData(fileBytes);
-    final TaskSnapshot snapshot = await uploadTask!;
-    final downloadUrl = await snapshot.ref.getDownloadURL();
+    final String? fileName = pickedImage?.name;
+    final ref = firebase_storage.FirebaseStorage.instance.ref().child('images/$fileName');
+    uploadTask = ref.putData(imageBytes);
+    await uploadTask!.whenComplete(() {});
+    final downloadUrl = await ref.getDownloadURL();
     return downloadUrl;
   }
 
@@ -141,10 +145,10 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            if (pickedFile != null)
+                            if (pickedImage != null)
                               Flexible(
                                 child: Image.memory(
-                                  pickedFile!.bytes!,
+                                  pickedImage!.bytes!,
                                   width: double.infinity,
                                   fit: BoxFit.cover,
                                 ),
@@ -158,7 +162,7 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                                 style: ElevatedButton.styleFrom(
                                   primary: Colors.deepPurple,
                                 ),
-                                onPressed: selectFile,
+                                onPressed: selectImage,
                               ),
                             ),
                           ],

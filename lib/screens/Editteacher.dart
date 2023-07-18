@@ -1,4 +1,9 @@
+import 'dart:async';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+
+import '../Models/class_and_section.dart';
 
 class EditTeacherPage extends StatefulWidget {
   const EditTeacherPage({Key? key}) : super(key: key);
@@ -9,8 +14,12 @@ class EditTeacherPage extends StatefulWidget {
 
 class _EditTeacherPageState extends State<EditTeacherPage> {
   String staffType = ''; // Variable to hold the selected staff type
-  String selectedClass = ''; // Variable to hold the selected class
-  String selectedSection = ''; // Variable to hold the selected section
+  String? selectedClass;
+  String? selectedSection;
+
+  final classStream = StreamController<List<String>>();
+  final sectionStream = StreamController<List<String>>();
+  bool ischange = false;
 
   @override
   Widget build(BuildContext context) {
@@ -44,30 +53,66 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
                 children: [
                   Text(
                     'Select Class:',
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
+                  SizedBox(width: 8),
                   Container(
-                    width: textFieldWidth,
-                    child: TextField(
-                      readOnly: true,
-                      onTap: () {
-                        // Open class dropdown
-                        _showClassDropdown(context);
-                      },
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.grey[300],
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 8.0,
-                          horizontal: 12.0,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                      controller: TextEditingController(text: selectedClass),
-                    ),
+                    width: 250,
+                    child: StreamBuilder(
+                        stream: FirebaseFirestore.instance
+                            .collection("ClassSections")
+                            .snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<dynamic> snapshot) {
+                          if (snapshot.hasError ||
+                              snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                            return Text("Loading");
+                          }
+
+                          final List<String> classData = [];
+                          final documents = snapshot.data!.docs.map((e) {
+                            classData.add(e.id);
+                            return e.data();
+                          });
+                          final List<Sections> teacherList = [];
+
+                          for (var val in documents) {
+                            final object = Sections.fromJson(val);
+                            teacherList.add(object);
+                          }
+
+                          return DropdownButtonFormField<String>(
+                            value: selectedClass,
+                            onChanged: (newValue) {
+                              setState(() {
+                                selectedClass = newValue;
+                                List<String> section = teacherList[
+                                (int.parse(selectedClass!)) - 1]
+                                    .sections
+                                    .cast<String>()
+                                    .toList();
+
+                                sectionStream.add(section);
+                                ischange = true;
+                              });
+                            },
+                            items: classData
+                                .map<DropdownMenuItem<String>>(
+                                    (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 8, horizontal: 4),
+                            ),
+                          );
+                        }),
                   ),
                 ],
               ),
@@ -77,30 +122,44 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
                 children: [
                   Text(
                     'Select Section:',
-                    style: TextStyle(fontSize: 18),
+                    style: TextStyle(
+                        fontSize: 18, fontWeight: FontWeight.bold),
                   ),
+                  SizedBox(width: 8),
                   Container(
-                    width: textFieldWidth,
-                    child: TextField(
-                      readOnly: true,
-                      onTap: () {
-                        // Open section dropdown
-                        _showSectionDropdown(context);
-                      },
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.grey[300],
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 8.0,
-                          horizontal: 12.0,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                      controller: TextEditingController(text: selectedSection),
-                    ),
+                    width: 250,
+                    child: StreamBuilder(
+                        stream: sectionStream.stream,
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<String>> snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Text('Loading...');
+                          }
+
+                          final sections = snapshot.data ?? [];
+
+                          return DropdownButtonFormField<String>(
+                            value: selectedSection,
+                            onChanged: (newValue) {
+                              setState(() {
+                                selectedSection = newValue;
+                              });
+                            },
+                            items: sections.map<DropdownMenuItem<String>>(
+                                    (String value) {
+                                  return DropdownMenuItem<String>(
+                                    value: value,
+                                    child: Text(value),
+                                  );
+                                }).toList(),
+                            decoration: InputDecoration(
+                              border: OutlineInputBorder(),
+                              contentPadding: EdgeInsets.symmetric(
+                                  vertical: 8, horizontal: 4),
+                            ),
+                          );
+                        }),
                   ),
                 ],
               ),
@@ -143,7 +202,7 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
                   SizedBox(width: 8),
                   Container(
                     width: textFieldWidth,
-                    child: TextField(
+                    child: TextFormField(
                       decoration: InputDecoration(
                         filled: true,
                         fillColor: Colors.grey[300],
@@ -375,4 +434,3 @@ class _EditTeacherPageState extends State<EditTeacherPage> {
     );
   }
 }
-
