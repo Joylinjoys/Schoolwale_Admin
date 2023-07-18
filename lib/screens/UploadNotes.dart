@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
-
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
@@ -66,11 +65,8 @@ class _UploadNotesState extends State<UploadNotes> {
     }
   }
 
-
-
-
-  Future<void> _selectFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles();
+  Future<void> _selectImage() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
 
     if (result != null && result.files.isNotEmpty) {
       setState(() {
@@ -81,6 +77,7 @@ class _UploadNotesState extends State<UploadNotes> {
   final sectionStream = StreamController<List<String>>();
   bool ischange = false;
   final classStream = StreamController<List<String>>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -354,7 +351,7 @@ class _UploadNotesState extends State<UploadNotes> {
                                   style: ElevatedButton.styleFrom(
                                     primary: Colors.deepPurple,
                                   ),
-                                  onPressed: _selectFile,
+                                  onPressed: _selectImage,
                                 ),
                               ),
                             ],
