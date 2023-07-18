@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
@@ -5,6 +6,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+
+import '../Models/class_and_section.dart';
 
 class UploadNotes extends StatefulWidget {
   const UploadNotes({Key? key}) : super(key: key);
@@ -19,8 +22,10 @@ class _UploadNotesState extends State<UploadNotes> {
 
   final _marksObtainedController = TextEditingController();
 
-  String? _selectedClass;
-  String? _selectedSection;
+  String? selectedClass;
+  String? selectedSection;
+  // String? selectedRollNo;
+  String? selectedClassSection;
   String? _selectedSubject;
   String? _selectedTitle;
 
@@ -73,6 +78,9 @@ class _UploadNotesState extends State<UploadNotes> {
       });
     }
   }
+  final sectionStream = StreamController<List<String>>();
+  bool ischange = false;
+  final classStream = StreamController<List<String>>();
 
   @override
   Widget build(BuildContext context) {
@@ -103,95 +111,121 @@ class _UploadNotesState extends State<UploadNotes> {
                       style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 20),
-                    SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Select Class',
-                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                          'Select Class:',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(width: 50),
-                        SizedBox(
+                        SizedBox(width: 8),
+                        Container(
                           width: 250,
-                          child: DropdownButtonFormField<String>(
-                            value: _selectedClass,
-                            onChanged: (newValue) {
-                              setState(() {
-                                _selectedClass = newValue;
-                              });
-                            },
-                            items: [
-                              DropdownMenuItem(
-                                value: 'Class I',
-                                child: Text('Class I'),
-                              ),
-                              DropdownMenuItem(
-                                value: 'Class II',
-                                child: Text('Class II'),
-                              ),
-                              DropdownMenuItem(
-                                value: 'Class III',
-                                child: Text('Class III'),
-                              ),
-                              DropdownMenuItem(
-                                value: 'Class IV',
-                                child: Text('Class IV'),
-                              ),
-                              DropdownMenuItem(
-                                value: 'Class V',
-                                child: Text('Class V'),
-                              ),
-                            ],
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-                            ),
-                          ),
+                          child: StreamBuilder(
+                              stream: FirebaseFirestore.instance
+                                  .collection("ClassSections")
+                                  .snapshots(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<dynamic> snapshot) {
+                                if (snapshot.hasError ||
+                                    snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                  return Text("Loading");
+                                }
+
+                                final List<String> classData = [];
+                                final documents = snapshot.data!.docs.map((e) {
+                                  classData.add(e.id);
+                                  return e.data();
+                                });
+
+                                final List<Sections> teacherList = [];
+                                for (var val in documents) {
+                                  final object = Sections.fromJson(val);
+                                  teacherList.add(object);
+                                }
+
+                                return DropdownButtonFormField<String>(
+                                  value: selectedClass,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      selectedClass = newValue;
+                                      List<String> section = teacherList[
+                                      (int.parse(selectedClass!)) - 1]
+                                          .sections
+                                          .cast<String>()
+                                          .toList();
+
+                                      sectionStream.add(section);
+                                      ischange = true;
+                                    });
+                                  },
+                                  items: classData
+                                      .map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 8, horizontal: 4),
+                                  ),
+                                );
+                              }),
                         ),
                       ],
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 16),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Select Section',
-                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                          'Select Section:',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
                         ),
-                        SizedBox(width: 50),
-                        SizedBox(
+                        SizedBox(width: 8),
+                        Container(
                           width: 250,
-                          child: DropdownButtonFormField<String>(
-                            value: _selectedSection,
-                            onChanged: (newValue) {
-                              setState(() {
-                                _selectedSection = newValue;
-                              });
-                            },
-                            items: [
-                              DropdownMenuItem(
-                                value: 'Section A',
-                                child: Text('Section A'),
-                              ),
-                              DropdownMenuItem(
-                                value: 'Section B',
-                                child: Text('Section B'),
-                              ),
-                              DropdownMenuItem(
-                                value: 'Section C',
-                                child: Text('Section C'),
-                              ),
-                              DropdownMenuItem(
-                                value: 'Section D',
-                                child: Text('Section D'),
-                              ),
-                            ],
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-                            ),
-                          ),
+                          child: StreamBuilder(
+                              stream: sectionStream.stream,
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<List<String>> snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return Text('Loading...');
+                                }
+
+                                final sections = snapshot.data ?? [];
+
+                                return DropdownButtonFormField<String>(
+                                  value: selectedSection,
+                                  onChanged: (newValue) {
+                                    setState(() {
+                                      selectedSection = newValue;
+                                      selectedClassSection = selectedClass! +
+                                          " " +
+                                          selectedSection!;
+                                    });
+                                  },
+                                  items: sections.map<DropdownMenuItem<String>>(
+                                          (String value) {
+                                        return DropdownMenuItem<String>(
+                                          value: value,
+                                          child: Text(value),
+                                        );
+                                      }).toList(),
+                                  decoration: InputDecoration(
+                                    border: OutlineInputBorder(),
+                                    contentPadding: EdgeInsets.symmetric(
+                                        vertical: 8, horizontal: 4),
+                                  ),
+                                );
+                              }),
                         ),
                       ],
                     ),
