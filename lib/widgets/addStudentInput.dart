@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
 
 class StudentInput extends StatelessWidget {
-  const StudentInput({super.key, required this.textContent, required this.label, required this.hint});
+  const StudentInput(
+      {super.key,
+      this.controller,
+      required this.textContent,
+      required this.label,
+      required this.hint});
   final String textContent;
   final String label;
   final String hint;
+  final TextEditingController? controller;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +32,7 @@ class StudentInput extends StatelessWidget {
                 height: 20.0,
               ),
               TextField(
-                // controller: nameController,
+                controller: controller,
                 decoration: InputDecoration(
                   labelText: label,
                   hintText: hint,

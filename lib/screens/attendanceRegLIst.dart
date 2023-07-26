@@ -44,18 +44,18 @@ class _AttendanceListState extends State<AttendanceList> {
         }
         documents = snapshot.data ?? [];
         print(documents);
-
-        return Text(" ");
+        print("hjdhjahjhdajh");
+        return Text(" dsfdsfsd");
       },
     );
-    
+
     _studentList.addAll(documents
         .where((element) =>
             element.className == widget.className &&
             element.sectionName == widget.sectionName)
         .toList());
     print(_studentList);
-
+    print(widget.className);
     //print(widget.className);
     super.initState();
   }
