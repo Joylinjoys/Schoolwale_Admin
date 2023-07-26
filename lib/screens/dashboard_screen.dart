@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:web_dashboard_app_tut/Models/student_class.dart';
 import 'package:web_dashboard_app_tut/repositories/student_repository.dart';
@@ -15,14 +16,14 @@ class DashboardScreen extends StatefulWidget {
 
 class _DashboardScreenState extends State<DashboardScreen> {
   @override
-  // void initState() {
-  //   int id = 20230001;
-  //   for (final student in students) {
-  //     StudentRepository().studentsRef.doc(id.toString()).set(student);
-  //     id++;
-  //   }
-  //   super.initState();
-  // }
+  void initState() {
+    // int id = 20230001;
+    // for (final student in students) {
+    //   StudentRepository().studentsRef.doc(id.toString()).set(student);
+    //   id++;
+    // }
+    super.initState();
+  }
 
   bool isExpanded = false;
   @override

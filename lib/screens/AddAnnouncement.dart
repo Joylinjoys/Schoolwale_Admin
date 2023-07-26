@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:web_dashboard_app_tut/screens/AnnouncementList.dart';
@@ -8,6 +9,7 @@ import 'package:web_dashboard_app_tut/screens/AnnouncementList.dart';
 import '../Models/class_and_section.dart';
 
 class AddAnnouncementPage extends StatefulWidget {
+  
   const AddAnnouncementPage({Key? key}) : super(key: key);
 
   @override
@@ -15,6 +17,7 @@ class AddAnnouncementPage extends StatefulWidget {
 }
 
 class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
+  final _formKey = GlobalKey<FormState>();
   TextEditingController idController = TextEditingController();
   TextEditingController titleController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
@@ -36,6 +39,13 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
     if (picked != null && picked != selectedDate)
       setState(() {
         selectedDate = picked;
+        selectedDate = new DateTime(
+          selectedDate.year,
+          selectedDate.month,
+          selectedDate.day,
+          selectedTime.hour,
+          selectedTime.minute,
+        );
       });
   }
 
@@ -47,6 +57,13 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
     if (picked != null && picked != selectedTime)
       setState(() {
         selectedTime = picked;
+        selectedDate = new DateTime(
+          selectedDate.year,
+          selectedDate.month,
+          selectedDate.day,
+          selectedTime.hour,
+          selectedTime.minute,
+        );
       });
   }
 
@@ -61,7 +78,66 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
     descriptionController.dispose();
     super.dispose();
   }
+   void _clearText() {
+    idController.clear();
+    titleController.clear();
+    descriptionController.clear();
+  
+  //  selectedClass.
+  //  _marksObtainedController.clear();
+  }
+ void _submitForm() {
+    if (_formKey.currentState?.validate() ?? false) {
+      // Form is valid, perform form submission
+      final _class=selectedClass;
+      final Section=selectedSection;
+      final titleValue = titleController.text;
+      final description = descriptionController.text;
+      final scheduledDate = selectedDate;
+    //  final scheduledTime = selectedTime;
+      
+     
 
+      // Example: Print form values
+
+      print('Exam Name: $_class');
+      print('Subject Name: $Section');
+      print('Total Marks: $titleValue');
+      print('Passing Marks: $description');
+      print('Marks Obtained: $scheduledDate');
+   //   print('Marks Obtained: $scheduledTime');
+      final String classSection=_class.toString()+"-"+Section.toString();
+       var now = new DateTime.now();
+    var formatter = new DateFormat('yyyy-MM-dd');
+    String formattedDate = formatter.format(now);
+    //print(formattedDate);
+      CollectionReference users =
+          FirebaseFirestore.instance.collection('users');
+
+      FirebaseFirestore.instance
+          .collection('Announcements')
+          .doc(classSection)
+          .set(
+            {
+              'AnnName': titleValue,
+              'CreateDate': formattedDate.toString() ,
+              'description':description,
+              'scheduledDate':scheduledDate,
+            },
+            SetOptions(merge: true),
+            
+          )
+          .then((value) => CoolAlert.show(
+                context: context,
+                type: CoolAlertType.success,
+                text: "Inserted Successfuly...",
+                width: MediaQuery.of(context).size.width / 5,
+              ))
+          .catchError((onError) => print("Error:$onError"));
+      //TODO: Handle form submission and further actions
+    }
+    _clearText();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -334,16 +410,18 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
                     SizedBox(height: 16),
                     Center(
                       child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => AnnouncementsPage(
-                                // regNo: selectedRollNo.toString(),
-                              ),
-                            ),
-                          );
-                        },
+                        onPressed:  _submitForm,
+                         
+                          // Navigator.push(
+                          //   context,
+                          //   MaterialPageRoute(
+                          //     builder: (context) => AnnouncementsPage(
+                          //       // _submitForm(),
+                          //       // regNo: selectedRollNo.toString(),
+                          //     ),
+                          //   ),
+                          // );
+                        
                         style: ElevatedButton.styleFrom(
                           primary: Colors.deepPurple,
                           minimumSize: Size(200, 50),
@@ -357,6 +435,7 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
                         ),
                       ),
                     ),
+                  //  Text(DateFormat.yMd().add_jm().format(selectedDate))
                   ],
                 ),
               ),

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:web_dashboard_app_tut/Models/student_class.dart';
 import 'package:web_dashboard_app_tut/widgets/AttedanceRegNo.dart';
@@ -27,35 +28,6 @@ class _AttendanceListState extends State<AttendanceList> {
 
   @override
   void initState() {
-    List<StudentInfo> documents = [];
-    StreamBuilder(
-      stream: StudentService().studentList,
-      builder:
-          (BuildContext context, AsyncSnapshot<List<StudentInfo>> snapshot) {
-        if (snapshot.hasError ||
-            snapshot.connectionState == ConnectionState.waiting) {
-          print(snapshot.error);
-          return Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Colors.red,
-              strokeWidth: 6,
-            ),
-          );
-        }
-        documents = snapshot.data ?? [];
-        print(documents);
-        print("hjdhjahjhdajh");
-        return Text(" dsfdsfsd");
-      },
-    );
-
-    _studentList.addAll(documents
-        .where((element) =>
-            element.className == widget.className &&
-            element.sectionName == widget.sectionName)
-        .toList());
-    print(_studentList);
-    print(widget.className);
     //print(widget.className);
     super.initState();
   }
@@ -63,21 +35,7 @@ class _AttendanceListState extends State<AttendanceList> {
   @override
   Widget build(BuildContext context) {
     // return Scaffold(
-    // body:StreamBuilder(
-    //   stream: StudentService().studentList,
-    //   builder:
-    //       (BuildContext context, AsyncSnapshot<List<StudentInfo>> snapshot) {
-    //     if (snapshot.hasError ||
-    //         snapshot.connectionState == ConnectionState.waiting) {
-    //       print(snapshot.error);
-    //       return Center(
-    //         child: CircularProgressIndicator(
-    //           backgroundColor: Colors.red,
-    //           strokeWidth: 6,
-    //         ),
-    //       );
-    //     }
-    //     final documents = snapshot.data ?? [];
+    // body:
     //       final List<StudentInfo> students=[];
     //final List<String> studentList=[];
 
@@ -124,42 +82,65 @@ class _AttendanceListState extends State<AttendanceList> {
                   ),
                 ],
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    // crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 20),
-                      ..._studentList.map((student) => RollNoContainer(
-                            rollno: student.registerNumber.toString(),
-                            onTap: () {
-                              setState(() {
-                                _studentList.remove(student);
-                                _absentees.add(student);
-                              });
-                            },
-                          ))
-                    ],
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    // crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: 20),
-                      ..._absentees.map((absent) => RollNoContainer(
-                            rollno: absent.registerNumber.toString(),
-                            onTap: () {
-                              setState(() {
-                                _absentees.remove(absent);
-                                _studentList.add(absent);
-                              });
-                            },
-                          ))
-                    ],
-                  ),
-                ],
+              
+                StreamBuilder(
+                  stream: StudentService().studentList,
+                  builder:
+                      (BuildContext context, AsyncSnapshot<List<StudentInfo>> snapshot) {
+                    if (snapshot.hasError ||
+                        snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(
+                        child: CircularProgressIndicator(
+                          backgroundColor: Colors.red,
+                          strokeWidth: 6,
+                        ),
+                      );
+                    }
+                    final documents = snapshot.data ?? [];
+                    _studentList.addAll(documents.where((element)=>element.className==widget.className&&element.sectionName==widget.sectionName).toList());
+
+                  return StatefulBuilder(
+                    builder: (context, setState) {
+                      return Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            // crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const SizedBox(height: 20),
+                              ..._studentList.map((student) => RollNoContainer(
+                                    rollno: student.registerNumber.toString(),
+                                    onTap: () {
+                                      setState(() {
+                                        _studentList.remove(student);
+                                        _absentees.add(student);
+                                      });
+                                    },
+                                  ))
+                            ],
+                          ),
+                          Column(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            // crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 20),
+                              ..._absentees.map((absent) => RollNoContainer(
+                                    rollno: absent.registerNumber.toString(),
+                                    onTap: () {
+                                      setState(() {
+                                        _absentees.remove(absent);
+                                        _studentList.add(absent);
+                                      });
+                                    },
+                                  ))
+                            ],
+                          ),
+                        ],
+                      );
+                    }
+                  );
+                }
               ),
               SizedBox(
                 height: 20,

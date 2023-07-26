@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:web_dashboard_app_tut/screens/addclassList.dart';
 
 class classfirst extends StatefulWidget {
@@ -12,69 +13,38 @@ class _classfirstState extends State<classfirst> {
   TextEditingController sectionController = TextEditingController();
 
   String? selectedClass;
-  String? selectedSection;
-  String? section;
-
   List<String> classes = [
-    ' 1',
-    ' 2',
-    ' 3',
-    ' 4',
-    ' 5',
-    ' 6',
-    ' 7',
-    ' 8',
-    ' 9',
-    ' 10',
-    // Add more class options here
+    '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'
   ];
-
-  List<String> sections = [];
-
-  List<Map<String, String>> classList = [
-    {
-      'Class': '1',
-      'Section': 'A',
-    },
-    {
-      'Class': '2',
-      'Section': 'C',
-    },
-    {
-      'Class': '3',
-      'Section': 'D',
-    },
-    {
-      'Class': '1',
-      'Section': 'A',
-    },
-  ];
-
 
   @override
-  void initState() {
-    super.initState();
+  void dispose() {
+    sectionController.dispose();
+    super.dispose();
   }
 
-  void addToClassList() {
-    setState(() {
-      String selectedClassValue = selectedClass ?? '';
-      String sectionValue = sectionController.text;
+  Future<void> addToClassList() async {
+    String sectionsValue = sectionController.text.trim();
 
-      if (selectedClassValue.isNotEmpty && sectionValue.isNotEmpty) {
-        Map<String, String> classInfo = {
-          'Class': selectedClassValue,
-          'Section': sectionValue,
-        };
+    if (selectedClass != null && sectionsValue.isNotEmpty) {
+      List<String> sections = sectionsValue.split(',');
 
-        classList.add(classInfo);
+      try {
+        await FirebaseFirestore.instance
+            .collection('ClassSections')
+            .doc(selectedClass)
+            .set({
+          'class': selectedClass,
+          'sections': FieldValue.arrayUnion(sections),
+        });
 
-        selectedClass = null;
-        sectionController.text = '';
+        print('Class added successfully.');
+        sectionController.clear();
+      } catch (e) {
+        print('Error adding class: $e');
       }
-    });
+    }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -82,7 +52,7 @@ class _classfirstState extends State<classfirst> {
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'Add classes Page',
+          'Add Classes Page',
           style: TextStyle(
             fontSize: 29,
             fontWeight: FontWeight.bold,
@@ -106,11 +76,14 @@ class _classfirstState extends State<classfirst> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Add Class',
-                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                          'Add Class:',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         SizedBox(width: 8),
-                        Container(
+                        SizedBox(
                           width: 250,
                           child: DropdownButtonFormField<String>(
                             value: selectedClass,
@@ -138,17 +111,20 @@ class _classfirstState extends State<classfirst> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Add section',
-                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                          'Add Sections:',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                        SizedBox(width: 50),
+                        SizedBox(width: 8),
                         SizedBox(
                           width: 250,
                           child: TextField(
                             controller: sectionController,
                             decoration: InputDecoration(
-                              labelText: "Add section",
-                              hintText: "Enter section",
+                              labelText: "Sections",
+                              hintText: "Enter Sections",
                               border: OutlineInputBorder(),
                             ),
                           ),
@@ -172,28 +148,30 @@ class _classfirstState extends State<classfirst> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 16),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => AddPageList(classList: classList)),
-                          );
-                        },
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.deepPurple,
-                          minimumSize: Size(200, 50),
-                        ),
-                        child: Text(
-                          'View Classes',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
+                        SizedBox(height: 16),
+    Center(
+    child: ElevatedButton(
+    onPressed: () {
+    Navigator.push(
+    context,
+    MaterialPageRoute(
+    builder: (context) => AddPageList(),
+    ),
+    );
+    },
+    style: ElevatedButton.styleFrom(
+    primary: Colors.deepPurple,
+    minimumSize: Size(200, 50),
+    ),
+    child: Text(
+    'View Classes',
+    style: TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+    ),
+    ),
+    ),
+           ),
                   ],
                 ),
               ),
