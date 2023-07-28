@@ -128,6 +128,12 @@ class _ResultPageState extends State<ResultPage> {
                           width: 250,
                           child: TextFormField(
                             controller: _examNameController,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter a Examination name';
+                              }
+                              return null;
+                            },
                             decoration: InputDecoration(
                               labelText: "Examination Name",
                               hintText: "Examination Name",
@@ -201,6 +207,12 @@ class _ResultPageState extends State<ResultPage> {
                           width: 250,
                           child: TextFormField(
                             controller: _totalMarksController,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter  Total Marks';
+                              }
+                              return null;
+                            },
                             decoration: InputDecoration(
                               labelText: "Total Marks",
                               hintText: "Total Marks",
@@ -224,6 +236,12 @@ class _ResultPageState extends State<ResultPage> {
                           width: 250,
                           child: TextFormField(
                             controller: _passingMarksController,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter Passing marks';
+                              }
+                              return null;
+                            },
                             decoration: InputDecoration(
                               labelText: "Passing Marks",
                               hintText: "Passing Marks",
@@ -247,6 +265,12 @@ class _ResultPageState extends State<ResultPage> {
                           width: 250,
                           child: TextFormField(
                             controller: _marksObtainedController,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter Marks Obtained';
+                              }
+                              return null;
+                            },
                             decoration: InputDecoration(
                               labelText: "Marks Obtained",
                               hintText: "Marks Obtained",
