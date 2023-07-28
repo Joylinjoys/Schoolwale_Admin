@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -27,8 +26,12 @@ class _SchoolDetailsState extends State<SchoolDetails> {
       // Form validation passed, handle form submission
       if (_platformFile != null) {
         // Generate a unique filename
-        String fileName = DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
-        firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child(fileName);
+        String fileName = DateTime
+            .now()
+            .millisecondsSinceEpoch
+            .toString() + '.jpg';
+        firebase_storage.Reference ref = firebase_storage.FirebaseStorage
+            .instance.ref().child(fileName);
 
         if (kIsWeb) {
           // Upload the file data
@@ -55,19 +58,26 @@ class _SchoolDetailsState extends State<SchoolDetails> {
           _platformFile = null;
         });
       }
+    } else {
+      // Form validation failed, show error messages
+      setState(() {
+        // Use setState to update the UI and trigger auto-validation
+      });
     }
   }
 
   Future<void> _selectImage() async {
     if (kIsWeb) {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+          type: FileType.image);
       if (result != null && result.files.isNotEmpty) {
         setState(() {
           _platformFile = result.files.first;
         });
       }
     } else {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+          type: FileType.image);
       if (result != null && result.files.isNotEmpty) {
         setState(() {
           _platformFile = result.files.first;
@@ -103,13 +113,16 @@ class _SchoolDetailsState extends State<SchoolDetails> {
               width: 700,
               child: Form(
                 key: _formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                // Enable auto-validation
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(height: 20),
                     Text(
                       'School Details',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.bold),
                     ),
                     SizedBox(height: 20),
                     Row(
@@ -117,7 +130,8 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                       children: [
                         Text(
                           'Enter School Name',
-                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 22,
+                              fontWeight: FontWeight.bold),
                         ),
                         SizedBox(width: 50),
                         SizedBox(
@@ -145,7 +159,8 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                       children: [
                         Text(
                           'Upload School Photo',
-                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 22,
+                              fontWeight: FontWeight.bold),
                         ),
                         SizedBox(width: 50),
                         SizedBox(
@@ -182,8 +197,9 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Enter Discription',
-                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                          'Enter Description',
+                          style: TextStyle(fontSize: 22,
+                              fontWeight: FontWeight.bold),
                         ),
                         SizedBox(width: 50),
                         SizedBox(
@@ -194,13 +210,13 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                             controller: _descriptionController,
                             validator: (value) {
                               if (value!.isEmpty) {
-                                return 'Please enter a Discription';
+                                return 'Please enter a Description';
                               }
                               return null;
                             },
                             decoration: InputDecoration(
-                              labelText: "Discription",
-                              hintText: "Enter Discription",
+                              labelText: "Description",
+                              hintText: "Enter Description",
                               border: OutlineInputBorder(),
                             ),
                           ),
@@ -213,7 +229,8 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                       children: [
                         Text(
                           'Enter Mission',
-                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                          style: TextStyle(fontSize: 22,
+                              fontWeight: FontWeight.bold),
                         ),
                         SizedBox(width: 50),
                         SizedBox(
@@ -245,7 +262,8 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                         onPressed: _submitForm,
                         child: Text(
                           'Submit',
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 24),
                         ),
                         style: ElevatedButton.styleFrom(
                           primary: Colors.deepPurple,

@@ -17,6 +17,8 @@ class _classfirstState extends State<classfirst> {
     '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'
   ];
 
+  final _formKey = GlobalKey<FormState>();
+
   @override
   void dispose() {
     sectionController.dispose();
@@ -46,6 +48,40 @@ class _classfirstState extends State<classfirst> {
     }
   }
 
+  String? validateSections(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter Sections';
+    }
+    return null;
+  }
+
+  String? validateClass(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please select a class';
+    }
+    return null;
+  }
+
+  void _showSuccessPopup(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Success'),
+          content: Text('Form submitted successfully!'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context); // Close the dialog
+              },
+              child: Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,111 +104,121 @@ class _classfirstState extends State<classfirst> {
               alignment: Alignment.topCenter,
               child: Container(
                 width: 500,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Add Class:',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(width: 8),
-                        SizedBox(
-                          width: 250,
-                          child: DropdownButtonFormField<String>(
-                            value: selectedClass,
-                            onChanged: (newValue) {
-                              setState(() {
-                                selectedClass = newValue;
-                              });
-                            },
-                            items: classes.map<DropdownMenuItem<String>>((String value) {
-                              return DropdownMenuItem<String>(
-                                value: value,
-                                child: Text(value),
-                              );
-                            }).toList(),
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(),
-                              contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Add Class:',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Add Sections:',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        SizedBox(width: 8),
-                        SizedBox(
-                          width: 250,
-                          child: TextField(
-                            controller: sectionController,
-                            decoration: InputDecoration(
-                              labelText: "Sections",
-                              hintText: "Enter Sections",
-                              border: OutlineInputBorder(),
+                          SizedBox(width: 8),
+                          SizedBox(
+                            width: 250,
+                            child: DropdownButtonFormField<String>(
+                              value: selectedClass,
+                              onChanged: (newValue) {
+                                setState(() {
+                                  selectedClass = newValue;
+                                });
+                              },
+                              items: classes.map<DropdownMenuItem<String>>((String value) {
+                                return DropdownMenuItem<String>(
+                                  value: value,
+                                  child: Text(value),
+                                );
+                              }).toList(),
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
+                              ),
+                              validator: validateClass,
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 16),
-                    Center(
-                      child: ElevatedButton(
-                        onPressed: addToClassList,
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.deepPurple,
-                          minimumSize: Size(200, 50),
-                        ),
-                        child: Text(
-                          'ADD',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Add Sections:',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          SizedBox(width: 8),
+                          SizedBox(
+                            width: 250,
+                            child: TextFormField(
+                              controller: sectionController,
+                              validator: validateSections,
+                              decoration: InputDecoration(
+                                labelText: "Sections",
+                                hintText: "Enter Sections",
+                                border: OutlineInputBorder(),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 16),
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            if (_formKey.currentState!.validate()) {
+                              addToClassList();
+                              _showSuccessPopup(context);
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.deepPurple,
+                            minimumSize: Size(200, 50),
+                          ),
+                          child: Text(
+                            'ADD',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                        SizedBox(height: 16),
-    Center(
-    child: ElevatedButton(
-    onPressed: () {
-    Navigator.push(
-    context,
-    MaterialPageRoute(
-    builder: (context) => AddPageList(),
-    ),
-    );
-    },
-    style: ElevatedButton.styleFrom(
-    primary: Colors.deepPurple,
-    minimumSize: Size(200, 50),
-    ),
-    child: Text(
-    'View Classes',
-    style: TextStyle(
-    fontSize: 18,
-    fontWeight: FontWeight.bold,
-    ),
-    ),
-    ),
-           ),
-                  ],
+                      SizedBox(height: 16),
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => AddPageList(),
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            primary: Colors.deepPurple,
+                            minimumSize: Size(200, 50),
+                          ),
+                          child: Text(
+                            'View Classes',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
