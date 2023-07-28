@@ -151,8 +151,8 @@ class TimetableCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 335,
-      height:180,
+      width: 320,
+      height:170,
       child: Card(
         child: Column(
           children: [
@@ -170,7 +170,7 @@ class TimetableCard extends StatelessWidget {
                   Text(
                     text,
                     style: TextStyle(
-                      fontSize: 14.0,
+                      fontSize: 12.0,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -183,7 +183,7 @@ class TimetableCard extends StatelessWidget {
                   //   ),
                   // ),
                   // SizedBox(height: 3.0),
-                  SizedBox(height: 2.0),
+                  // SizedBox(height: 1.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [

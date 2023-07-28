@@ -18,67 +18,8 @@ class _ResultfirstState extends State<Resultfirst> {
   String? selectedRollNo;
   String? selectedClassSection;
 
-  static Future getClass() async {
-    QuerySnapshot response1 =
-        await FirebaseFirestore.instance.collection("ClassSections").get();
-    List<String> classnames = [];
-    List<Object?> list1 = response1.docs.map((e) {
-      classnames.add(e.id);
-      return e.data();
-    }).toList();
-
-    // print(list1[0]);
-    // print(classnames);
-    // print(classnames.runtimeType);
-
-    return classnames;
-  }
-
-  static getSections(String className) async {
-    List<String>? list = [];
-    var collection = FirebaseFirestore.instance.collection('ClassSections');
-    var docSnapshot = await collection.doc(className).get();
-    if (docSnapshot.exists) {
-      Map<String, dynamic>? data = docSnapshot.data();
-      List<String>? value = [...data?['sections']];
-      list = [...data?['sections']];
-      // print(value.length);
-      // print(value);
-      // print(value.runtimeType);
-      // print(value?[0].toString());
-    }
-
-    return await list;
-  }
-
-  var classss = getClass();
-  var ss = getSections("4");
-
-  // List<String> lst = getSections("4");
-  List<String> classes = [
-    'Class 1',
-    'Class 2',
-    'Class 3',
-    // Add more class options here
-  ];
-
-  // List<String> sections = [
-  //   'Section A',
-  //   'Section B',
-  //   'Section C',
-  //   // Add more section options here
-  // ];
-
-  List<String> rollNos = [
-    'Roll No 1',
-    'Roll No 2',
-    'Roll No 3',
-    // Add more roll number options here
-  ];
-
   final sectionStream = StreamController<List<String>>();
   bool ischange = false;
-  final classStream = StreamController<List<String>>();
 
   @override
   Widget build(BuildContext context) {
@@ -142,16 +83,14 @@ class _ResultfirstState extends State<Resultfirst> {
                                   classData.add(e.id);
                                   return e.data();
                                 });
-                                //final dd = classData;
-                                final List<Sections> teacherList = [];
+
+                                final List<Sections> sectionList = [];
 
                                 for (var val in documents) {
                                   final object = Sections.fromJson(val);
 
-                                  teacherList.add(object);
+                                  sectionList.add(object);
                                 }
-
-                                // print(teacherList[4].sections);
 
                                 return DropdownButtonFormField<String>(
                                   value: selectedClass,
@@ -159,7 +98,7 @@ class _ResultfirstState extends State<Resultfirst> {
                                     setState(() {
                                       //sectionStream.add([]);
                                       selectedClass = newValue;
-                                      List<String> section = teacherList[
+                                      List<String> section = sectionList[
                                               (int.parse(selectedClass!)) - 1]
                                           .sections
                                           .cast<String>()
