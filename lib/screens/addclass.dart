@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:web_dashboard_app_tut/screens/addclassList.dart';
 
 class classfirst extends StatefulWidget {
@@ -13,9 +14,7 @@ class _classfirstState extends State<classfirst> {
   TextEditingController sectionController = TextEditingController();
 
   String? selectedClass;
-  List<String> classes = [
-    '1', '2', '3', '4', '5', '6', '7', '8', '9', '10'
-  ];
+  List<String> classes = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10'];
 
   @override
   void dispose() {
@@ -40,6 +39,14 @@ class _classfirstState extends State<classfirst> {
 
         print('Class added successfully.');
         sectionController.clear();
+
+        // Show success message dialog
+        CoolAlert.show(
+          context: context,
+          type: CoolAlertType.success,
+          text: "Class added successfully.",
+          width: MediaQuery.of(context).size.width / 5,
+        );
       } catch (e) {
         print('Error adding class: $e');
       }
@@ -148,30 +155,30 @@ class _classfirstState extends State<classfirst> {
                         ),
                       ),
                     ),
-                        SizedBox(height: 16),
-    Center(
-    child: ElevatedButton(
-    onPressed: () {
-    Navigator.push(
-    context,
-    MaterialPageRoute(
-    builder: (context) => AddPageList(),
-    ),
-    );
-    },
-    style: ElevatedButton.styleFrom(
-    primary: Colors.deepPurple,
-    minimumSize: Size(200, 50),
-    ),
-    child: Text(
-    'View Classes',
-    style: TextStyle(
-    fontSize: 18,
-    fontWeight: FontWeight.bold,
-    ),
-    ),
-    ),
-           ),
+                    SizedBox(height: 16),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => AddPageList(),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.deepPurple,
+                          minimumSize: Size(200, 50),
+                        ),
+                        child: Text(
+                          'View Classes',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
                   ],
                 ),
               ),

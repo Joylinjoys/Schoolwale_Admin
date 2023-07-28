@@ -22,6 +22,34 @@ class _SchoolDetailsState extends State<SchoolDetails> {
   TextEditingController _descriptionController = TextEditingController();
   TextEditingController _missionController = TextEditingController();
 
+  String? _validateSchoolName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a school name';
+    }
+    return null;
+  }
+
+  String? _validateDescription(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a description';
+    }
+    return null;
+  }
+
+  String? _validateMission(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a mission';
+    }
+    return null;
+  }
+
+  String? _validateImage(PlatformFile? file) {
+    if (file == null) {
+      return 'Please select an image';
+    }
+    return null;
+  }
+
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
       // Form validation passed, handle form submission
@@ -124,12 +152,7 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                           width: 250,
                           child: TextFormField(
                             controller: _schoolNameController,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter a school name';
-                              }
-                              return null;
-                            },
+                            validator: _validateSchoolName,
                             decoration: InputDecoration(
                               labelText: "School Name",
                               hintText: "Enter School Name",
@@ -182,7 +205,7 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Enter Discription',
+                          'Enter Description',
                           style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
                         ),
                         SizedBox(width: 50),
@@ -192,15 +215,10 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                             maxLines: 4,
                             maxLength: 1000,
                             controller: _descriptionController,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter a Discription';
-                              }
-                              return null;
-                            },
+                            validator: _validateDescription,
                             decoration: InputDecoration(
-                              labelText: "Discription",
-                              hintText: "Enter Discription",
+                              labelText: "Description",
+                              hintText: "Enter Description",
                               border: OutlineInputBorder(),
                             ),
                           ),
@@ -222,12 +240,7 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                             maxLines: 4,
                             maxLength: 1000,
                             controller: _missionController,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return 'Please enter a mission';
-                              }
-                              return null;
-                            },
+                            validator: _validateMission,
                             decoration: InputDecoration(
                               labelText: "Mission",
                               hintText: "Enter Mission",

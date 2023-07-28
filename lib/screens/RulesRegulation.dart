@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class RulesRegulation extends StatefulWidget {
   @override
@@ -10,16 +11,38 @@ class _RulesRegulationState extends State<RulesRegulation> {
   final TextEditingController _descriptionController = TextEditingController();
   bool _isEditing = false;
   String _currentTitle = '';
-  String _currentDescription = '';
+  Map<String, dynamic> _currentDescription = {};
+
+  // Firestore Collection Reference
+  final CollectionReference rulesCollection =
+  FirebaseFirestore.instance.collection('Rules');
+
+  // Function to update Firestore data
+  Future<void> _updateFirestoreData(String title, Map<String, dynamic> description) async {
+    await rulesCollection.doc().set({
+      'Title': title,
+      'Description': description,
+    });
+  }
 
   @override
   void initState() {
     super.initState();
-    _currentTitle = 'Rules and Regulation';
-    _currentDescription =
-    'All students are expected to greet their school teachers when they meet them whether they actually teach them or not.\n• No books (other than text books or library books), magazines Cds, Pen Drive etc should be brought to school.\n• If they are brought, they will be confiscated.\n• Students are expected to respect school property.\n• No student should damage any school furniture,\n write or draw anything on the walls irregular or in any way damage things belonging to others.\n• Any school property damaged even by accident should be reported at once to the class teacher or to the Principal.\n• A student must always come to school in uniform, even during the Practical and special classes.\n• Chewing chocolates and gum in the school premises is strictly forbidden.\n• No students shall indulge in any of the following practices:\n   - spitting in or near the school building.\n   - disfiguring or damaging any school property.\n   - smoking any form of gambling.\n   - use of drugs or intoxicants except on prescription by a regular medical practitioner.';
-    _titleController.text = _currentTitle;
-    _descriptionController.text = _currentDescription;
+    _getCurrentDataFromFirestore();
+  }
+
+  Future<void> _getCurrentDataFromFirestore() async {
+    // Assuming you want to retrieve the latest document (if there are multiple documents)
+    QuerySnapshot snapshot = await rulesCollection.orderBy('Title', descending: true).limit(1).get();
+    if (snapshot.docs.isNotEmpty) {
+      var doc = snapshot.docs.first;
+      setState(() {
+        _currentTitle = doc['Title'];
+        _currentDescription = Map<String, dynamic>.from(doc['Description']);
+        _titleController.text = _currentTitle;
+        _descriptionController.text = _currentDescription['text'] ?? '';
+      });
+    }
   }
 
   @override
@@ -40,7 +63,6 @@ class _RulesRegulationState extends State<RulesRegulation> {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
                 padding: const EdgeInsets.all(16.0),
@@ -63,6 +85,10 @@ class _RulesRegulationState extends State<RulesRegulation> {
                       controller: _descriptionController,
                       readOnly: !_isEditing,
                       maxLines: null,
+                      onChanged: (text) {
+                        // Update the description map with the text value
+                        _currentDescription['text'] = text;
+                      },
                       decoration: InputDecoration(
                         hintText: 'Description',
                       ),
@@ -75,14 +101,18 @@ class _RulesRegulationState extends State<RulesRegulation> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       setState(() {
                         if (_isEditing) {
                           _currentTitle = _titleController.text;
-                          _currentDescription = _descriptionController.text;
                         }
                         _isEditing = !_isEditing;
                       });
+
+                      if (!_isEditing) {
+                        // Call function to update Firestore data on 'Done' press
+                        await _updateFirestoreData(_currentTitle, _currentDescription);
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       primary: Colors.deepPurple,
@@ -94,14 +124,16 @@ class _RulesRegulationState extends State<RulesRegulation> {
                   ),
                   SizedBox(width: 10.0),
                   ElevatedButton(
-                    onPressed: () {
+                    onPressed: () async {
                       setState(() {
                         _currentTitle = _titleController.text;
-                        _currentDescription = _descriptionController.text;
                         // Perform update action here with _currentTitle and _currentDescription
                         print('Title updated: $_currentTitle');
                         print('Description updated: $_currentDescription');
                       });
+
+                      // Call function to update Firestore data
+                      await _updateFirestoreData(_currentTitle, _currentDescription);
                     },
                     style: ElevatedButton.styleFrom(
                       primary: Colors.deepPurple,
@@ -120,4 +152,3 @@ class _RulesRegulationState extends State<RulesRegulation> {
     );
   }
 }
-
