@@ -57,7 +57,7 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
     if (picked != null && picked != selectedTime)
       setState(() {
         selectedTime = picked;
-        selectedDate = new DateTime(
+        selectedDate= new DateTime(
           selectedDate.year,
           selectedDate.month,
           selectedDate.day,
@@ -93,26 +93,24 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
       final Section=selectedSection;
       final titleValue = titleController.text;
       final description = descriptionController.text;
-      final scheduledDate = selectedDate;
+      DateTime scheduledDate = selectedDate;
     //  final scheduledTime = selectedTime;
       
      
 
       // Example: Print form values
-
+      //  print("hi");
       print('Exam Name: $_class');
-      print('Subject Name: $Section');
-      print('Total Marks: $titleValue');
-      print('Passing Marks: $description');
-      print('Marks Obtained: $scheduledDate');
+      // print('Subject Name: $Section');
+      // print('Total Marks: $titleValue');
+      // print('Passing Marks: $description');
+      // print('Marks Obtained: $scheduledDate');
    //   print('Marks Obtained: $scheduledTime');
       final String classSection=_class.toString()+"-"+Section.toString();
        var now = new DateTime.now();
     var formatter = new DateFormat('yyyy-MM-dd');
     String formattedDate = formatter.format(now);
     //print(formattedDate);
-      CollectionReference users =
-          FirebaseFirestore.instance.collection('users');
 
       FirebaseFirestore.instance
           .collection('Announcements')
@@ -120,9 +118,9 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
           .set(
             {
               'AnnName': titleValue,
-              'CreateDate': formattedDate.toString() ,
+              'CreateDate': formattedDate,
               'description':description,
-              'scheduledDate':scheduledDate,
+              'scheduledDate':DateFormat.yMd().add_jm().format(selectedDate),
             },
             SetOptions(merge: true),
             
