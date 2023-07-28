@@ -94,13 +94,11 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
       final titleValue = titleController.text;
       final description = descriptionController.text;
       DateTime scheduledDate = selectedDate;
+     // print(selectedDate);
     //  final scheduledTime = selectedTime;
-      
-     
-
       // Example: Print form values
       //  print("hi");
-      print('Exam Name: $_class');
+      print('class : $_class');
       // print('Subject Name: $Section');
       // print('Total Marks: $titleValue');
       // print('Passing Marks: $description');
@@ -120,7 +118,7 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
               'AnnName': titleValue,
               'CreateDate': formattedDate,
               'description':description,
-              'scheduledDate':DateFormat.yMd().add_jm().format(selectedDate),
+              'scheduledDate':scheduledDate,//DateFormat.yMd().add_jm().format(scheduledDate),
             },
             SetOptions(merge: true),
             
