@@ -55,13 +55,21 @@ class _AddTimetableState extends State<AddTimetable> {
 
         // Get the download URL of the uploaded image
         String downloadUrl = await ref.getDownloadURL();
+        print(downloadUrl);
 
         // Store the timetable details in Firestore
-        await FirebaseFirestore.instance.collection('Timetable').add({
-          'className': _classNameController.text,
-          'section': _sectionController.text,
-          'imageUrl': downloadUrl,
-        });
+        String className = _classNameController.text;
+        String section = _sectionController.text;
+
+        // Create a document with className as the document ID
+        DocumentReference classDocumentRef = FirebaseFirestore.instance.collection('Timetable').doc(className);
+
+        // Set the timetable details as subfields inside the document
+        await classDocumentRef.set({
+          section: {
+            'imageUrl': downloadUrl,
+          },
+        }, SetOptions(merge: true)); // Use merge option to update existing fields and add new fields
 
         // Reset the form and clear the file
         _formKey.currentState!.reset();
