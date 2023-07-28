@@ -28,12 +28,10 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
       // Form validation passed, handle form submission
       if (_platformFile != null) {
         // Generate a unique filename
-        String fileName = DateTime
-            .now()
-            .millisecondsSinceEpoch
-            .toString() + '.jpg';
-        firebase_storage.Reference ref = firebase_storage.FirebaseStorage
-            .instance.ref().child(fileName);
+        String fileName =
+            DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
+        firebase_storage.Reference ref =
+        firebase_storage.FirebaseStorage.instance.ref().child(fileName);
 
         if (kIsWeb) {
           // Upload the file data
@@ -46,8 +44,11 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
         // Get the download URL of the uploaded image
         String downloadUrl = await ref.getDownloadURL();
 
-        // Store the teacher details in Firestore
-        await FirebaseFirestore.instance.collection('Teachers').doc().set({
+        // Store the teacher details in Firestore with the teacher's name as the document ID
+        await FirebaseFirestore.instance
+            .collection('Teachers')
+            .doc(_teacherNameController.text) // Use teacher's name as document ID
+            .set({
           'name': _teacherNameController.text,
           'subject': _subjectController.text,
           'imageUrl': downloadUrl,

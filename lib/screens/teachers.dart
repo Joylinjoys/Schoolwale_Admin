@@ -107,16 +107,16 @@ class TeacherPage extends StatelessWidget {
                         return DataRow(
                           cells: [
                             DataCell(
-                              Text(teacher['Name'] ?? ''),
+                              Text(teacher['name'] ?? ''),
                             ),
                             DataCell(
-                              Text(teacher['Subjects'] ?? ''),
+                              Text(teacher['subject'] ?? ''),
                             ),
                             DataCell(
-                              Text(teacher['Qualification'] ?? ''),
+                              Text(teacher['qualification'] ?? ''),
                             ),
                             DataCell(
-                              Text(teacher['Phone number'].toString()),
+                              Text(teacher['phoneNo'].toString()),
                             ),
                             DataCell(
                               ElevatedButton(
