@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -52,13 +53,15 @@ class _AdminEventState extends State<AdminEvent> {
       });
     }
   }
-
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
       // Form validation passed, handle form submission
       if (_image != null || _platformFile != null) {
-        // Generate a unique filename
-        String fileName = DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
+        // Generate a custom document ID using the current timestamp
+        String customDocumentId = DateTime.now().millisecondsSinceEpoch.toString();
+
+        // Generate a unique filename for the image
+        String fileName = customDocumentId + '.jpg';
         firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child(fileName);
 
         if (kIsWeb && _platformFile != null) {
@@ -72,8 +75,8 @@ class _AdminEventState extends State<AdminEvent> {
         // Get the download URL of the uploaded image
         String downloadUrl = await ref.getDownloadURL();
 
-        // Store the event details in Firestore
-        await FirebaseFirestore.instance.collection('Event').add({
+        // Store the event details in Firestore with the custom document ID
+        await FirebaseFirestore.instance.collection('Event').doc(customDocumentId).set({
           'eventName': _eventNameController.text,
           'eventDate': _selectedDate,
           'imageUrl': downloadUrl,
@@ -86,6 +89,17 @@ class _AdminEventState extends State<AdminEvent> {
           _image = null;
           _platformFile = null;
         });
+
+        // Show success alert using CoolAlert
+        CoolAlert.show(
+          context: context,
+          type: CoolAlertType.success,
+          text: "Event added successfully!",
+          width: MediaQuery.of(context).size.width / 5,
+          onConfirmBtnTap: () {
+            // After the user confirms the alert, do any further actions (if needed)
+          },
+        );
       }
     }
   }
@@ -184,7 +198,6 @@ class _AdminEventState extends State<AdminEvent> {
                         ),
                       ],
                     ),
-
                     SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -245,7 +258,8 @@ class _AdminEventState extends State<AdminEvent> {
                             maxLength: 200,
                             controller: _descriptionController,
                             validator: (value) {
-                              if (value!.isEmpty) {
+                              if (
+value!.isEmpty) {
                                 return 'Please enter a description';
                               }
                               return null;

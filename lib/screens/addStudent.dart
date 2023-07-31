@@ -6,8 +6,8 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:web_dashboard_app_tut/widgets/addStudentInput.dart';
-
 import '../Models/class_and_section.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 
 class AddStudent extends StatefulWidget {
   const AddStudent({Key? key}) : super(key: key);
@@ -160,6 +160,7 @@ String? _validateName(String? value) {
           .catchError((onError) => print("Error:$onError"));
     }
   }
+
 
   //String? selectedGender;
   @override
@@ -318,31 +319,7 @@ String? _validateName(String? value) {
                                                         horizontal: 4),
                                               ),
                                             );
-                                            // return DropdownButton(
-                                            //   // Initial Value
-                                            //   value: selectedClass,
-                                            //
-                                            //   // Down Arrow Icon
-                                            //   icon: const Icon(
-                                            //       Icons.keyboard_arrow_down),
-                                            //
-                                            //   // Array list of items
-                                            //   items:
-                                            //       classData.map((String items) {
-                                            //     return DropdownMenuItem(
-                                            //       value: items,
-                                            //       child: Text(items),
-                                            //     );
-                                            //   }).toList(),
-                                            //   // After selecting the desired option,it will
-                                            //   // change button value to selected value
-                                            //   onChanged: (String? newValue) {
-                                            //     setState(() {
-                                            //       dropdownvalue1 = newValue!;
-                                            //     });
-                                            //   },
-                                            // );
-                                          },
+                                            },
                                         );
                                       })
                                 ],

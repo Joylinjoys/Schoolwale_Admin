@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
@@ -76,6 +77,14 @@ class _SchoolDetailsState extends State<SchoolDetails> {
           'mission': _missionController.text,
           'imageUrl': downloadUrl,
         });
+
+        // Show the CoolAlert after successful submission
+        CoolAlert.show(
+          context: context,
+          type: CoolAlertType.success,
+          text: "School details submitted successfully!",
+          width: MediaQuery.of(context).size.width / 5,
+        );
 
         // Reset the form and clear the file
         _formKey.currentState!.reset();
@@ -251,19 +260,22 @@ class _SchoolDetailsState extends State<SchoolDetails> {
                       ],
                     ),
                     SizedBox(height: 20),
-                    SizedBox(
-                      width: 140,
-                      height: 40,
-                      child: ElevatedButton(
-                        onPressed: _submitForm,
-                        child: Text(
-                          'Submit',
-                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24),
-                        ),
-                        style: ElevatedButton.styleFrom(
-                          primary: Colors.deepPurple,
-                        ),
+                Center(
+                  child: ElevatedButton(
+                    onPressed: _submitForm,
+                    style: ElevatedButton.styleFrom(
+                      primary:
+                      Colors.deepPurple, // Set button color to purple
+                      minimumSize: Size(200, 50), // Increase button size
+                    ),
+                    child: Text(
+                      'Submit',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
+                    ),
+                  ),
                     ),
                   ],
                 ),

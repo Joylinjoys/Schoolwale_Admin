@@ -3,35 +3,39 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'addEvents.dart';
 import 'editEvent.dart';
 
-class EventsPage extends StatelessWidget {
+class EventsPage extends StatefulWidget {
   const EventsPage({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    return StreamBuilder<QuerySnapshot>(
-      stream: FirebaseFirestore.instance.collection('Event').snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.hasError ||
-            snapshot.connectionState == ConnectionState.waiting) {
-          return Text("Loading");
-        }
-        final documents = snapshot.data!.docs.map((e) {
-          return e.data();
-        });
-        List<Map<String, dynamic>> eventList = snapshot.data!.docs.map((doc) {
-          return doc.data() as Map<String, dynamic>;
-        }).toList();
+  _EventsPageState createState() => _EventsPageState();
+}
 
-        return Scaffold(
-          appBar: AppBar(
-            centerTitle: true,
-            title: Text(
-              'Events',
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-            ),
-            backgroundColor: Colors.deepPurple.shade400,
-          ),
-          body: Padding(
+class _EventsPageState extends State<EventsPage> {
+  List<Map<String, dynamic>> eventList = [];
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          'Events',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.deepPurple.shade400,
+      ),
+      body: StreamBuilder<QuerySnapshot>(
+        stream: FirebaseFirestore.instance.collection('Event').snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError || snapshot.connectionState == ConnectionState.waiting) {
+            return Text("Loading");
+          }
+
+          eventList = snapshot.data!.docs.map((doc) {
+            return doc.data() as Map<String, dynamic>;
+          }).toList();
+
+          return Padding(
             padding: const EdgeInsets.all(40.0),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -45,7 +49,7 @@ class EventsPage extends StatelessWidget {
                   child: SingleChildScrollView(
                     scrollDirection: Axis.horizontal,
                     child: DataTable(
-                      columnSpacing: 50.0, // Adjust the spacing as needed
+                      columnSpacing: 50.0,
                       columns: [
                         DataColumn(
                           label: Text(
@@ -100,7 +104,7 @@ class EventsPage extends StatelessWidget {
                               Text(event['eventName'] ?? ''),
                             ),
                             DataCell(
-                              Text(event['event_date'] ?? ''),
+                              Text(event['eventDate']?.toDate().toString() ?? ''),
                             ),
                             DataCell(
                               Text(event['description'] ?? ''),
@@ -112,11 +116,7 @@ class EventsPage extends StatelessWidget {
                                   primary: Colors.deepPurple,
                                 ),
                                 onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => EditEvent()),
-                                  );
-                                  // Navigate to edit event page
+                                  _navigateToEditEvent(context, event);
                                 },
                               ),
                             ),
@@ -131,21 +131,24 @@ class EventsPage extends StatelessWidget {
                                     context: context,
                                     builder: (BuildContext context) {
                                       return AlertDialog(
-                                        title: Text('Confirmation'),
-                                        content: Text('Are you sure you want to delete?'),
+                                        title: Text('Delete Event'),
+                                        content: Text('Are you sure you want to delete this event?'),
                                         actions: [
                                           TextButton(
                                             onPressed: () {
-                                              // Perform delete operation
-                                              Navigator.of(context).pop(); // Close the dialog
+                                              Navigator.of(context).pop();
                                             },
-                                            child: Text('Yes'),
+                                            child: Text('CANCEL'),
                                           ),
                                           TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop(); // Close the dialog
+                                            onPressed: () async {
+                                              await FirebaseFirestore.instance
+                                                  .collection('Event')
+                                                  .doc(event['eventId'])
+                                                  .delete();
+                                              Navigator.of(context).pop();
                                             },
-                                            child: Text('No'),
+                                            child: Text('DELETE'),
                                           ),
                                         ],
                                       );
@@ -162,22 +165,52 @@ class EventsPage extends StatelessWidget {
                 ),
               ],
             ),
-          ),
-          floatingActionButton: FloatingActionButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AdminEvent()),
-              );
-              // Handle add button press
-              // Implement your logic here to add a new event
-            },
-            child: Text('ADD'), // Added the text 'ADD' to the button
-            backgroundColor: Colors.deepPurple.shade400,
-          ),
-          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        );
-      },
+          );
+        },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => AdminEvent()),
+          );
+        },
+        child: Text('ADD'),
+        backgroundColor: Colors.deepPurple.shade400,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
+  }
+
+  // Method to navigate to EditEvent page and handle updates
+  Future<void> _navigateToEditEvent(BuildContext context, Map<String, dynamic> eventData) async {
+    final Map<String, dynamic>? updatedData = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => EditEvent(eventData: eventData),
+      ),
+    );
+
+    if (updatedData != null) {
+      // Handle the updated data from EditEvent
+      // Update the event data in the eventList to reflect changes in the DataTable
+      setState(() {
+        eventList = eventList.map((event) {
+          if (event['eventId'] == eventData['eventId']) {
+            event['eventName'] = updatedData['eventName'];
+            event['eventDate'] = updatedData['eventDate'];
+            event['description'] = updatedData['description'];
+          }
+          return event;
+        }).toList();
+      });
+
+      // Show a snackbar with the updated event details
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Event updated: ${updatedData['eventName']}'),
+        ),
+      );
+    }
   }
 }

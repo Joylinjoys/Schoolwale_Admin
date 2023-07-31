@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:web_dashboard_app_tut/screens/addtimetabel.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TimetableScreen extends StatelessWidget {
-  get onAddImage => null;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -48,101 +47,72 @@ class TimetableScreen extends StatelessWidget {
                   ),
                   child: Text('Add'),
                 ),
-
               ],
             ),
           ),
           SizedBox(height: 10.0),
           Expanded(
-            child: Column(
-              children: [
-                Expanded(
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.symmetric(horizontal: 10.0),
-                    children: [
-                      TimetableCard(
-                        image: 'https://images.twinkl.co.uk/tw1n/image/private/t_630/image_repo/fc/33/roi-pa-31-editable-sample-timetable_ver_2.jpg',
-                        text: 'Class I - Section A',
-                        // subtitle: 'Section A',
-                        onDelete: () {  }, onAddImage: () {  },
-                      ),
-                      TimetableCard(
-                        image: 'https://images.twinkl.co.uk/tw1n/image/private/t_630/image_repo/fc/33/roi-pa-31-editable-sample-timetable_ver_2.jpg',
-                        text: 'Class II - Section A',
-                        // subtitle: 'Section B',
-                         onDelete: () {  }, onAddImage: () {  },
-                      ),
-                      TimetableCard(
-                        image: 'https://images.twinkl.co.uk/tw1n/image/private/t_630/image_repo/fc/33/roi-pa-31-editable-sample-timetable_ver_2.jpg',
-                        text: 'Class III - Section A',
-                        // subtitle: 'Section A',
-                        onDelete: () {  }, onAddImage: () {  },
-                      ),
-                      TimetableCard(
-                        image: 'https://images.twinkl.co.uk/tw1n/image/private/t_630/image_repo/fc/33/roi-pa-31-editable-sample-timetable_ver_2.jpg',
-                        text: 'Class IV - Section A',
-                        // subtitle: 'Section B',
-                         onDelete: () {  }, onAddImage: () {  },
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 7.0),
-                Expanded(
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    padding: EdgeInsets.symmetric(horizontal: 10.0),
-                    children: [
-                      TimetableCard(
-                        image: 'https://images.twinkl.co.uk/tw1n/image/private/t_630/image_repo/fc/33/roi-pa-31-editable-sample-timetable_ver_2.jpg',
-                        text: 'Class V - Section A',
-                        // subtitle: 'Section A',
-                        onDelete: () {  }, onAddImage: () {  },
-                      ),
-                      TimetableCard(
-                        image: 'https://images.twinkl.co.uk/tw1n/image/private/t_630/image_repo/fc/33/roi-pa-31-editable-sample-timetable_ver_2.jpg',
-                        text: 'Class VI - Section A ',
-                        // subtitle: 'Section B',
-                         onDelete: () {  }, onAddImage: () {  },
-                      ),
-                      TimetableCard(
-                        image: 'https://images.twinkl.co.uk/tw1n/image/private/t_630/image_repo/fc/33/roi-pa-31-editable-sample-timetable_ver_2.jpg',
-                        text: 'Class VII - Section A',
-                        // subtitle: 'Section A',
-                         onDelete: () {  }, onAddImage: () {  },
-                      ),
-                      TimetableCard(
-                        image: 'https://images.twinkl.co.uk/tw1n/image/private/t_630/image_repo/fc/33/roi-pa-31-editable-sample-timetable_ver_2.jpg',
-                        text: 'Class VIII - Section A',
-                        // subtitle: 'Section B',
-                        onDelete: () {  }, onAddImage: () {  },
-                      ),
-                    ],
-                  ),
-                ),
-              ],
+            child: StreamBuilder<QuerySnapshot>(
+              stream: FirebaseFirestore.instance.collection('Timetable').snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Center(child: Text('Error: ${snapshot.error}'));
+                }
+
+                if (!snapshot.hasData) {
+                  return Center(child: Text('No Data Available'));
+                }
+
+                // Extract the documents from the snapshot
+                final documents = snapshot.data!.docs;
+
+                return ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
+                  itemCount: documents.length,
+                  itemBuilder: (context, index) {
+                    // Extract the document data
+                    final data = documents[index].data() as Map<String, dynamic>;
+                    final className = documents[index].id;
+                    final section = data['section'];
+                    final imageUrl = data['imageUrl'];
+
+                    return TimetableCard(
+                      image: imageUrl,
+                      text: '$className - Section $section',
+                      onDelete: () => _deleteTimetable(className),
+                      onAddImage: () => _updateTimetableImage(className),
+                    );
+                  },
+                );
+              },
             ),
           ),
         ],
       ),
     );
   }
+
+  void _deleteTimetable(String className) {
+    // Add your delete logic here
+    print('Delete timetable for class: $className');
+  }
+
+  void _updateTimetableImage(String className) {
+    // Add your image update logic here
+    print('Update timetable image for class: $className');
+  }
 }
 
-
 class TimetableCard extends StatelessWidget {
-  final String image;
+  final String? image; // Make the image field nullable
   final String text;
-  // final String subtitle;
-
   final VoidCallback onDelete;
   final VoidCallback onAddImage;
 
   const TimetableCard({
-    required this.image,
+    this.image, // Allow the image to be nullable
     required this.text,
-    // required this.subtitle,
     required this.onDelete,
     required this.onAddImage,
     Key? key,
@@ -152,16 +122,17 @@ class TimetableCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 320,
-      height:170,
+      height: 170,
       child: Card(
         child: Column(
           children: [
-            Image.network(
-              image,
-              height: 200.0,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
+            if (image != null) // Only show the image if it's not null
+              Image.network(
+                image!,
+                height: 200.0,
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -174,16 +145,7 @@ class TimetableCard extends StatelessWidget {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  // SizedBox(height: 4.0),
-                  // Text(
-                  //   subtitle,
-                  //   style: TextStyle(
-                  //     fontSize: 14.0,
-                  //     color: Colors.grey,
-                  //   ),
-                  // ),
-                  // SizedBox(height: 3.0),
-                  // SizedBox(height: 1.0),
+                  SizedBox(height: 1.0),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -237,3 +199,4 @@ class TimetableCard extends StatelessWidget {
     );
   }
 }
+
