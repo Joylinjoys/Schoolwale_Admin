@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -56,6 +57,13 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
           'phoneNo': _phoneNoController.text,
           'staffType': staffType,
         });
+
+        CoolAlert.show(
+          context: context,
+          type: CoolAlertType.success,
+          text: "Teacher details added successfully!",
+          width: MediaQuery.of(context).size.width / 5,
+        );
 
         // Reset the form and clear the file
         _formKey.currentState!.reset();

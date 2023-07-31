@@ -68,7 +68,23 @@ class _EditEventState extends State<EditEvent> {
     if (_formKey.currentState!.validate()) {
       // Form validation passed, handle form submission
       if (_image != null) {
-        // ... (rest of the code remains unchanged)
+        // Generate a unique filename
+        String fileName = DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
+        Reference ref = FirebaseStorage.instance.ref().child(fileName);
+
+        // Upload the file
+        await ref.putFile(_image!);
+
+        // Get the download URL of the uploaded image
+        String downloadUrl = await ref.getDownloadURL();
+
+        // Update the event details in Firestore with the image URL
+        await FirebaseFirestore.instance.collection('Event').doc(widget.eventData['eventId']).update({
+          'eventName': _eventNameController.text,
+          'eventDate': _selectedDate,
+          'description': _descriptionController.text,
+          'imageUrl': downloadUrl,
+        });
 
         // Show success CoolAlert
         CoolAlert.show(
@@ -76,18 +92,18 @@ class _EditEventState extends State<EditEvent> {
           type: CoolAlertType.success,
           text: "Event updated successfully!",
           onConfirmBtnTap: () {
-            // Return the updated event data to EventsPage
+            // Return the updated event data to the calling page (EventsPage)
             Navigator.pop(
               context,
               {
                 'eventName': _eventNameController.text,
                 'eventDate': _selectedDate,
                 'description': _descriptionController.text,
+                'imageUrl': downloadUrl,
               },
             );
           },
         );
-
       } else {
         // If no new image selected, only update the other event details in Firestore
         await FirebaseFirestore.instance.collection('Event').doc(widget.eventData['eventId']).update({
@@ -102,7 +118,7 @@ class _EditEventState extends State<EditEvent> {
           type: CoolAlertType.success,
           text: "Event updated successfully!",
           onConfirmBtnTap: () {
-            // Return the updated event data to EventsPage
+            // Return the updated event data to the calling page (EventsPage)
             Navigator.pop(
               context,
               {
@@ -297,4 +313,3 @@ class _EditEventState extends State<EditEvent> {
     );
   }
 }
-
