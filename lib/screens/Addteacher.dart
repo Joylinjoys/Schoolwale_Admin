@@ -23,6 +23,34 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
   TextEditingController _qualificationController = TextEditingController();
   TextEditingController _phoneNoController = TextEditingController();
 
+  String? _validateSchoolName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a school name';
+    }
+    return null;
+  }
+
+  String? _validateDescription(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a description';
+    }
+    return null;
+  }
+
+  String? _validateMission(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a mission';
+    }
+    return null;
+  }
+
+  String? _validateImage(PlatformFile? file) {
+    if (file == null) {
+      return 'Please select an image';
+    }
+    return null;
+  }
+
   Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
       // Form validation passed, handle form submission

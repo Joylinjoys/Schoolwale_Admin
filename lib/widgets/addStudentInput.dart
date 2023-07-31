@@ -6,11 +6,13 @@ class StudentInput extends StatelessWidget {
       this.controller,
       required this.textContent,
       required this.label,
-      required this.hint});
+      required this.hint, required this.validator});
   final String textContent;
   final String label;
   final String hint;
   final TextEditingController? controller;
+
+  final  validator;
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +33,9 @@ class StudentInput extends StatelessWidget {
               SizedBox(
                 height: 20.0,
               ),
-              TextField(
+              TextFormField(
+                
+                validator:validator,
                 controller: controller,
                 decoration: InputDecoration(
                   labelText: label,

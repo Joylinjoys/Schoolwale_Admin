@@ -1,9 +1,9 @@
-import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import '../Models/class_and_section.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:file_picker/file_picker.dart';
+import 'dart:io';
 
 class EditTeacherPage extends StatefulWidget {
   const EditTeacherPage({Key? key}) : super(key: key);
@@ -13,424 +13,358 @@ class EditTeacherPage extends StatefulWidget {
 }
 
 class _EditTeacherPageState extends State<EditTeacherPage> {
-  String staffType = ''; // Variable to hold the selected staff type
-  String? selectedClass;
-  String? selectedSection;
+  String staffType = '';
+  File? _image;
+  PlatformFile? _platformFile;
+  final _formKey = GlobalKey<FormState>();
 
-  final classStream = StreamController<List<String>>();
-  final sectionStream = StreamController<List<String>>();
-  bool ischange = false;
+  TextEditingController _teacherNameController = TextEditingController();
+  TextEditingController _subjectController = TextEditingController();
+  TextEditingController _qualificationController = TextEditingController();
+  TextEditingController _phoneNoController = TextEditingController();
+
+  String? _validateSchoolName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a school name';
+    }
+    return null;
+  }
+
+  String? _validateDescription(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a description';
+    }
+    return null;
+  }
+
+  String? _validateMission(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a mission';
+    }
+    return null;
+  }
+
+  String? _validateImage(PlatformFile? file) {
+    if (file == null) {
+      return 'Please select an image';
+    }
+    return null;
+  }
+
+  Future<void> _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      // Form validation passed, handle form submission
+      if (_platformFile != null) {
+        // Generate a unique filename
+        String fileName =
+            DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
+        firebase_storage.Reference ref =
+        firebase_storage.FirebaseStorage.instance.ref().child(fileName);
+
+        if (kIsWeb) {
+          // Upload the file data
+          await ref.putData(_platformFile!.bytes!);
+        } else {
+          // Upload the file
+          await ref.putFile(File(_platformFile!.path!));
+        }
+
+        // Get the download URL of the uploaded image
+        String downloadUrl = await ref.getDownloadURL();
+
+        // Store the teacher details in Firestore with the teacher's name as the document ID
+        await FirebaseFirestore.instance
+            .collection('Teachers')
+            .doc(_teacherNameController.text) // Use teacher's name as document ID
+            .set({
+          'name': _teacherNameController.text,
+          'subject': _subjectController.text,
+          'imageUrl': downloadUrl,
+          'qualification': _qualificationController.text,
+          'phoneNo': _phoneNoController.text,
+          'staffType': staffType,
+        });
+
+        // Reset the form and clear the file
+        _formKey.currentState!.reset();
+        setState(() {
+          _platformFile = null;
+        });
+      }
+    } else {
+      // Form validation failed, show error messages
+      setState(() {
+        // Use setState to update the UI and trigger auto-validation
+      });
+    }
+  }
+
+  Future<void> _selectImage() async {
+    if (kIsWeb) {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+          type: FileType.image);
+      if (result != null && result.files.isNotEmpty) {
+        setState(() {
+          _platformFile = result.files.first;
+        });
+      }
+    } else {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+          type: FileType.image);
+      if (result != null && result.files.isNotEmpty) {
+        setState(() {
+          _platformFile = result.files.first;
+        });
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _teacherNameController.dispose();
+    _subjectController.dispose();
+    _qualificationController.dispose();
+    _phoneNoController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final double textFieldWidth = MediaQuery.of(context).size.width * 0.5;
-
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
         title: Text(
-          'Teacher Page',
-          style: TextStyle(
-            fontSize: 29,
-            fontWeight: FontWeight.bold,
-          ),
+          'Add Teacher',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
         ),
         backgroundColor: Colors.deepPurple.shade400,
       ),
-      body: Center(
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
         child: SingleChildScrollView(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Edit Teacher Details',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Select Class:',
-                    style: TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(width: 8),
-                  Container(
-                    width: 250,
-                    child: StreamBuilder(
-                        stream: FirebaseFirestore.instance
-                            .collection("ClassSections")
-                            .snapshots(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<dynamic> snapshot) {
-                          if (snapshot.hasError ||
-                              snapshot.connectionState ==
-                                  ConnectionState.waiting) {
-                            return Text("Loading");
-                          }
-
-                          final List<String> classData = [];
-                          final documents = snapshot.data!.docs.map((e) {
-                            classData.add(e.id);
-                            return e.data();
-                          });
-                          final List<Sections> teacherList = [];
-
-                          for (var val in documents) {
-                            final object = Sections.fromJson(val);
-                            teacherList.add(object);
-                          }
-
-                          return DropdownButtonFormField<String>(
-                            value: selectedClass,
-                            onChanged: (newValue) {
-                              setState(() {
-                                selectedClass = newValue;
-                                List<String> section = teacherList[
-                                (int.parse(selectedClass!)) - 1]
-                                    .sections
-                                    .cast<String>()
-                                    .toList();
-
-                                sectionStream.add(section);
-                                ischange = true;
-                              });
+          child: Center(
+            child: Container(
+              width: 700,
+              child: Form(
+                key: _formKey,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 20),
+                    Text(
+                      'Enter Teacher Details',
+                      style: TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Enter Teacher Name',
+                          style: TextStyle(fontSize: 22,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(width: 50),
+                        SizedBox(
+                          width: 250,
+                          child: TextFormField(
+                            controller: _teacherNameController,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter a teacher name';
+                              }
+                              return null;
                             },
-                            items: classData
-                                .map<DropdownMenuItem<String>>(
-                                    (String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
                             decoration: InputDecoration(
+                              labelText: "Teacher Name",
+                              hintText: "Enter Teacher Name",
                               border: OutlineInputBorder(),
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 8, horizontal: 4),
                             ),
-                          );
-                        }),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Select Section:',
-                    style: TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.bold),
-                  ),
-                  SizedBox(width: 8),
-                  Container(
-                    width: 250,
-                    child: StreamBuilder(
-                        stream: sectionStream.stream,
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<String>> snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.waiting) {
-                            return Text('Loading...');
-                          }
-
-                          final sections = snapshot.data ?? [];
-
-                          return DropdownButtonFormField<String>(
-                            value: selectedSection,
-                            onChanged: (newValue) {
-                              setState(() {
-                                selectedSection = newValue;
-                              });
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Choose Subject',
+                          style: TextStyle(fontSize: 22,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(width: 50),
+                        SizedBox(
+                          width: 250,
+                          child: TextFormField(
+                            controller: _subjectController,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please choose a subject';
+                              }
+                              return null;
                             },
-                            items: sections.map<DropdownMenuItem<String>>(
-                                    (String value) {
-                                  return DropdownMenuItem<String>(
-                                    value: value,
-                                    child: Text(value),
-                                  );
-                                }).toList(),
                             decoration: InputDecoration(
+                              labelText: "Subject",
+                              hintText: "Choose Subject",
                               border: OutlineInputBorder(),
-                              contentPadding: EdgeInsets.symmetric(
-                                  vertical: 8, horizontal: 4),
                             ),
-                          );
-                        }),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Enter Teacher Name:',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  SizedBox(width: 8),
-                  Container(
-                    width: textFieldWidth,
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.grey[300],
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 8.0,
-                          horizontal: 12.0,
+                          ),
                         ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                          borderSide: BorderSide.none,
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Upload Image',
+                          style: TextStyle(fontSize: 22,
+                              fontWeight: FontWeight.bold),
                         ),
+                        SizedBox(width: 50),
+                        SizedBox(
+                          width: 250,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 90,
+                                width: 90,
+                                child: _platformFile == null
+                                    ? Text('No image selected.')
+                                    : Text(_platformFile?.name ?? 'No name'),
+                              ),
+                              SizedBox(width: 10),
+                              SizedBox(
+                                width: 150,
+                                height: 47,
+                                child: ElevatedButton(
+                                  child: Text('Select Image'),
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.deepPurple,
+                                  ),
+                                  onPressed: _selectImage,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Enter Qualification',
+                          style: TextStyle(fontSize: 22,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(width: 50),
+                        SizedBox(
+                          width: 250,
+                          child: TextFormField(
+                            controller: _qualificationController,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter a qualification';
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              labelText: "Qualification",
+                              hintText: "Enter Qualification",
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Enter Phone No',
+                          style: TextStyle(fontSize: 22,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(width: 50),
+                        SizedBox(
+                          width: 250,
+                          child: TextFormField(
+                            controller: _phoneNoController,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return 'Please enter a phone number';
+                              }
+                              return null;
+                            },
+                            decoration: InputDecoration(
+                              labelText: "Phone No",
+                              hintText: "Enter Phone No",
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Staff:',
+                          style: TextStyle(fontSize: 22,
+                              fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(width: 20),
+                        Row(
+                          children: [
+                            Radio<String>(
+                              value: 'Teaching',
+                              groupValue: staffType,
+                              onChanged: (value) {
+                                setState(() {
+                                  staffType = value!;
+                                });
+                              },
+                            ),
+                            Text('Teaching'),
+                            Radio<String>(
+                              value: 'NonTeaching',
+                              groupValue: staffType,
+                              onChanged: (value) {
+                                setState(() {
+                                  staffType = value!;
+                                });
+                              },
+                            ),
+                            Text('Non-Teaching'),
+                          ],
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: _submitForm,
+                      child: Text('Submit'),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors
+                            .deepPurple, // Set button color to purple
                       ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Enter Subject:',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  SizedBox(width: 8),
-                  Container(
-                    width: textFieldWidth,
-                    child: TextFormField(
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.grey[300],
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 8.0,
-                          horizontal: 12.0,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Upload Image:',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  SizedBox(width: 8),
-                  ElevatedButton(
-                    onPressed: () {
-                      // Handle image upload
-                    },
-                    child: Text('Upload'),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Enter Qualification:',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  SizedBox(width: 8),
-                  Container(
-                    width: textFieldWidth,
-                    child: TextField(
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.grey[300],
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 8.0,
-                          horizontal: 12.0,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Enter Phone No:',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  SizedBox(width: 8),
-                  Container(
-                    width: textFieldWidth,
-                    child: TextField(
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: Colors.grey[300],
-                        contentPadding: EdgeInsets.symmetric(
-                          vertical: 8.0,
-                          horizontal: 12.0,
-                        ),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Staff:',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                  SizedBox(width: 8),
-                  Row(
-                    children: [
-                      Radio<String>(
-                        value: 'Teaching',
-                        groupValue: staffType,
-                        onChanged: (value) {
-                          setState(() {
-                            staffType = value!;
-                          });
-                        },
-                      ),
-                      Text('Teaching'),
-                      Radio<String>(
-                        value: 'NonTeaching',
-                        groupValue: staffType,
-                        onChanged: (value) {
-                          setState(() {
-                            staffType = value!;
-                          });
-                        },
-                      ),
-                      Text('Non-Teaching'),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 16),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Handle button press
-                  },
-                  style: ElevatedButton.styleFrom(
-                    primary: Colors.deepPurple, // Set button color to purple
-                  ),
-                  child: Text('Update'),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
         ),
       ),
     );
   }
 
-  void _showClassDropdown(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Select Class'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                title: Text('1'),
-                onTap: () {
-                  setState(() {
-                    selectedClass = '1';
-                  });
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
-                title: Text('2'),
-                onTap: () {
-                  setState(() {
-                    selectedClass = '2';
-                  });
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
-                title: Text('3'),
-                onTap: () {
-                  setState(() {
-                    selectedClass = '3';
-                  });
-                  Navigator.of(context).pop();
-                },
-              ),
-              // Add more class options as needed
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void _showSectionDropdown(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Select Section'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              ListTile(
-                title: Text('A'),
-                onTap: () {
-                  setState(() {
-                    selectedSection = 'A';
-                  });
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
-                title: Text('B'),
-                onTap: () {
-                  setState(() {
-                    selectedSection = 'B';
-                  });
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
-                title: Text('C'),
-                onTap: () {
-                  setState(() {
-                    selectedSection = 'C';
-                  });
-                  Navigator.of(context).pop();
-                },
-              ),
-              // Add more section options as needed
-            ],
-          ),
-        );
-      },
-    );
-  }
 }

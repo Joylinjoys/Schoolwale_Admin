@@ -25,6 +25,38 @@ class _FinalexamState extends State<Finalexam> {
     super.dispose();
   }
 
+String? _validateExamName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a exam name';
+    }
+    return null;
+  }
+
+  String? _validateMark(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter written exam mark';
+    }
+    return null;
+  }
+
+  String? _validateMarksobtained(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a obtained marks';
+    }
+    return null;
+  }
+   String? _validatePassingMark(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a internal assessment mark';
+    }
+    return null;
+  }
+  String? _validateSubject(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please choose a subject';
+    }
+    return null;
+  }
   void _submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
       // Form is valid, perform form submission
@@ -86,6 +118,7 @@ class _FinalexamState extends State<Finalexam> {
                           width: 250,
                           child: TextFormField(
                             controller: _examNameController,
+                            validator: _validateExamName,
                             decoration: InputDecoration(
                               labelText: "Examination Name",
                               hintText: "Examination Name",
@@ -135,6 +168,7 @@ class _FinalexamState extends State<Finalexam> {
                                 child: Text('Social'),
                               ),
                             ],
+                            validator: _validateSubject,
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
                               contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
@@ -155,6 +189,7 @@ class _FinalexamState extends State<Finalexam> {
                         SizedBox(
                           width: 250,
                           child: TextFormField(
+                            validator: _validateMark,
                             controller: _totalMarksController,
                             decoration: InputDecoration(
                               labelText: "Written Exam",
@@ -177,6 +212,7 @@ class _FinalexamState extends State<Finalexam> {
                         SizedBox(
                           width: 250,
                           child: TextFormField(
+                            validator: _validatePassingMark,
                             controller: _passingMarksController,
                             decoration: InputDecoration(
                               labelText: "Internal Assesment",
@@ -200,6 +236,7 @@ class _FinalexamState extends State<Finalexam> {
                           width: 250,
                           child: TextFormField(
                             controller: _marksObtainedController,
+                            validator: _validateMarksobtained,
                             decoration: InputDecoration(
                               labelText: "Marks Obtained",
                               hintText: "Marks Obtained",

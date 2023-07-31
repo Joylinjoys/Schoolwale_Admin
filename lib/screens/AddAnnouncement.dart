@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:web_dashboard_app_tut/screens/AnnouncementList.dart';
+//import 'package:web_dashboard_app_tut/screens/AnnouncementList.dart';
 
 import '../Models/class_and_section.dart';
 
@@ -16,6 +16,9 @@ class AddAnnouncementPage extends StatefulWidget {
   _AddAnnouncementPageState createState() => _AddAnnouncementPageState();
 }
 
+ 
+
+ 
 class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController idController = TextEditingController();
@@ -28,7 +31,32 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
 
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
+ String? _validateTitle(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a Title';
+    }
+    return null;
+  }
 
+  String? _validateDescription(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a description';
+    }
+    return null;
+  }
+
+  String? _validateDate(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please choose date';
+    }
+    return null;
+  }
+   String? _validateTime(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please choose Time';
+    }
+    return null;
+  }
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -87,29 +115,23 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
   //  _marksObtainedController.clear();
   }
  void _submitForm() {
-    if (_formKey.currentState?.validate() ?? false) {
+     if (_formKey.currentState!.validate()) {
       // Form is valid, perform form submission
       final _class=selectedClass;
       final Section=selectedSection;
       final titleValue = titleController.text;
       final description = descriptionController.text;
-      DateTime scheduledDate = selectedDate;
-     // print(selectedDate);
-    //  final scheduledTime = selectedTime;
-      // Example: Print form values
-      //  print("hi");
-      print('class : $_class');
-      // print('Subject Name: $Section');
-      // print('Total Marks: $titleValue');
-      // print('Passing Marks: $description');
-      // print('Marks Obtained: $scheduledDate');
-   //   print('Marks Obtained: $scheduledTime');
+      final scheduledDate = Timestamp.fromDate(selectedDate);
+     print('haiiiii');
+      print('CLASS: $_class');
+      
       final String classSection=_class.toString()+"-"+Section.toString();
        var now = new DateTime.now();
     var formatter = new DateFormat('yyyy-MM-dd');
-    String formattedDate = formatter.format(now);
+    String formattedDate=" ";
+    formattedDate = formatter.format(now);
     //print(formattedDate);
-
+//Timestamp myTimeStamp = Timestamp.fromDate(scheduledDate); 
       FirebaseFirestore.instance
           .collection('Announcements')
           .doc(classSection)
@@ -294,6 +316,7 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
                             style: TextStyle(fontSize: 18),
                           ),
                           TextFormField(
+                            validator: _validateTitle,
                             controller: titleController,
                             decoration: InputDecoration(
                               filled: true,
@@ -319,6 +342,7 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
                             style: TextStyle(fontSize: 18),
                           ),
                           TextFormField(
+                            validator: _validateDescription,
                             maxLength: 200,
                             controller: descriptionController,
                             maxLines: 3,
@@ -346,6 +370,7 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
                             style: TextStyle(fontSize: 18),
                           ),
                           TextFormField(
+                            validator: _validateDate,
                             readOnly: true,
                             controller: TextEditingController(
                               text: DateFormat('yyyy-MM-dd').format(
@@ -381,6 +406,7 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
                             style: TextStyle(fontSize: 18),
                           ),
                           TextFormField(
+                            validator: _validateTime,
                             readOnly: true,
                             controller: TextEditingController(
                               text: selectedTime.format(context),
@@ -431,7 +457,8 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
                         ),
                       ),
                     ),
-                  //  Text(DateFormat.yMd().add_jm().format(selectedDate))
+                   // Text()
+                    // Text(DateFormat.yMd().add_jm().format(selectedDate))
                   ],
                 ),
               ),

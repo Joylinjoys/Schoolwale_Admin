@@ -166,6 +166,12 @@ class _UploadNotesState extends State<UploadNotes> {
                                           child: Text(value),
                                         );
                                       }).toList(),
+                                    validator: (value) {
+                                      if (value == null) {
+                                        return 'please select a class';
+                                      }
+                                      return null;
+                                    },  
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(),
                                     contentPadding: EdgeInsets.symmetric(
@@ -216,6 +222,12 @@ class _UploadNotesState extends State<UploadNotes> {
                                           child: Text(value),
                                         );
                                       }).toList(),
+                                      validator: (value) {
+                                      if (value == null) {
+                                        return 'please select a section';
+                                      }
+                                      return null;
+                                    },
                                   decoration: InputDecoration(
                                     border: OutlineInputBorder(),
                                     contentPadding: EdgeInsets.symmetric(
@@ -266,6 +278,12 @@ class _UploadNotesState extends State<UploadNotes> {
                                 child: Text('Social'),
                               ),
                             ],
+                            validator: (value) {
+                                      if (value == null) {
+                                        return 'please select a subject';
+                                      }
+                                      return null;
+                                    },
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
                               contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
@@ -314,6 +332,12 @@ class _UploadNotesState extends State<UploadNotes> {
                                 child: Text('Unit 5'),
                               ),
                             ],
+                            validator: (value) {
+                                      if (value == null) {
+                                        return 'please select a unit';
+                                      }
+                                      return null;
+                                    },
                             decoration: InputDecoration(
                               border: OutlineInputBorder(),
                               contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),

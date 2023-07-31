@@ -49,7 +49,63 @@ class _AddStudentState extends State<AddStudent> {
     _motherNameController.clear();
     _bloodGroupController.clear();
   }
+String? _validateName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a name';
+    }
+    return null;
+  }
 
+  String? _validateAddress(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter Address';
+    }
+    return null;
+  }
+
+  String? _validateBloodGroup(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a blood group';
+    }
+    return null;
+  }
+   String? _validateDOB(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter a DOB';
+    }
+    return null;
+  }
+  String? _validateFatherName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter father name';
+    }
+    return null;
+  }
+  String? _validateMotherName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter mother name';
+    }
+    return null;
+  }
+  String? _validateSchoolName(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter school name';
+    }
+    return null;
+  }
+  String? _validateRegNo(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter register no';
+    }
+    return null;
+  }
+   String? _validatePhone(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter phone no';
+    }
+    return null;
+  }
+  
   void submitForm() {
     if (_formKey.currentState?.validate() ?? false) {
       // Form is valid, perform form submission
@@ -142,6 +198,7 @@ class _AddStudentState extends State<AddStudent> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         StudentInput(
+                           validator: _validateRegNo,
                           controller: _registerNumberController,
                           textContent: "Enter Register No",
                           label: "Register No",
@@ -149,6 +206,7 @@ class _AddStudentState extends State<AddStudent> {
                         ),
                         SizedBox(width: 30),
                         StudentInput(
+                          validator: _validateName,
                           controller: _studentNameController,
                           textContent: "Enter Name",
                           label: "Name",
@@ -157,12 +215,7 @@ class _AddStudentState extends State<AddStudent> {
                         SizedBox(
                           width: 30,
                         ),
-                        StudentInput(
-                          controller: _schoolNameController,
-                          textContent: "Enter School Name",
-                          label: " School Name",
-                          hint: "enter school name here",
-                        ),
+                        
                       ],
                     ),
                     SizedBox(
@@ -251,6 +304,12 @@ class _AddStudentState extends State<AddStudent> {
                                                   child: Text(value),
                                                 );
                                               }).toList(),
+                                              validator: (value) {
+                                      if (value == null) {
+                                        return 'please select a class';
+                                      }
+                                      return null;
+                                    },
                                               decoration: InputDecoration(
                                                 border: OutlineInputBorder(),
                                                 contentPadding:
@@ -345,6 +404,12 @@ class _AddStudentState extends State<AddStudent> {
                                                   child: Text(value),
                                                 );
                                               }).toList(),
+                                              validator: (value) {
+                                      if (value == null) {
+                                        return 'please select a section';
+                                      }
+                                      return null;
+                                    },
                                               decoration: InputDecoration(
                                                 border: OutlineInputBorder(),
                                                 contentPadding:
@@ -420,6 +485,7 @@ class _AddStudentState extends State<AddStudent> {
                         Flexible(
                           flex: 1,
                           child: StudentInput(
+                            validator: _validatePhone,
                             controller: _phoneNumberController,
                             textContent: "Enter Phone Number",
                             label: " Phone Number",
@@ -433,6 +499,7 @@ class _AddStudentState extends State<AddStudent> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         StudentInput(
+                          validator: _validateAddress,
                           controller: _addressController,
                           textContent: "Enter Address",
                           label: "Address",
@@ -440,6 +507,7 @@ class _AddStudentState extends State<AddStudent> {
                         ),
                         SizedBox(width: 30),
                         StudentInput(
+                          validator: _validateFatherName,
                           controller: _fatherNameController,
                           textContent: "Enter Father Name",
                           label: "Father Name",
@@ -449,6 +517,7 @@ class _AddStudentState extends State<AddStudent> {
                           width: 30,
                         ),
                         StudentInput(
+                          validator: _validateMotherName,
                           controller: _motherNameController,
                           textContent: "Enter Mother Name",
                           label: "Mother Name",
@@ -463,6 +532,7 @@ class _AddStudentState extends State<AddStudent> {
                         Flexible(
                           flex: 1,
                           child: StudentInput(
+                            validator: _validateDOB,
                             textContent: "Enter Date Of Birth",
                             label: "DOB",
                             hint: "DD | MM | YYYY",
@@ -568,6 +638,7 @@ class _AddStudentState extends State<AddStudent> {
                         Flexible(
                           flex: 1,
                           child: StudentInput(
+                            validator: _validateBloodGroup,
                             controller: _bloodGroupController,
                             textContent: "Enter Blood Group",
                             label: "Blood Group",
