@@ -44,7 +44,12 @@ dependencies:
   cool_alert: ^2.0.1
   file_picker: ^5.3.0
   path: ^1.8.2
+<<<<<<< HEAD
   image_network: ^2.5.1
+=======
+  url_launcher: ^6.1.12
+
+>>>>>>> 249cfcf5b8a6f7547bd387855c0fc406246dd868
 
 dev_dependencies:
   flutter_test:

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'addEvents.dart';
@@ -32,7 +33,17 @@ class _EventsPageState extends State<EventsPage> {
           }
 
           eventList = snapshot.data!.docs.map((doc) {
-            return doc.data() as Map<String, dynamic>;
+            Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+            if (data['eventDate'] != null) {
+              if (kIsWeb) {
+                // For web, directly use Timestamp
+                data['eventDate'] = data['eventDate'];
+              } else {
+                // For mobile, convert Timestamp to DateTime
+                data['eventDate'] = (data['eventDate'] as Timestamp).toDate();
+              }
+            }
+            return data;
           }).toList();
 
           return Padding(
@@ -104,7 +115,11 @@ class _EventsPageState extends State<EventsPage> {
                               Text(event['eventName'] ?? ''),
                             ),
                             DataCell(
-                              Text(event['eventDate']?.toDate().toString() ?? ''),
+                              Text(
+                                event['eventDate'] != null
+                                    ? event['eventDate'].toDate().toString()
+                                    : 'N/A',
+                              ),
                             ),
                             DataCell(
                               Text(event['description'] ?? ''),
