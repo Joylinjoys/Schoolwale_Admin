@@ -40,7 +40,7 @@ class _EventsPageState extends State<EventsPage> {
                 data['eventDate'] = data['eventDate'];
               } else {
                 // For mobile, convert Timestamp to DateTime
-                data['eventDate'] = data['eventDate'].toDate();
+                data['eventDate'] = (data['eventDate'] as Timestamp).toDate();
               }
             }
             return data;
