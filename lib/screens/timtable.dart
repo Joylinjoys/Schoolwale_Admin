@@ -75,11 +75,11 @@ class TimetableScreen extends StatelessWidget {
                     final data = documents[index].data() as Map<String, dynamic>;
                     final className = documents[index].id;
                     final section = data['section'];
-                    final imageUrl = data['imageUrl'];
+                    final imageUrl = data[className.substring(2)]['imageUrl'];
 
                     return TimetableCard(
                       image: imageUrl,
-                      text: '$className - Section $section',
+                      text: '$className',
                       onDelete: () => _deleteTimetable(className),
                       onAddImage: () => _updateTimetableImage(className),
                     );
@@ -126,7 +126,9 @@ class TimetableCard extends StatelessWidget {
       child: Card(
         child: Column(
           children: [
-            if (image != null) // Only show the image if it's not null
+          
+            if (image != null)
+             // Only show the image if it's not null
               Image.network(
                 image!,
                 height: 200.0,

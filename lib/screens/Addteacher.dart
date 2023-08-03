@@ -236,6 +236,7 @@ class _AddTeacherPageState extends State<AddTeacherPage> {
                         SizedBox(
                           width: 250,
                           child: Row(
+                          
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               SizedBox(

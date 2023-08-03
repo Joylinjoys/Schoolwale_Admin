@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:cloud_firestore/cloud_firestore.dart';
-
+import 'package:cool_alert/cool_alert.dart';
 class AddTimetable extends StatefulWidget {
   const AddTimetable({Key? key}) : super(key: key);
 
@@ -77,6 +77,12 @@ class _AddTimetableState extends State<AddTimetable> {
           _image = null;
           _platformFile = null;
         });
+        CoolAlert.show(
+            context: context,
+            type: CoolAlertType.success,
+            text: "Time table added successfully.",
+            width: MediaQuery.of(context).size.width / 5,
+          );
       }
     }
   }

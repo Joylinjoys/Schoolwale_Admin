@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/foundation.dart';
@@ -61,6 +62,12 @@ class _UploadNotesState extends State<UploadNotes> {
         setState(() {
           _platformFile = null;
         });
+        CoolAlert.show(
+          context: context,
+          type: CoolAlertType.success,
+          text: "Notes uploaded successfully!",
+          width: MediaQuery.of(context).size.width / 5,
+        );
       }
     }
   }
