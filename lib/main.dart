@@ -20,7 +20,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: NavigationScreen(),
+      //home: Text("get lost",style: TextStyle(color: Colors.green),),
+     home: NavigationScreen(),
     );
   }
 }
