@@ -98,9 +98,20 @@ class TimetableScreen extends StatelessWidget {
     );
   }
 
-  void _deleteTimetable(String className) {
-    // Add your delete logic here
-    print('Delete timetable for class: $className');
+  void _deleteTimetable(String className) async {
+    try {
+      // Access the 'Timetable' collection in Firestore
+      final timetableCollection = FirebaseFirestore.instance.collection('Timetable');
+
+      // Delete the document with the given class name
+      await timetableCollection.doc(className).delete();
+
+      // Print a success message
+      print('Deleted timetable for class: $className');
+    } catch (e) {
+      // Handle any errors that might occur during the delete process
+      print('Error deleting timetable for class: $className, Error: $e');
+    }
   }
 
   void _updateTimetableImage(String className) {
