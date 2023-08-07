@@ -1,24 +1,15 @@
 import 'dart:async';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 //import 'package:web_dashboard_app_tut/screens/AnnouncementList.dart';
-
 import '../Models/class_and_section.dart';
-
 class AddAnnouncementPage extends StatefulWidget {
-  
-  const AddAnnouncementPage({Key? key}) : super(key: key);
-
-  @override
+const AddAnnouncementPage({Key? key}) : super(key: key);
+ @override
   _AddAnnouncementPageState createState() => _AddAnnouncementPageState();
 }
-
- 
-
- 
 class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
   final _formKey = GlobalKey<FormState>();
   TextEditingController idController = TextEditingController();
@@ -26,9 +17,7 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
   TextEditingController descriptionController = TextEditingController();
   String? selectedClass;
   String? selectedSection;
-
   String? selectedClassSection;
-
   DateTime selectedDate = DateTime.now();
   TimeOfDay selectedTime = TimeOfDay.now();
  String? _validateTitle(String? value) {
@@ -109,11 +98,11 @@ class _AddAnnouncementPageState extends State<AddAnnouncementPage> {
    void _clearText() {
     idController.clear();
     titleController.clear();
-    descriptionController.clear();
-  
+    descriptionController.clear(); 
   //  selectedClass.
   //  _marksObtainedController.clear();
   }
+  
  void _submitForm() {
      if (_formKey.currentState!.validate()) {
       // Form is valid, perform form submission
