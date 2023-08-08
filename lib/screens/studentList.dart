@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:web_dashboard_app_tut/screens/virtualID.dart';
 import 'package:web_dashboard_app_tut/services/student_service.dart';
 import '../Models/class_and_section.dart';
 import '../Models/student_class.dart';
@@ -101,12 +102,12 @@ class _StudentListTableState extends State<StudentListTable> {
         if (snapshot.hasError ||
             snapshot.connectionState == ConnectionState.waiting) {
           print(snapshot.error);
-          return Center(
-            child: CircularProgressIndicator(
-              backgroundColor: Colors.red,
-              strokeWidth: 6,
-            ),
-          );
+          // return Center(
+          //   child: CircularProgressIndicator(
+          //     backgroundColor: Colors.red,
+          //     strokeWidth: 6,
+          //   ),
+          // );
         }
         final documents = snapshot.data ?? [];
 
@@ -384,7 +385,14 @@ class _StudentListTableState extends State<StudentListTable> {
                                   primary: Colors
                                       .deepPurple, // Set button color to purple
                                 ),
-                                onPressed: () {},
+                                onPressed: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                        const VirtualId()),
+                                  );
+                                },
                               ),
                             )),
                             DataCell(Flexible(
