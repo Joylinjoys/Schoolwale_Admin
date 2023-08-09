@@ -357,7 +357,7 @@ class _StudentListTableState extends State<StudentListTable> {
                             ),
                             DataCell(
                               Flexible(
-                                child: Text(student.className as String ?? ''),
+                                child: Text(student.sectionName as String ?? ''),
                               ),
                             ),
                             DataCell(Flexible(
@@ -442,6 +442,7 @@ class _StudentListTableState extends State<StudentListTable> {
         );
       },
     ));
-    ;
+    
   }
+  
 }
