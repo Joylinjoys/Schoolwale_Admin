@@ -1,354 +1,260 @@
+import 'dart:io';
 
-import 'dart:async';
-
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cool_alert/cool_alert.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:web_dashboard_app_tut/Models/class_and_section.dart';
-import 'package:web_dashboard_app_tut/screens/Result.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class VirtualId extends StatefulWidget {
-   const VirtualId({super.key});
+  const VirtualId({Key? key}) : super(key: key);
 
   @override
-   State<VirtualId> createState() => _VirtualIdState();
- }
+  _VirtualIdState createState() => _VirtualIdState();
+}
 
- class _VirtualIdState extends State<VirtualId> {
-   final ImagePicker _picker = ImagePicker();
+class _VirtualIdState extends State<VirtualId> {
+  File? _image;
+  PlatformFile? _platformFile;
+  final _formKey = GlobalKey<FormState>();
 
-   //File? _image;
-   String? selectedClass;
-   String? selectedSection;
-   String? selectedRollNo;
-   String? selectedClassSection;
+  TextEditingController _selectClassController = TextEditingController();
+  TextEditingController _selectSectionController = TextEditingController();
+  TextEditingController _selectRollNoController = TextEditingController();
 
-   final sectionStream = StreamController<List<String>>();
-   bool ischange = false;
-   final _formKey = GlobalKey<FormState>();
+  String? _validateImage(PlatformFile? file) {
+    if (file == null) {
+      return 'Please select an image';
+    }
+    return null;
+  }
 
-   get textFieldWidth => null;
+  Future<void> _submitForm() async {
+    if (_formKey.currentState!.validate()) {
+      // Form validation passed, handle form submission
+      if (_platformFile != null) {
+        // Generate a unique filename
+        String fileName = DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
+        firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child(fileName);
 
-   Future<void> _submitForm() async {
-     if (_formKey.currentState!.validate()) {
-       // Form is valid, navigate to the next page
-       Navigator.push(
-         context,
-         MaterialPageRoute(
-             builder: (context) =>
-                 ResultPage(
-                   regNo: selectedRollNo.toString(),
-                 )),
-       );
-     }
-   }
+        if (kIsWeb) {
+          // Upload the file data
+          await ref.putData(_platformFile!.bytes!);
+        } else {
+          // Upload the file
+          await ref.putFile(File(_platformFile!.path!));
+        }
 
-   @override
-   Widget build(BuildContext context) {
-     return Scaffold(
-       appBar: AppBar(
-         centerTitle: true,
-         title: Text(
-           'View Virtual ID',
-           style: TextStyle(
-             fontSize: 29,
-             fontWeight: FontWeight.bold,
-           ),
-         ),
-         backgroundColor: Colors.deepPurple.shade400,
-       ),
-       body: SingleChildScrollView(
-         child: Center(
-           child: Padding(
-             padding: const EdgeInsets.all(16.0),
-             child: Form(
-               key: _formKey,
-               child: Container(
-                 alignment: Alignment.topCenter,
-                 child: Container(
-                   width: 500,
-                   child: Column(
-                     crossAxisAlignment: CrossAxisAlignment.start,
-                     children: [
-                       Center(
-                         child: Text(
-                           'Enter Student Virtual ID',
-                           style: TextStyle(
-                               fontSize: 24, fontWeight: FontWeight.bold),
-                         ),
-                       ),
-                       SizedBox(height: 16),
-                       Row(
-                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                         children: [
-                           Text(
-                             'Select Class:',
-                             style: TextStyle(
-                                 fontSize: 18, fontWeight: FontWeight.bold),
-                           ),
-                           SizedBox(width: 8),
-                           Container(
-                             width: 250,
-                             child: StreamBuilder(
-                                 stream: FirebaseFirestore.instance
-                                     .collection("ClassSections")
-                                     .snapshots(),
-                                 builder: (BuildContext context,
-                                     AsyncSnapshot<dynamic> snapshot) {
-                                   if (snapshot.hasError ||
-                                       snapshot.connectionState ==
-                                           ConnectionState.waiting) {
-                                     return Text("Loading");
-                                   }
+        // Get the download URL of the uploaded image
+        String downloadUrl = await ref.getDownloadURL();
 
-                                   // final classData = snapshot.data ?? [];
-                                   final List<String> classData = [];
-                                   final documents = snapshot.data!.docs.map((
-                                       e) {
-                                     classData.add(e.id);
-                                     return e.data();
-                                   });
+        // Store the virtual ID details in Firestore
+        await FirebaseFirestore.instance.collection('Students').doc(_selectRollNoController.text).set({
+          'class': _selectClassController.text,
+          'section': _selectSectionController.text,
+          'rollNo': _selectRollNoController.text,
+          'virtualIdUrl': downloadUrl,
+        });
 
-                                   final List<Sections> sectionList = [];
+        // Show the CoolAlert after successful submission
+        CoolAlert.show(
+          context: context,
+          type: CoolAlertType.success,
+          text: "Virtual ID details submitted successfully!",
+          width: MediaQuery.of(context).size.width / 5,
+        );
 
-                                   for (var val in documents) {
-                                     final object = Sections.fromJson(val);
+        // Reset the form and clear the file
+        _formKey.currentState!.reset();
+        setState(() {
+          _platformFile = null;
+        });
+      }
+    }
+  }
 
-                                     sectionList.add(object);
-                                   }
+  Future<void> _selectImage() async {
+    if (kIsWeb) {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
+      if (result != null && result.files.isNotEmpty) {
+        setState(() {
+          _platformFile = result.files.first;
+        });
+      }
+    } else {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(type: FileType.image);
+      if (result != null && result.files.isNotEmpty) {
+        setState(() {
+          _platformFile = result.files.first;
+        });
+      }
+    }
+  }
 
-                                   return DropdownButtonFormField<String>(
-                                     value: selectedClass,
-                                     onChanged: (newValue) {
-                                       setState(() {
-                                         //sectionStream.add([]);
-                                         selectedClass = newValue;
-                                         List<String> section = sectionList[
-                                         (int.parse(selectedClass!)) - 1]
-                                             .sections
-                                             .cast<String>()
-                                             .toList();
+  @override
+  void dispose() {
+    _selectClassController.dispose();
+    _selectSectionController.dispose();
+    _selectRollNoController.dispose();
+    super.dispose();
+  }
 
-                                         sectionStream.add(section);
-                                         ischange = true;
-                                       });
-                                     },
-                                     //items=classData
-                                     items: classData
-                                         .map<DropdownMenuItem<String>>(
-                                             (String value) {
-                                           return DropdownMenuItem<String>(
-                                             value: value,
-                                             child: Text(value),
-                                           );
-                                         }).toList(),
-                                     validator: (value) {
-                                       if (value == null) {
-                                         return 'please select a class';
-                                       }
-                                       return null;
-                                     },
-                                     decoration: InputDecoration(
-                                       border: OutlineInputBorder(),
-                                       contentPadding: EdgeInsets.symmetric(
-                                           vertical: 8, horizontal: 4),
-                                     ),
-                                   );
-                                 }),
-                           ),
-                         ],
-                       ),
-                       SizedBox(height: 16),
-                       Row(
-                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                         children: [
-                           Text(
-                             'Select Section:',
-                             style: TextStyle(
-                                 fontSize: 18, fontWeight: FontWeight.bold),
-                           ),
-                           SizedBox(width: 8),
-                           Container(
-                             width: 250,
-                             child: StreamBuilder(
-                                 stream: sectionStream.stream,
-                                 builder: (BuildContext context,
-                                     AsyncSnapshot<List<String>> snapshot) {
-                                   if (snapshot.connectionState ==
-                                       ConnectionState.waiting) {
-                                     return Text('Loading...');
-                                   }
-
-                                   final sections = snapshot.data ?? [];
-
-                                   return DropdownButtonFormField<String>(
-                                     value: selectedSection,
-                                     onChanged: (newValue) {
-                                       setState(() {
-                                         selectedSection = newValue;
-                                         selectedClassSection = selectedClass! +
-                                             " " +
-                                             selectedSection!;
-                                       });
-                                     },
-                                     items: sections.map<
-                                         DropdownMenuItem<String>>(
-                                             (String value) {
-                                           return DropdownMenuItem<String>(
-                                             value: value,
-                                             child: Text(value),
-                                           );
-                                         }).toList(),
-                                     validator: (value) {
-                                       if (value == null) {
-                                         return 'please select a section';
-                                       }
-                                       return null;
-                                     },
-                                     decoration: InputDecoration(
-                                       border: OutlineInputBorder(),
-                                       contentPadding: EdgeInsets.symmetric(
-                                           vertical: 8, horizontal: 4),
-                                     ),
-                                   );
-                                 }),
-                           ),
-                         ],
-                       ),
-                       SizedBox(height: 16),
-                       // Row(
-                       //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                       //   children: [
-                       //     Text(
-                       //       'Select Roll No:',
-                       //       style: TextStyle(
-                       //           fontSize: 18, fontWeight: FontWeight.bold),
-                       //     ),
-                       //     SizedBox(width: 8),
-                       //     Container(
-                       //       width: 250,
-                       //       child: StreamBuilder(
-                       //           stream: FirebaseFirestore.instance
-                       //               .collection("Students")
-                       //               .where('Class', isEqualTo: selectedClass)
-                       //               .where(
-                       //               'Section', isEqualTo: selectedSection)
-                       //               .snapshots(),
-                       //           builder: (BuildContext context,
-                       //               AsyncSnapshot<dynamic> snapshot) {
-                       //             if (snapshot.hasError ||
-                       //                 snapshot.connectionState ==
-                       //                     ConnectionState.waiting) {
-                       //               return Text("Loading");
-                       //             }
-                       //             List<String> lss = [];
-                       //             final documents = snapshot.data!.docs.map((
-                       //                 e) {
-                       //               lss.add(e.id.toString());
-                       //               return e.data();
-                       //             });
-                       //             //dont remove below line
-                       //             documents.toString();
-                       //             //print(lss);
-                       //
-                       //             return DropdownButtonFormField<String>(
-                       //               value: selectedRollNo,
-                       //               onChanged: (newValue) {
-                       //                 setState(() {
-                       //                   selectedRollNo = newValue;
-                       //                 });
-                       //               },
-                       //               items: lss.map<DropdownMenuItem<String>>(
-                       //                       (String value) {
-                       //                     return DropdownMenuItem<String>(
-                       //                       value: value,
-                       //                       child: Text(value),
-                       //                     );
-                       //                   }).toList(),
-                       //               validator: (value) {
-                       //                 if (value == null) {
-                       //                   return 'please select a roll number';
-                       //                 }
-                       //                 return null;
-                       //               },
-                       //               decoration: InputDecoration(
-                       //                 border: OutlineInputBorder(),
-                       //                 contentPadding: EdgeInsets.symmetric(
-                       //                     vertical: 8, horizontal: 4),
-                       //               ),
-                       //             );
-                       //           }),
-                       //     ),
-                       //   ],
-                       // ),
-
-
-                       SizedBox(height: 40),
-
-                       // Container(
-                       //   width: textFieldWidth,
-                       //   // height:200,
-                       //   child: Row(
-                       //     mainAxisAlignment: MainAxisAlignment.center,
-                       //     children: [
-                       //       Flexible(
-                       //         child: _image == null
-                       //             ? Text('No image selected.')
-                       //             : Image.file(_image!),
-                       //       ),
-                       //       SizedBox(width: 10),
-                       //       SizedBox(
-                       //         width: 150,
-                       //         height: 47,
-                       //         child: ElevatedButton(
-                       //           child: Text('Upload Image'),
-                       //           style: ElevatedButton.styleFrom(
-                       //             primary: Colors
-                       //                 .deepPurple, // Set button color to purple
-                       //           ),
-                       //           onPressed: () async {
-                       //             final image = await _picker.pickImage(
-                       //                 source: ImageSource.gallery);
-                       //             setState(() {
-                       //               _image = image as File?;
-                       //             });
-                       //           },
-                       //         ),
-                       //       ),
-                       //     ],
-                       //   ),
-                       //
-                       // ),
-                       SizedBox(
-                         height: 50,
-                       ),
-                          Center(
-                         child: ElevatedButton(
-                           onPressed: _submitForm,
-                           style: ElevatedButton.styleFrom(
-                             primary: Colors.deepPurple,
-                             minimumSize: Size(200, 50),
-                           ),
-                           child: Text(
-                             'Add',
-                             style: TextStyle(
-                               fontSize: 18,
-                               fontWeight: FontWeight.bold,
-                             ),
-                           ),
-                         ),
-                       ),
-
-
-                     ],
-                   ),
-                 ),
-               ),
-             ),
-           ),
-         ),
-       ),
-     );
-   }
- }
-// class DATA {}
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          'Virtual ID Details',
+          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: Colors.deepPurple.shade400,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: SingleChildScrollView(
+          child: Center(
+            child: Container(
+              width: 700,
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 20),
+                    Text(
+                      'Virtual ID Details',
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Select Class',
+                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(width: 50),
+                        SizedBox(
+                          width: 250,
+                          child: TextFormField(
+                            controller: _selectClassController,
+                            decoration: InputDecoration(
+                              labelText: "Select Class",
+                              hintText: "Enter Class",
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Select Section',
+                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(width: 50),
+                        SizedBox(
+                          width: 250,
+                          child: TextFormField(
+                            controller: _selectSectionController,
+                            decoration: InputDecoration(
+                              labelText: "Select Section",
+                              hintText: "Enter Section",
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Select Roll No',
+                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(width: 50),
+                        SizedBox(
+                          width: 250,
+                          child: TextFormField(
+                            controller: _selectRollNoController,
+                            decoration: InputDecoration(
+                              labelText: "Select Roll No",
+                              hintText: "Enter Roll No",
+                              border: OutlineInputBorder(),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          'Upload Image',
+                          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(width: 50),
+                        SizedBox(
+                          width: 250,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 90,
+                                width: 90,
+                                child: _platformFile == null
+                                    ? Text('No image selected.')
+                                    : Text(_platformFile?.name ?? 'No name'),
+                              ),
+                              SizedBox(width: 10),
+                              SizedBox(
+                                width: 150,
+                                height: 47,
+                                child: ElevatedButton(
+                                  child: Text('Select Image'),
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.deepPurple,
+                                  ),
+                                  onPressed: _selectImage,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 20),
+                    Center(
+                      child: ElevatedButton(
+                        onPressed: _submitForm,
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.deepPurple,
+                          minimumSize: Size(200, 50),
+                        ),
+                        child: Text(
+                          'Submit',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
