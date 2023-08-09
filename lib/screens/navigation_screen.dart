@@ -106,7 +106,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                           NavigationRailDestination(
                             icon: Tooltip(
                               message: 'Virtual ID',
-                              child: Icon(Icons.perm_identity_sharp),
+                              child: Icon(Icons.person_pin_outlined),
                             ),
                             label: Text('Virtual ID'),
                           ),

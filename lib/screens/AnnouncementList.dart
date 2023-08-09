@@ -1,46 +1,40 @@
-import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:intl/intl.dart';
-import '../Models/annoncement.dart';
+import 'package:flutter/material.dart';
 import 'AddAnnouncement.dart';
 
-class AnnouncementsPage extends StatefulWidget {
+class AnnouncementsPage extends StatelessWidget {
   const AnnouncementsPage({Key? key}) : super(key: key);
 
-  @override
-  State<AnnouncementsPage> createState() => _AnnouncementsPageState();
-}
-
-class _AnnouncementsPageState extends State<AnnouncementsPage> {
+  Future<void> deleteAnnouncement(String docId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('Announcements')
+          .doc(docId)
+          .delete();
+    } catch (e) {
+      print('Error deleting announcement: $e');
+    }
+  }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          'Announcements',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.deepPurple.shade400,
-      ),
-      body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection("Announcements").snapshots(),
-        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-          if (snapshot.hasError || snapshot.connectionState == ConnectionState.waiting) {
-            return Text("Loading");
-          }
-          final documents = snapshot.data!.docs.map((e) {
-            return e.data();
-          });
-
-          final List<AnnouncementInfo> announcementList = [];
-
-          for (var val in documents) {
-            final object = AnnouncementInfo.fromJson(val);
-            announcementList.add(object);
-          }
-
-          return Center(
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection('Announcements').snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        if (snapshot.hasError ||
+            snapshot.connectionState == ConnectionState.waiting) {
+          return Text("Loading");
+        }
+        List<DocumentSnapshot> announcements = snapshot.data!.docs;
+        return Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text(
+              'Announcements',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            backgroundColor: Colors.deepPurple.shade400,
+          ),
+          body: Center(
             child: Padding(
               padding: const EdgeInsets.all(40.0),
               child: Column(
@@ -59,8 +53,8 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                           label: Text(
                             'Title',
                             style: TextStyle(
-                              fontSize: 24,
                               fontWeight: FontWeight.bold,
+                              fontSize: 18, // You can adjust the font size here
                             ),
                           ),
                         ),
@@ -68,8 +62,8 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                           label: Text(
                             'Date & Time',
                             style: TextStyle(
-                              fontSize: 24,
                               fontWeight: FontWeight.bold,
+                              fontSize: 18, // You can adjust the font size here
                             ),
                           ),
                         ),
@@ -77,81 +71,80 @@ class _AnnouncementsPageState extends State<AnnouncementsPage> {
                           label: Text(
                             'Delete',
                             style: TextStyle(
-                              fontSize: 24,
                               fontWeight: FontWeight.bold,
+                              fontSize: 18, // You can adjust the font size here
                             ),
                           ),
                         ),
                       ],
-                      rows: announcementList.map((announcement) {
+                      rows: announcements.asMap().entries.map((entry) {
+                        int rowIndex = entry.key;
+                        DocumentSnapshot announcement = entry.value;
+
                         return DataRow(
-                          cells: [
-                            DataCell(
-                              Text(announcement.name as String ?? ''),
-                            ),
-                            DataCell(
-                              Text(DateFormat.yMd().add_jm().format((announcement.date as Timestamp).toDate()) ?? ''),
-                            ),
-                            DataCell(
-                              ElevatedButton(
-                                child: Text('Delete'),
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.deepPurple,
-                                ),
-                                onPressed: () async {
-                                  showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        title: Text('Confirmation'),
-                                        content: Text('Are you sure you want to delete?'),
-                                        actions: [
-                                          TextButton(
-                                            onPressed: () async {
-                                              // Perform delete operation
-                                              await FirebaseFirestore.instance
-                                                  .collection('Announcements')
-                                                  .doc(announcement.id) // Use the correct document ID
-                                                  .delete();
-                                              Navigator.of(context).pop(); // Close the dialog
-                                            },
-                                            child: Text('Yes'),
-                                          ),
-                                          TextButton(
-                                            onPressed: () {
-                                              Navigator.of(context).pop(); // Close the dialog
-                                            },
-                                            child: Text('No'),
-                                          ),
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
+                            cells: [
+                        DataCell(Text(announcement['AnnName'] ?? '')),
+                        DataCell(Text(announcement['scheduledDate']?.toDate().toString() ?? '')),
+                        DataCell(
+                        ElevatedButton(
+                        child: Text('Delete'),
+                        style: ElevatedButton.styleFrom(
+                        primary: Colors.deepPurple,
+                        ),
+                        onPressed: () {
+                        showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                        return AlertDialog(
+                        title: Text('Confirmation'),
+                        content: Text(
+                        'Are you sure you want to delete?'),
+                        actions: [
+                        TextButton(
+                        onPressed: () async {
+                        await deleteAnnouncement(
+                        announcement.id);
+                        Navigator.of(context).pop();
+                        },
+                        child: Text('Delete'),
+                        ),
+                        TextButton(
+                        onPressed: () {
+                        Navigator.of(context).pop();
+                        },
+                        child: Text('CANCEL'),
+                        ),
+                        ],
                         );
-                      }).toList(),
+                        },
+                        );
+                        },
+                        ),
+                        ),
+                        ],
+                        );
+                        }).toList(),
                     ),
                   ),
                 ],
               ),
             ),
-          );
-        },
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => AddAnnouncementPage()),
-          );
-        },
-        child: Text('ADD'),
-        backgroundColor: Colors.deepPurple.shade400,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+          ),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddAnnouncementPage()),
+
+              );
+            },
+            child: Text('ADD'),
+            backgroundColor: Colors.deepPurple.shade400,
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        );
+      },
     );
   }
+
 }

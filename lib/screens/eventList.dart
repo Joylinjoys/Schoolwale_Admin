@@ -48,10 +48,42 @@ class EventsPage extends StatelessWidget {
                     child: DataTable(
                       columnSpacing: 100.0,
                       columns: [
-                        DataColumn(label: Text('Event Name')),
-                        DataColumn(label: Text('Date')),
-                        DataColumn(label: Text('Description')),
-                        DataColumn(label: Text('Delete')),
+                        DataColumn(
+                          label: Text(
+                            'Event Name',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18, // You can adjust the font size here
+                            ),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            'Date',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18, // You can adjust the font size here
+                            ),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            'Description',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18, // You can adjust the font size here
+                            ),
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            'Delete',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18, // You can adjust the font size here
+                            ),
+                          ),
+                        ),
                       ],
                       rows: events.asMap().entries.map((entry) {
                         int rowIndex = entry.key;
