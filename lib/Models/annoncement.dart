@@ -13,4 +13,6 @@ class AnnouncementInfo {
         //  description: json['description'] as String,
           date: json['scheduledDate'] ,
         );
+
+  String? get id => null;
 }

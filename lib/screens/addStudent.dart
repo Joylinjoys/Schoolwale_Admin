@@ -19,6 +19,7 @@ class AddStudent extends StatefulWidget {
 class _AddStudentState extends State<AddStudent> {
   final ImagePicker _picker = ImagePicker();
   File? _image;
+
   String? selectedClass;
   String? selectedSection;
   String? selectedRollNo;
@@ -49,7 +50,23 @@ class _AddStudentState extends State<AddStudent> {
     _motherNameController.clear();
     _bloodGroupController.clear();
   }
-String? _validateName(String? value) {
+  Future<void> _uploadStudentImage(File imageFile, String regNo) async {
+    if (imageFile != null) {
+      String fileName = 'student_${regNo}_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child(fileName);
+
+      await ref.putFile(imageFile);
+
+      String downloadUrl = await ref.getDownloadURL();
+
+      await FirebaseFirestore.instance.collection('Students').doc(regNo).update({
+        'ImageURL': downloadUrl,
+      });
+    }
+  }
+
+
+  String? _validateName(String? value) {
     if (value == null || value.isEmpty) {
       return 'Please enter a name';
     }
@@ -105,8 +122,8 @@ String? _validateName(String? value) {
     }
     return null;
   }
-  
-  void submitForm() {
+
+  void submitForm() async {
     if (_formKey.currentState?.validate() ?? false) {
       // Form is valid, perform form submission
       final _regno = _registerNumberController.text;
@@ -131,35 +148,42 @@ String? _validateName(String? value) {
       print(selectedGender);
       print(selectedBool);
 
+      // Upload image if selected
+      if (_image != null) {
+        await _uploadStudentImage(_image!, _regno);
+      }
+
+      // Store student details in Firestore
       FirebaseFirestore.instance
           .collection('Students')
           .doc(_regno)
           .set(
-            {
-              'Register No': int.parse(_regno),
-              'Full Name': _studentName,
-              'School Name': _schoolName,
-              'Addess': _address,
-              'Registered_number': _phoneNO,
-              'Fathers Name': _fatherName,
-              'Mothers Name': _motherName,
-              'Blood Group': _bloodGroup,
-              'Class': selectedClass,
-              'Section': selectedSection,
-              'Gender': selectedGender,
-              'isStudent': selectedBool,
-            },
-            SetOptions(merge: true),
-          )
+        {
+          'Register No': int.parse(_regno),
+          'Full Name': _studentName,
+          'School Name': _schoolName,
+          'Address': _address,
+          'Registered_number': _phoneNO,
+          'Fathers Name': _fatherName,
+          'Mothers Name': _motherName,
+          'Blood Group': _bloodGroup,
+          'Class': selectedClass,
+          'Section': selectedSection,
+          'Gender': selectedGender,
+          'isStudent': selectedBool,
+        },
+        SetOptions(merge: true),
+      )
           .then((value) => CoolAlert.show(
-                context: context,
-                type: CoolAlertType.success,
-                text: "Inserted Successfuly...",
-                width: MediaQuery.of(context).size.width / 5,
-              ))
-          .catchError((onError) => print("Error:$onError"));
+        context: context,
+        type: CoolAlertType.success,
+        text: "Inserted Successfully...",
+        width: MediaQuery.of(context).size.width / 5,
+      ))
+          .catchError((onError) => print("Error: $onError"));
     }
   }
+
 
 
   //String? selectedGender;
@@ -437,22 +461,21 @@ String? _validateName(String? value) {
                                         child: ElevatedButton(
                                           child: Text('Upload Image'),
                                           style: ElevatedButton.styleFrom(
-                                            primary: Colors
-                                                .deepPurple, // Set button color to purple
+                                            primary: Colors.deepPurple,
                                           ),
                                           onPressed: () async {
-                                            final image =
-                                                await _picker.pickImage(
-                                                    source:
-                                                        ImageSource.gallery);
+                                            final image = await _picker.pickImage(
+                                              source: ImageSource.gallery,
+                                            );
                                             setState(() {
-                                              _image = image as File?;
+                                              _image = image != null ? File(image.path) : null;
                                             });
                                           },
                                         ),
                                       ),
                                     ],
                                   ),
+
                                 ],
                               ),
                             ),
@@ -636,11 +659,9 @@ String? _validateName(String? value) {
                             submitForm();
                           },
                           child: Text('Submit',
-                              style: TextStyle(
-                                  fontWeight: FontWeight.bold, fontSize: 24)),
+                              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 24)),
                           style: ElevatedButton.styleFrom(
-                            primary:
-                                Colors.deepPurple, // Set button color to purple
+                            primary: Colors.deepPurple,
                           ),
                         ),
                       ),
