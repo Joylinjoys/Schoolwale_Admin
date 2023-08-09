@@ -1,208 +1,150 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import '../Models/annoncement.dart';
 import 'AddAnnouncement.dart';
-import 'EditAnnouncement.dart';
 
-class AnnouncementsPage extends StatefulWidget {
+class AnnouncementsPage extends StatelessWidget {
   const AnnouncementsPage({Key? key}) : super(key: key);
 
-  @override
-  State<AnnouncementsPage> createState() => _AnnouncementsPageState();
-}
-
-class _AnnouncementsPageState extends State<AnnouncementsPage> {
-  List<Map<String, String>> announcements = [
-    {
-      'title': 'Announcement 1',
-      'datetime': '2023-06-30',
-    //  'time': '10:00 AM',
-    },
-    {
-
-      'title': 'Announcement 2',
-      'datetime': '2023-07-01',
-      //'time': '11:30 AM',
-    },
-    {
-
-      'title': 'Announcement 3',
-      'datetime': '2023-07-02',
-      //'time': '02:15 PM',
-    },
-  ];
-
+  Future<void> deleteAnnouncement(String docId) async {
+    try {
+      await FirebaseFirestore.instance
+          .collection('Announcements')
+          .doc(docId)
+          .delete();
+    } catch (e) {
+      print('Error deleting announcement: $e');
+    }
+  }
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        body: StreamBuilder(
-      stream: FirebaseFirestore.instance.collection("Announcements").snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+    return StreamBuilder<QuerySnapshot>(
+      stream: FirebaseFirestore.instance.collection('Announcements').snapshots(),
+      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError ||
             snapshot.connectionState == ConnectionState.waiting) {
           return Text("Loading");
         }
-        final documents = snapshot.data!.docs.map((e) {
-          return e.data();
-        });
-
-        final List<AnnouncementInfo> annoncementList = [];
-
-        for (var val in documents) {
-          final object = AnnouncementInfo.fromJson(val);
-
-          annoncementList.add(object);
-        }
-
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(
-          'Announcements',
-          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-        ),
-        backgroundColor: Colors.deepPurple.shade400,
-      ),
-      body: Center(
-        child: Padding(
-          padding: const EdgeInsets.all(40.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Text(
-                'Announcement List',
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 20),
-              SingleChildScrollView(
-                child: DataTable(
-                  columnSpacing: 100.0,
-                  columns: [
-
-                    DataColumn(
-                      label: Text(
-                        'Title',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    DataColumn(
-                      label: Text(
-                        'Date & Time',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    
-                    DataColumn(
-                      label: Text(
-                        'Edit',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    DataColumn(
-                      label: Text(
-                        'Delete',
-                        style: TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ],
-                  rows: annoncementList.map((announcementList) {
-                    return DataRow(
-                      cells: [
-
-                        DataCell(
-                          Text(announcementList.name as String?? ''),
-                        ),
-                        DataCell(
-                          Text(DateFormat.yMd().add_jm().format((announcementList.date as Timestamp).toDate()) ?? ''),
-                        ),
-                      
-                        DataCell(
-                          ElevatedButton(
-                            child: Text('Edit'),
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.deepPurple,
+        List<DocumentSnapshot> announcements = snapshot.data!.docs;
+        return Scaffold(
+          appBar: AppBar(
+            centerTitle: true,
+            title: Text(
+              'Announcements',
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            ),
+            backgroundColor: Colors.deepPurple.shade400,
+          ),
+          body: Center(
+            child: Padding(
+              padding: const EdgeInsets.all(40.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    'Announcement List',
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+                  ),
+                  SizedBox(height: 20),
+                  SingleChildScrollView(
+                    child: DataTable(
+                      columnSpacing: 100.0,
+                      columns: [
+                        DataColumn(
+                          label: Text(
+                            'Title',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18, // You can adjust the font size here
                             ),
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) =>  EditAnnouncementPage()),
-                              );
-                              // Navigate to edit announcement page
-                            },
                           ),
                         ),
-                        DataCell(
-                          ElevatedButton(
-                            child: Text('Delete'),
-                            style: ElevatedButton.styleFrom(
-                              primary: Colors.deepPurple,
+                        DataColumn(
+                          label: Text(
+                            'Date & Time',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18, // You can adjust the font size here
                             ),
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text('Confirmation'),
-                                    content: Text('Are you sure you want to delete?'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          // Perform delete operation
-                                          Navigator.of(context).pop(); // Close the dialog
-                                        },
-                                        child: Text('Yes'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop(); // Close the dialog
-                                        },
-                                        child: Text('No'),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
+                          ),
+                        ),
+                        DataColumn(
+                          label: Text(
+                            'Delete',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 18, // You can adjust the font size here
+                            ),
                           ),
                         ),
                       ],
-                    );
-                  }).toList(),
-                ),
+                      rows: announcements.asMap().entries.map((entry) {
+                        int rowIndex = entry.key;
+                        DocumentSnapshot announcement = entry.value;
+
+                        return DataRow(
+                            cells: [
+                        DataCell(Text(announcement['AnnName'] ?? '')),
+                        DataCell(Text(announcement['scheduledDate']?.toDate().toString() ?? '')),
+                        DataCell(
+                        ElevatedButton(
+                        child: Text('Delete'),
+                        style: ElevatedButton.styleFrom(
+                        primary: Colors.deepPurple,
+                        ),
+                        onPressed: () {
+                        showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                        return AlertDialog(
+                        title: Text('Confirmation'),
+                        content: Text(
+                        'Are you sure you want to delete?'),
+                        actions: [
+                        TextButton(
+                        onPressed: () async {
+                        await deleteAnnouncement(
+                        announcement.id);
+                        Navigator.of(context).pop();
+                        },
+                        child: Text('Delete'),
+                        ),
+                        TextButton(
+                        onPressed: () {
+                        Navigator.of(context).pop();
+                        },
+                        child: Text('CANCEL'),
+                        ),
+                        ],
+                        );
+                        },
+                        );
+                        },
+                        ),
+                        ),
+                        ],
+                        );
+                        }).toList(),
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) =>  AddAnnouncementPage()),
-          );
-          // Handle add button press
-          // Implement your logic here to add a new announcement
-        },
-        child: Text('ADD'), // Added the text 'ADD' to the button
-        backgroundColor: Colors.deepPurple.shade400,
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-    );
+          floatingActionButton: FloatingActionButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => AddAnnouncementPage()),
+
+              );
+            },
+            child: Text('ADD'),
+            backgroundColor: Colors.deepPurple.shade400,
+          ),
+          floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+        );
       },
-        )
     );
   }
+
 }

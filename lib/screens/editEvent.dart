@@ -1,9 +1,9 @@
-import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'dart:io';
+import 'package:cool_alert/cool_alert.dart';
 
 class EditEvent extends StatefulWidget {
   final Map<String, dynamic> eventData;
@@ -68,42 +68,19 @@ class _EditEventState extends State<EditEvent> {
     if (_formKey.currentState!.validate()) {
       // Form validation passed, handle form submission
       if (_image != null) {
-        // Generate a unique filename
-        String fileName = DateTime.now().millisecondsSinceEpoch.toString() + '.jpg';
-        Reference ref = FirebaseStorage.instance.ref().child(fileName);
+        // Upload the new image to Firebase Storage
+        Reference ref = FirebaseStorage.instance.ref().child('images').child(widget.eventData['eventId']);
+        UploadTask uploadTask = ref.putFile(_image!);
+        TaskSnapshot taskSnapshot = await uploadTask.whenComplete(() => null);
+        String imageUrl = await taskSnapshot.ref.getDownloadURL();
 
-        // Upload the file
-        await ref.putFile(_image!);
-
-        // Get the download URL of the uploaded image
-        String downloadUrl = await ref.getDownloadURL();
-
-        // Update the event details in Firestore with the image URL
+        // Update event data in Firebase Firestore with the new image URL
         await FirebaseFirestore.instance.collection('Event').doc(widget.eventData['eventId']).update({
           'eventName': _eventNameController.text,
           'eventDate': _selectedDate,
           'description': _descriptionController.text,
-          'imageUrl': downloadUrl,
+          'imageUrl': imageUrl,
         });
-
-        // Show success CoolAlert
-        CoolAlert.show(
-          context: context,
-          type: CoolAlertType.success,
-          text: "Event updated successfully!",
-          onConfirmBtnTap: () {
-            // Return the updated event data to the calling page (EventsPage)
-            Navigator.pop(
-              context,
-              {
-                'eventName': _eventNameController.text,
-                'eventDate': _selectedDate,
-                'description': _descriptionController.text,
-                'imageUrl': downloadUrl,
-              },
-            );
-          },
-        );
       } else {
         // If no new image selected, only update the other event details in Firestore
         await FirebaseFirestore.instance.collection('Event').doc(widget.eventData['eventId']).update({
@@ -111,25 +88,25 @@ class _EditEventState extends State<EditEvent> {
           'eventDate': _selectedDate,
           'description': _descriptionController.text,
         });
-
-        // Show success CoolAlert
-        CoolAlert.show(
-          context: context,
-          type: CoolAlertType.success,
-          text: "Event updated successfully!",
-          onConfirmBtnTap: () {
-            // Return the updated event data to the calling page (EventsPage)
-            Navigator.pop(
-              context,
-              {
-                'eventName': _eventNameController.text,
-                'eventDate': _selectedDate,
-                'description': _descriptionController.text,
-              },
-            );
-          },
-        );
       }
+
+      // Show success CoolAlert
+      CoolAlert.show(
+        context: context,
+        type: CoolAlertType.success,
+        text: "Event updated successfully!",
+        onConfirmBtnTap: () {
+          // Return the updated event data to EventsPage
+          Navigator.pop(
+            context,
+            {
+              'eventName': _eventNameController.text,
+              'eventDate': _selectedDate,
+              'description': _descriptionController.text,
+            },
+          );
+        },
+      );
     }
   }
 

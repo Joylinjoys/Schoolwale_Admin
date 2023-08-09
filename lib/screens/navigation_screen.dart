@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:web_dashboard_app_tut/screens/aboutschool.dart';
 import 'package:web_dashboard_app_tut/screens/attedanceFirst.dart';
 import 'package:web_dashboard_app_tut/screens/teachers.dart';
+import 'package:web_dashboard_app_tut/screens/virtualID.dart';
 import 'UploadNotes.dart';
 import 'package:web_dashboard_app_tut/screens/timtable.dart';
 import 'AnnouncementList.dart';
@@ -28,6 +29,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
     Resultfirst(),
     TeacherPage(),
     Student_main(),
+    VirtualId(),
     Attendancefirst(),
     EventsPage(),
     AnnouncementsPage(),
@@ -35,6 +37,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
     TimetableScreen(),
     SchoolDetails(),
     RulesRegulation()
+
   ];
 
   @override
@@ -99,6 +102,13 @@ class _NavigationScreenState extends State<NavigationScreen> {
                               child: Icon(Icons.people_outline),
                             ),
                             label: Text('Students'),
+                          ),
+                          NavigationRailDestination(
+                            icon: Tooltip(
+                              message: 'Virtual ID',
+                              child: Icon(Icons.person_pin_outlined),
+                            ),
+                            label: Text('Virtual ID'),
                           ),
                           NavigationRailDestination(
                             icon: Tooltip(

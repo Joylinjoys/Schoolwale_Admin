@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:web_dashboard_app_tut/screens/Addteacher.dart';
-import 'Editteacher.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/material.dart';
+
 
 class TeacherPage extends StatelessWidget {
   const TeacherPage({Key? key}) : super(key: key);
+
+  Future<void> deleteTeacher(String docId) async {
+    try {
+      await FirebaseFirestore.instance.collection('Teachers').doc(docId).delete();
+    } catch (e) {
+      print('Error deleting teacher: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,9 +27,7 @@ class TeacherPage extends StatelessWidget {
           return Text('Loading...');
         }
 
-        List<Map<String, dynamic>> teachers = snapshot.data!.docs.map((doc) {
-          return doc.data() as Map<String, dynamic>;
-        }).toList();
+        List<DocumentSnapshot> teachers = snapshot.data!.docs;
 
         return Scaffold(
           appBar: AppBar(
@@ -47,94 +52,63 @@ class TeacherPage extends StatelessWidget {
                   SingleChildScrollView(
                     child: DataTable(
                       columnSpacing: 100.0,
-                      columns: [
-                        DataColumn(
-                          label: Text(
-                            'Name',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Subject',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Qualification',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Phone No',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Edit',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        DataColumn(
-                          label: Text(
-                            'Delete',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
-                      rows: teachers.map((teacher) {
-                        return DataRow(
-                          cells: [
-                            DataCell(
-                              Text(teacher['name'] ?? ''),
-                            ),
-                            DataCell(
-                              Text(teacher['subject'] ?? ''),
-                            ),
-                            DataCell(
-                              Text(teacher['qualification'] ?? ''),
-                            ),
-                            DataCell(
-                              Text(teacher['phoneNo'].toString()),
-                            ),
-                            DataCell(
-                              ElevatedButton(
-                                child: Text('Edit'),
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.deepPurple,
-                                ),
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => EditTeacherPage(),
-                                    ),
-                                  );
-                                  // Navigate to edit teacher page
-                                },
+                        columns: [
+                          DataColumn(
+                            label: Text(
+                              'Name',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18, // You can adjust the font size here
                               ),
                             ),
+                          ),
+                          DataColumn(
+                            label: Text(
+                              'Subject',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18, // You can adjust the font size here
+                              ),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Text(
+                              'Qualification',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18, // You can adjust the font size here
+                              ),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Text(
+                              'Phone No',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18, // You can adjust the font size here
+                              ),
+                            ),
+                          ),
+                          DataColumn(
+                            label: Text(
+                              'Delete',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18, // You can adjust the font size here
+                              ),
+                            ),
+                          ),
+                        ],
+                      rows: teachers.asMap().entries.map((entry) {
+                        int rowIndex = entry.key;
+                        DocumentSnapshot teacher = entry.value;
+
+                        return DataRow(
+                          cells: [
+                            DataCell(Text(teacher['name'] ?? '')),
+                            DataCell(Text(teacher['subject'] ?? '')),
+                            DataCell(Text(teacher['qualification'] ?? '')),
+                            DataCell(Text(teacher['phoneNo'].toString())),
                             DataCell(
                               ElevatedButton(
                                 child: Text('Delete'),
@@ -150,15 +124,15 @@ class TeacherPage extends StatelessWidget {
                                         content: Text('Are you sure you want to delete?'),
                                         actions: [
                                           TextButton(
-                                            onPressed: () {
-                                              // Perform delete operation
-                                              Navigator.of(context).pop(); // Close the dialog
+                                            onPressed: () async {
+                                              await deleteTeacher(teacher.id);
+                                              Navigator.of(context).pop();
                                             },
                                             child: Text('Yes'),
                                           ),
                                           TextButton(
                                             onPressed: () {
-                                              Navigator.of(context).pop(); // Close the dialog
+                                              Navigator.of(context).pop();
                                             },
                                             child: Text('No'),
                                           ),
@@ -186,10 +160,8 @@ class TeacherPage extends StatelessWidget {
                   builder: (context) => AddTeacherPage(),
                 ),
               );
-              // Handle add button press
-              // Implement your logic here to add a new teacher
             },
-            child: Text('ADD'), // Added the text 'ADD' to the button
+            child: Text('ADD'),
             backgroundColor: Colors.deepPurple.shade400,
           ),
           floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
