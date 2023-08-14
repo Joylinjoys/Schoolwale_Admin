@@ -68,6 +68,7 @@ class StudentListTable extends StatefulWidget {
   //final List<Map<String, String>> studentsList;
   const StudentListTable({Key? key}) : super(key: key);
 
+
   @override
   State<StudentListTable> createState() => _StudentListTableState();
 }
@@ -283,7 +284,7 @@ class _StudentListTableState extends State<StudentListTable> {
                             label: Text(
                           'Register No',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 17,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -291,7 +292,7 @@ class _StudentListTableState extends State<StudentListTable> {
                             label: Text(
                           'Name',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 17,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -299,7 +300,7 @@ class _StudentListTableState extends State<StudentListTable> {
                             label: Text(
                           'Class',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 17,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -307,7 +308,7 @@ class _StudentListTableState extends State<StudentListTable> {
                             label: Text(
                           'Section',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 17,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -315,7 +316,7 @@ class _StudentListTableState extends State<StudentListTable> {
                             label: Text(
                           'Profile',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 17,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -323,7 +324,7 @@ class _StudentListTableState extends State<StudentListTable> {
                             label: Text(
                           'Virtual ID',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 17,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
@@ -331,7 +332,7 @@ class _StudentListTableState extends State<StudentListTable> {
                             label: Text(
                           'Delete',
                           style: TextStyle(
-                            fontSize: 24,
+                            fontSize: 17,
                             fontWeight: FontWeight.bold,
                           ),
                         )),
