@@ -1,5 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:web_dashboard_app_tut/Models/student_class.dart';
 import 'package:web_dashboard_app_tut/widgets/AttedanceRegNo.dart';
 import '../services/student_service.dart';
@@ -8,28 +10,71 @@ import 'attedanceStream.dart';
 class AttendanceList extends StatefulWidget {
   final String className;
   final String sectionName;
+  final DateTime selectedDate;
   const AttendanceList(
-      {super.key, required this.className, required this.sectionName});
+      {super.key,
+      required this.className,
+      required this.sectionName,
+      required this.selectedDate});
 
   @override
   State<AttendanceList> createState() =>
-      _AttendanceListState(className, sectionName);
+      _AttendanceListState(className, sectionName, selectedDate);
 }
 
 class _AttendanceListState extends State<AttendanceList> {
   late final String className;
   late final String sectionName;
+  late final DateTime selectedDate;
 
-  _AttendanceListState(this.className, this.sectionName);
+  _AttendanceListState(this.className, this.sectionName, this.selectedDate);
 
   final List<StudentInfo> _studentList = [];
 
   final List<StudentInfo> _absentees = [];
-
+  List<String> registerNumbers = [];
   @override
   void initState() {
     //print(widget.className);
     super.initState();
+  }
+
+  void getAbsentees(List<StudentInfo> absentees) {
+    for (int i = 0; i < absentees.length; i++) {
+      registerNumbers.add(absentees[i].registerNumber);
+    }
+  }
+
+  void submitAttendanc() {
+    String date = new DateFormat('dd-MM-yyyy').format(selectedDate);
+
+    print(date); //19-08-2023
+
+    print(selectedDate); //2023-08-19 12:17:04.791
+  }
+
+  Future<void> submitAttendance() async {
+    String date = new DateFormat('dd-MM-yyyy').format(selectedDate);
+    // date =19-08-2023 -format
+
+    try {
+      await FirebaseFirestore.instance.collection('Attendance').doc(date).set({
+        'date': date,
+        'absentees': registerNumbers,
+      });
+
+      //resetting the list
+      registerNumbers = [];
+      // Show success message dialog
+      CoolAlert.show(
+        context: context,
+        type: CoolAlertType.success,
+        text: "Attendance updated successfully.",
+        width: MediaQuery.of(context).size.width / 5,
+      );
+    } catch (e) {
+      print('Error updating attendance: $e');
+    }
   }
 
   @override
@@ -82,13 +127,14 @@ class _AttendanceListState extends State<AttendanceList> {
                   ),
                 ],
               ),
-              
-                StreamBuilder(
+              StreamBuilder(
                   stream: StudentService().studentList,
-                  builder:
-                      (BuildContext context, AsyncSnapshot<List<StudentInfo>> snapshot) {
+                  builder: (BuildContext context,
+                      AsyncSnapshot<List<StudentInfo>> snapshot) {
                     if (snapshot.hasError ||
                         snapshot.connectionState == ConnectionState.waiting) {
+                      print(snapshot.error);
+                      print("dddddw");
                       return const Center(
                         child: CircularProgressIndicator(
                           backgroundColor: Colors.red,
@@ -97,10 +143,13 @@ class _AttendanceListState extends State<AttendanceList> {
                       );
                     }
                     final documents = snapshot.data ?? [];
-                    _studentList.addAll(documents.where((element)=>element.className==widget.className&&element.sectionName==widget.sectionName).toList());
+                    _studentList.addAll(documents
+                        .where((element) =>
+                            element.className == widget.className &&
+                            element.sectionName == widget.sectionName)
+                        .toList());
 
-                  return StatefulBuilder(
-                    builder: (context, setState) {
+                    return StatefulBuilder(builder: (context, setState) {
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
@@ -138,16 +187,18 @@ class _AttendanceListState extends State<AttendanceList> {
                           ),
                         ],
                       );
-                    }
-                  );
-                }
-              ),
+                    });
+                  }),
               SizedBox(
                 height: 20,
               ),
               Center(
                 child: ElevatedButton(
                   onPressed: () {
+                    getAbsentees(_absentees);
+                    print(registerNumbers);
+
+                    submitAttendance();
                     // Navigator.push(
                     //   context,
                     //   MaterialPageRoute(builder: (context) => AttendanceList()),

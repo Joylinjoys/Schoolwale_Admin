@@ -1,5 +1,5 @@
 class StudentInfo {
-  final int registerNumber;
+  final String registerNumber;
   final phoneNumber;
   final String name;
   final String gender;
@@ -26,7 +26,7 @@ class StudentInfo {
 
   StudentInfo.fromJson(Map<String, Object?> json)
       : this(
-          registerNumber: json['Register No'] as int,
+          registerNumber: json['Register No'] as String,
           phoneNumber: json['Registered_number'],
           name: json['Full Name'] as String,
           gender: json['Gender'] as String,
@@ -53,9 +53,7 @@ class StudentInfo {
       'DOB': dob,
     };
   }
-  
 }
-
 
 // final StudentInfo s1 = StudentInfo(
 //     registerNumber: 20230001,
@@ -101,7 +99,6 @@ class StudentInfo {
 //     sectionName: "B",
 //     address: "Mangalore",
 //     dob: "01-04-2009");
-
 
 // final List<StudentInfo> students = [
 //   StudentInfo(
