@@ -29,7 +29,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
     Resultfirst(),
     TeacherPage(),
     Student_main(),
-    VirtualId(),
+    VirtualId(regNo: '',),
     Attendancefirst(),
     EventsPage(),
     AnnouncementsPage(),

@@ -374,7 +374,7 @@ class _StudentListTableState extends State<StudentListTable> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                            const ViewStudent()),
+                                             ViewStudent(regNo: student.registerNumber.toString(),)),
                                   );
                                 },
                               ),
@@ -391,7 +391,7 @@ class _StudentListTableState extends State<StudentListTable> {
                                     context,
                                     MaterialPageRoute(
                                         builder: (context) =>
-                                        const VirtualId()),
+                                         VirtualId(regNo: student.registerNumber.toString(),)),
                                   );
                                 },
                               ),
