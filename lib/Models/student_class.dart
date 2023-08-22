@@ -53,9 +53,7 @@ class StudentInfo {
       'DOB': dob,
     };
   }
-  
 }
-
 
 // final StudentInfo s1 = StudentInfo(
 //     registerNumber: 20230001,
@@ -101,7 +99,6 @@ class StudentInfo {
 //     sectionName: "B",
 //     address: "Mangalore",
 //     dob: "01-04-2009");
-
 
 // final List<StudentInfo> students = [
 //   StudentInfo(

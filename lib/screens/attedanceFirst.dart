@@ -9,7 +9,6 @@ import 'package:intl/intl.dart';
 
 class Attendancefirst extends StatefulWidget {
   const Attendancefirst({Key? key}) : super(key: key);
-  
 
   @override
   _AttendancefirstState createState() => _AttendancefirstState();
@@ -19,14 +18,14 @@ class _AttendancefirstState extends State<Attendancefirst> {
   // String? selectedClass;
   // String? selectedSection;
   // String? selectedRollNo;
-   String? selectedClass;
+  String? selectedClass;
   String? selectedSection;
   String? selectedRollNo;
   String? selectedClassSection;
 
   final _formKey = GlobalKey<FormState>();
   DateTime selectedDate = DateTime.now();
- // TimeOfDay selectedTime = TimeOfDay.now();
+  // TimeOfDay selectedTime = TimeOfDay.now();
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
@@ -41,38 +40,23 @@ class _AttendancefirstState extends State<Attendancefirst> {
       });
   }
 
-
-  List<String> classes = [
-    'Class 1',
-    'Class 2',
-    'Class 3',
-    // Add more class options here
-  ];
-
-  List<String> sections = [
-    'Section A',
-    'Section B',
-    'Section C',
-    // Add more section options here
-  ];
-
-  List<String> rollNos = [
-    'Roll No 1',
-    'Roll No 2',
-    'Roll No 3',
-    // Add more roll number options here
-  ];
-   final sectionStream = StreamController<List<String>>();
-   bool ischange = false;
- Future<void> _submitForm() async {
+  final sectionStream = StreamController<List<String>>();
+  bool ischange = false;
+  Future<void> _submitForm() async {
     if (_formKey.currentState!.validate()) {
       // Form is valid, navigate to the next page
       Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => AttendanceList(className: selectedClass.toString(), sectionName: selectedSection.toString(),)),
-                            );
+        context,
+        MaterialPageRoute(
+            builder: (context) => AttendanceList(
+                  className: selectedClass.toString(),
+                  sectionName: selectedSection.toString(),
+                  selectedDate: selectedDate,
+                )),
+      );
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -103,11 +87,12 @@ class _AttendancefirstState extends State<Attendancefirst> {
                       Center(
                         child: Text(
                           'Select Class and Section',
-                          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
                         ),
                       ),
                       SizedBox(height: 25),
-                       Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
@@ -129,24 +114,25 @@ class _AttendancefirstState extends State<Attendancefirst> {
                                           ConnectionState.waiting) {
                                     return Text("Loading");
                                   }
-            
+
                                   // final classData = snapshot.data ?? [];
                                   final List<String> classData = [];
-                                  final documents = snapshot.data!.docs.map((e) {
+                                  final documents =
+                                      snapshot.data!.docs.map((e) {
                                     classData.add(e.id);
                                     return e.data();
                                   });
                                   //final dd = classData;
                                   final List<Sections> teacherList = [];
-            
+
                                   for (var val in documents) {
                                     final object = Sections.fromJson(val);
-            
+
                                     teacherList.add(object);
                                   }
-            
+
                                   // print(teacherList[4].sections);
-            
+
                                   return DropdownButtonFormField<String>(
                                     value: selectedClass,
                                     onChanged: (newValue) {
@@ -161,7 +147,7 @@ class _AttendancefirstState extends State<Attendancefirst> {
                                         // print(section);
                                         //
                                         // print(sectionStream);
-            
+
                                         sectionStream.add(section);
                                         ischange = true;
                                       });
@@ -175,11 +161,11 @@ class _AttendancefirstState extends State<Attendancefirst> {
                                       );
                                     }).toList(),
                                     validator: (value) {
-                                        if (value == null) {
-                                          return 'please select a class';
-                                        }
-                                        return null;
-                                      },
+                                      if (value == null) {
+                                        return 'please select a class';
+                                      }
+                                      return null;
+                                    },
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(),
                                       contentPadding: EdgeInsets.symmetric(
@@ -190,9 +176,8 @@ class _AttendancefirstState extends State<Attendancefirst> {
                           ),
                         ],
                       ),
-                      
                       SizedBox(height: 25),
-                        Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
@@ -211,9 +196,9 @@ class _AttendancefirstState extends State<Attendancefirst> {
                                       ConnectionState.waiting) {
                                     return Text('Loading...');
                                   }
-            
+
                                   final sections = snapshot.data ?? [];
-            
+
                                   return DropdownButtonFormField<String>(
                                     value: selectedSection,
                                     onChanged: (newValue) {
@@ -222,22 +207,23 @@ class _AttendancefirstState extends State<Attendancefirst> {
                                         selectedClassSection = selectedClass! +
                                             " " +
                                             selectedSection!;
-                                            // print(selectedClassSection);
+                                        // print(selectedClassSection);
                                       });
                                     },
-                                    items: sections.map<DropdownMenuItem<String>>(
-                                        (String value) {
+                                    items: sections
+                                        .map<DropdownMenuItem<String>>(
+                                            (String value) {
                                       return DropdownMenuItem<String>(
                                         value: value,
                                         child: Text(value),
                                       );
                                     }).toList(),
                                     validator: (value) {
-                                        if (value == null) {
-                                          return 'please select a section';
-                                        }
-                                        return null;
-                                      },
+                                      if (value == null) {
+                                        return 'please select a section';
+                                      }
+                                      return null;
+                                    },
                                     decoration: InputDecoration(
                                       border: OutlineInputBorder(),
                                       contentPadding: EdgeInsets.symmetric(
@@ -248,57 +234,57 @@ class _AttendancefirstState extends State<Attendancefirst> {
                           ),
                         ],
                       ),
-                     
                       SizedBox(height: 25),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          
-                        Text(
-                          'Enter Date:',
-                          style: TextStyle(fontSize: 18,fontWeight: FontWeight.bold),
-                        ),
-                        SizedBox(width: 8,),
-                        Container(
-                          width: 250,
-                          child: TextFormField(
-                            
-                            readOnly: true,
-                            controller: TextEditingController(
-                              text: DateFormat('yyyy-MM-dd').format(selectedDate),
-                            ),
-                            validator: (value) {
-                                        if (value == null) {
-                                          return 'please select a date';
-                                        }
-                                        return null;
-                                      },
-                            decoration: InputDecoration(
-                               border: OutlineInputBorder(),
-                                contentPadding: EdgeInsets.symmetric(vertical: 8, horizontal: 4),
-                              filled: true,
-                              fillColor: Colors.white12,
-                              // border: OutlineInputBorder(
-                              //   borderRadius: BorderRadius.circular(8.0),
-                              //   borderSide: BorderSide.none,
-                              // ),
-                              // contentPadding: EdgeInsets.symmetric(
-                              //   vertical: 12.0,
-                              //   horizontal: 16.0,
-                              // ),
-                              suffixIcon: IconButton(
-                                onPressed: () => _selectDate(context),
-                                icon: Icon(Icons.calendar_today),
-                              ),
-                            ),
-                            onTap: () => _selectDate(context),
+                          Text(
+                            'Enter Date:',
+                            style: TextStyle(
+                                fontSize: 18, fontWeight: FontWeight.bold),
                           ),
-                        ),
-                      
+                          SizedBox(
+                            width: 8,
+                          ),
+                          Container(
+                            width: 250,
+                            child: TextFormField(
+                              readOnly: true,
+                              controller: TextEditingController(
+                                text: DateFormat('yyyy-MM-dd')
+                                    .format(selectedDate),
+                              ),
+                              validator: (value) {
+                                if (value == null) {
+                                  return 'please select a date';
+                                }
+                                return null;
+                              },
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                contentPadding: EdgeInsets.symmetric(
+                                    vertical: 8, horizontal: 4),
+                                filled: true,
+                                fillColor: Colors.white12,
+                                // border: OutlineInputBorder(
+                                //   borderRadius: BorderRadius.circular(8.0),
+                                //   borderSide: BorderSide.none,
+                                // ),
+                                // contentPadding: EdgeInsets.symmetric(
+                                //   vertical: 12.0,
+                                //   horizontal: 16.0,
+                                // ),
+                                suffixIcon: IconButton(
+                                  onPressed: () => _selectDate(context),
+                                  icon: Icon(Icons.calendar_today),
+                                ),
+                              ),
+                              onTap: () => _selectDate(context),
+                            ),
+                          ),
                         ],
                       ),
-                     
-                       SizedBox(height: 16),
+                      SizedBox(height: 16),
                       Center(
                         child: ElevatedButton(
                           onPressed: _submitForm,
