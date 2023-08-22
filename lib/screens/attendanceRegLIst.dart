@@ -89,6 +89,7 @@ class _AttendanceListState extends State<AttendanceList> {
                       (BuildContext context, AsyncSnapshot<List<StudentInfo>> snapshot) {
                     if (snapshot.hasError ||
                         snapshot.connectionState == ConnectionState.waiting) {
+                      print(snapshot.error);
                       return const Center(
                         child: CircularProgressIndicator(
                           backgroundColor: Colors.red,

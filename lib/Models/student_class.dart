@@ -1,5 +1,5 @@
 class StudentInfo {
-  final int registerNumber;
+  final String registerNumber;
   final phoneNumber;
   final String name;
   final String gender;
@@ -26,7 +26,7 @@ class StudentInfo {
 
   StudentInfo.fromJson(Map<String, Object?> json)
       : this(
-          registerNumber: json['Register No'] as int,
+          registerNumber: json['Register No'] as String,
           phoneNumber: json['Registered_number'],
           name: json['Full Name'] as String,
           gender: json['Gender'] as String,

@@ -19,6 +19,7 @@ class AddStudent extends StatefulWidget {
 class _AddStudentState extends State<AddStudent> {
   final ImagePicker _picker = ImagePicker();
   File? _image;
+  File? _virtualIdImage;
 
   String? selectedClass;
   String? selectedSection;
@@ -50,9 +51,9 @@ class _AddStudentState extends State<AddStudent> {
     _motherNameController.clear();
     _bloodGroupController.clear();
   }
-  Future<void> _uploadStudentImage(File imageFile, String regNo) async {
+  Future<void> _uploadStudentImage(File imageFile, String regNo, String imageName) async {
     if (imageFile != null) {
-      String fileName = 'student_${regNo}_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      String fileName = 'student_${regNo}_${imageName}_${DateTime.now().millisecondsSinceEpoch}.jpg';
       firebase_storage.Reference ref = firebase_storage.FirebaseStorage.instance.ref().child(fileName);
 
       await ref.putFile(imageFile);
@@ -60,9 +61,13 @@ class _AddStudentState extends State<AddStudent> {
       String downloadUrl = await ref.getDownloadURL();
 
       await FirebaseFirestore.instance.collection('Students').doc(regNo).update({
-        'ImageURL': downloadUrl,
+        imageName: downloadUrl, // Use the provided image name parameter
       });
     }
+  }
+  bool _imageIsFromWeb(String imagePath) {
+    // Check if the image path starts with 'http://' or 'https://'
+    return imagePath.startsWith('http://') || imagePath.startsWith('https://');
   }
 
 
@@ -150,7 +155,11 @@ class _AddStudentState extends State<AddStudent> {
 
       // Upload image if selected
       if (_image != null) {
-        await _uploadStudentImage(_image!, _regno);
+        await _uploadStudentImage(_image!, _regno, 'profile_picture');
+      }
+
+      if (_virtualIdImage != null) {
+        await _uploadStudentImage(_virtualIdImage!, _regno, 'virtual_id');
       }
 
       // Store student details in Firestore
@@ -223,7 +232,7 @@ class _AddStudentState extends State<AddStudent> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         StudentInput(
-                           validator: _validateRegNo,
+                          validator: _validateRegNo,
                           controller: _registerNumberController,
                           textContent: "Enter Register No",
                           label: "Register No",
@@ -240,7 +249,6 @@ class _AddStudentState extends State<AddStudent> {
                         SizedBox(
                           width: 30,
                         ),
-                        
                       ],
                     ),
                     SizedBox(
@@ -346,6 +354,7 @@ class _AddStudentState extends State<AddStudent> {
                                             },
                                         );
                                       })
+
                                 ],
                               ),
                             ),
@@ -428,59 +437,111 @@ class _AddStudentState extends State<AddStudent> {
                           ),
                         ),
                         SizedBox(width: 30),
-                        Flexible(
-                          flex: 1,
-                          child: Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(18.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    "choose Image",
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 20.0,
-                                  ),
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Flexible(
-                                        child: _image == null
-                                            ? Text('No image selected.')
-                                            : Image.file(_image!),
-                                      ),
-                                      SizedBox(width: 10),
-                                      SizedBox(
-                                        width: 150,
-                                        height: 47,
-                                        child: ElevatedButton(
-                                          child: Text('Upload Image'),
-                                          style: ElevatedButton.styleFrom(
-                                            primary: Colors.deepPurple,
-                                          ),
-                                          onPressed: () async {
-                                            final image = await _picker.pickImage(
-                                              source: ImageSource.gallery,
-                                            );
-                                            setState(() {
-                                              _image = image != null ? File(image.path) : null;
-                                            });
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  ),
+                        // Flexible(
+                        //   flex: 1,
+                        //   child: Card(
+                        //     child: Padding(
+                        //       padding: const EdgeInsets.all(18.0),
+                        //       child: Column(
+                        //         crossAxisAlignment: CrossAxisAlignment.start,
+                        //         children: [
+                        //           Column(
+                        //             crossAxisAlignment: CrossAxisAlignment.start,
+                        //             children: [
+                        //               Text(
+                        //                 "Choose Virtual ID Image",
+                        //                 style: TextStyle(
+                        //                   fontSize: 20,
+                        //                   fontWeight: FontWeight.bold,
+                        //                 ),
+                        //               ),
+                        //               SizedBox(
+                        //                 height: 20.0,
+                        //               ),
+                        //               Row(
+                        //                 mainAxisAlignment: MainAxisAlignment.center,
+                        //                 children: [
+                        //                   Flexible(
+                        //                     child: _virtualIdImage == null
+                        //                         ? Text('No image selected.')
+                        //                         : Image.network(_virtualIdImage!.path),
+                        //                   ),
+                        //                   SizedBox(width: 10),
+                        //                   SizedBox(
+                        //                     width: 150,
+                        //                     height: 47,
+                        //                     child: ElevatedButton(
+                        //                       child: Text('Upload Virtual ID Image'),
+                        //                       style: ElevatedButton.styleFrom(
+                        //                         primary: Colors.deepPurple,
+                        //                       ),
+                        //                       onPressed: () async {
+                        //                         final image = await _picker.pickImage(
+                        //                           source: ImageSource.gallery,
+                        //                         );
+                        //                         setState(() {
+                        //                           _virtualIdImage = image != null ? File(image.path) : null;
+                        //                         });
+                        //                       },
+                        //                     ),
+                        //                   ),
+                        //                 ],
+                        //               ),
+                        //               SizedBox(width: 30),
+                        //               Column(
+                        //                 crossAxisAlignment: CrossAxisAlignment.start,
+                        //                 children: [
+                        //                   Text(
+                        //                     "Choose Profile Picture",
+                        //                     style: TextStyle(
+                        //                       fontSize: 20,
+                        //                       fontWeight: FontWeight.bold,
+                        //                     ),
+                        //                   ),
+                        //                   SizedBox(
+                        //                     height: 20.0,
+                        //                   ),
+                        //                   Row(
+                        //                     mainAxisAlignment: MainAxisAlignment.center,
+                        //                     children: [
+                        //                       Flexible(
+                        //                         child: _image == null
+                        //                             ? Text('No image selected.')
+                        //                             : Image.network(_image!.path),
+                        //                       ),
+                        //                       SizedBox(width: 10),
+                        //                       SizedBox(
+                        //                         width: 150,
+                        //                         height: 47,
+                        //                         child: ElevatedButton(
+                        //                           child: Text('Upload Profile Picture'),
+                        //                           style: ElevatedButton.styleFrom(
+                        //                             primary: Colors.deepPurple,
+                        //                           ),
+                        //                           onPressed: () async {
+                        //                             final image = await _picker.pickImage(
+                        //                               source: ImageSource.gallery,
+                        //                             );
+                        //                             setState(() {
+                        //                               _image = image != null ? File(image.path) : null;
+                        //                             });
+                        //                           },
+                        //                         ),
+                        //                       ),
+                        //                     ],
+                        //                   ),
+                        //                 ],
+                        //               ),
+                        //
+                        //
+                        //             ],
+                        //           ),
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
 
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
                         SizedBox(width: 30),
                         Flexible(
                           flex: 1,
@@ -494,6 +555,7 @@ class _AddStudentState extends State<AddStudent> {
                         ),
                       ],
                     ),
+
                     SizedBox(height: 20),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,

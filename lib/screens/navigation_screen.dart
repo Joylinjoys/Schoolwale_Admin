@@ -29,7 +29,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
     Resultfirst(),
     TeacherPage(),
     Student_main(),
-    VirtualId(),
+    // VirtualId(),
     Attendancefirst(),
     EventsPage(),
     AnnouncementsPage(),
@@ -103,13 +103,13 @@ class _NavigationScreenState extends State<NavigationScreen> {
                             ),
                             label: Text('Students'),
                           ),
-                          NavigationRailDestination(
-                            icon: Tooltip(
-                              message: 'Virtual ID',
-                              child: Icon(Icons.person_pin_outlined),
-                            ),
-                            label: Text('Virtual ID'),
-                          ),
+                          // NavigationRailDestination(
+                          //   icon: Tooltip(
+                          //     message: 'Virtual ID',
+                          //     child: Icon(Icons.person_pin_outlined),
+                          //   ),
+                          //   label: Text('Virtual ID'),
+                          // ),
                           NavigationRailDestination(
                             icon: Tooltip(
                               message: 'Attendance',

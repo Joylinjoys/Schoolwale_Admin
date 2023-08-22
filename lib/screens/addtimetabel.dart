@@ -62,13 +62,13 @@ class _AddTimetableState extends State<AddTimetable> {
         String section = _sectionController.text;
 
         // Create a document with className as the document ID
-        DocumentReference classDocumentRef = FirebaseFirestore.instance.collection('Timetable').doc(className);
+        DocumentReference classDocumentRef = FirebaseFirestore.instance.collection('Timetable').doc();
 
         // Set the timetable details as subfields inside the document
         await classDocumentRef.set({
-          section: {
-            'imageUrl': downloadUrl,
-          },
+          'imageUrl': downloadUrl,
+          'class': _classNameController.text,
+          'section': _sectionController.text
         }, SetOptions(merge: true)); // Use merge option to update existing fields and add new fields
 
         // Reset the form and clear the file

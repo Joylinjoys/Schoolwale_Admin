@@ -213,7 +213,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           Text(
                             " 56 Teachers",
                             style: TextStyle(
-                              fontSize: 36,
+                              fontSize: 32,
                               color: Colors.green,
                               fontWeight: FontWeight.bold,
                             ),
@@ -265,7 +265,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                             Text(
                               "Add Class",
                               style: TextStyle(
-                                fontSize: 36,
+                                fontSize: 32,
                                 color: Colors.deepPurple,
                                 fontWeight: FontWeight.bold,
                               ),
