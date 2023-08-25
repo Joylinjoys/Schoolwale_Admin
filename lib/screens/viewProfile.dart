@@ -9,12 +9,11 @@ class ViewStudent extends StatefulWidget {
   const ViewStudent({Key? key, required this.regNo}) : super(key: key);
 
   @override
-  State<ViewStudent> createState() => _ViewStudentState(regNo);
+  State<ViewStudent> createState() => _ViewStudentState();
 }
 
 class _ViewStudentState extends State<ViewStudent> {
-  final String regNo;
-  _ViewStudentState(this.regNo);
+
 
 
   @override
@@ -28,10 +27,10 @@ class _ViewStudentState extends State<ViewStudent> {
             ),
             backgroundColor: Colors.deepPurple.shade400,
           ),
-      body: FutureBuilder<QuerySnapshot<Map<String, dynamic>>>(
+      body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
         future: FirebaseFirestore.instance
-            .collection("Students")
-             .where(regNo)
+            .collection("Students").
+          doc(widget.regNo)
              .get(),
         builder: (context, snapshot) {
           if (snapshot.hasError ||
@@ -44,12 +43,12 @@ class _ViewStudentState extends State<ViewStudent> {
             return Text("No data available");
           }
 
-          final data = snapshot.data!.docs;
-          if (data.isEmpty) {
+          final data = snapshot.data!;
+          if (data == null) {
             return Text("No data available");
           }
 
-          final profileData = ProfileConverter.fromJson(data.first.data());
+          final profileData = ProfileConverter.fromJson(data.data()!);
 
           return ProfilePageContent(profileData: profileData);
 

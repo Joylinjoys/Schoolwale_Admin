@@ -9,7 +9,7 @@ class AttendanceList extends StatefulWidget {
   final String className;
   final String sectionName;
   const AttendanceList(
-      {super.key, required this.className, required this.sectionName});
+      {super.key, required this.className, required this.sectionName, required DateTime selectedDate});
 
   @override
   State<AttendanceList> createState() =>

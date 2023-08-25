@@ -267,12 +267,11 @@ class VirtualId extends StatefulWidget {
   const VirtualId({super.key, required this.regNo});
 
   @override
-  State<VirtualId> createState() => _VirtualIdState(regNo);
+  State<VirtualId> createState() => _VirtualIdState();
 }
 
 class _VirtualIdState extends State<VirtualId> {
-  final String regNo;
-  _VirtualIdState( this.regNo);
+
 
   @override
   Widget build(BuildContext context) {
@@ -288,10 +287,9 @@ class _VirtualIdState extends State<VirtualId> {
       body: FutureBuilder<DocumentSnapshot<Map<String, dynamic>>>(
         future: FirebaseFirestore.instance
             .collection("Students")
-            .where(regNo)
-            .get()
-            .then((querySnapshot) => querySnapshot.docs.first),
-        builder: (context, snapshot) {
+            .doc(widget.regNo)
+            .get(),
+          builder: (context, snapshot) {
           if (snapshot.hasError ||
               snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());

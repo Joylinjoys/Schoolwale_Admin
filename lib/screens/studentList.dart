@@ -361,7 +361,7 @@ class _StudentListTableState extends State<StudentListTable> {
                                     onPressed: () {
                                       Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (context) => const ViewStudent()),
+                                        MaterialPageRoute(builder: (context) =>  ViewStudent(regNo:student.registerNumber.toString(),)),
                                       );
                                     },
                                     style: ElevatedButton.styleFrom(
@@ -375,7 +375,7 @@ class _StudentListTableState extends State<StudentListTable> {
                                     onPressed: () {
                                       Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (context) => const VirtualId()),
+                                        MaterialPageRoute(builder: (context) =>  VirtualId(regNo: student.registerNumber,)),
                                       );
                                     },
                                     style: ElevatedButton.styleFrom(
