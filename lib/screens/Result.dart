@@ -80,6 +80,14 @@ class _ResultPageState extends State<ResultPage> {
                 width: MediaQuery.of(context).size.width / 5,
               ))
           .catchError((onError) => print("Error:$onError"));
+      //add exam name to the completed exam in student profile
+      List<String> completedExam = [examNameValue];
+      FirebaseFirestore.instance.collection("Students").doc(regNo).set(
+        {
+          'completed_exams': completedExam,
+        },
+        SetOptions(merge: true),
+      ).catchError((onError) => print("Error:$onError"));
       //TODO: Handle form submission and further actions
     }
     _clearText();
